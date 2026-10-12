@@ -9,11 +9,11 @@
 0x900108 sh_player_control_byte
 0x90010a sh_player_select_state
 0x90010c sh_attract_start_flag
-0x900204 sh_link_difficulty_204
+0x900204 sh_cabinet_id
 0x900206 sh_link_rx_flag_206
 0x900208 sh_link_rx_status_208
 0x90020a sh_link_rx_packet_flag
-0x90020e sh_attract_timer_flag
+0x90020e sh_own_seat_offset
 0x900210 sh_hud_page_select
 0x900212 sh_round_state_212
 0x900214 sh_cabinet_block_214
@@ -83,7 +83,7 @@
 0x900810 sh_cam_ctrl_810
 0x900812 sh_cam_ctrl_812
 0x900a00 sh_tank_count
-0x900a10 sh_num_tanks_active
+0x900a10 sh_seat_offset_b
 0x900a12 sh_tank_type_a12
 0x900b00 sh_obj_cam_rel_b00
 0x900c1c sh_rotmat_c1c

@@ -1,7 +1,7 @@
 # Cyber Sled (Namco 1993, System 21) decompile notes
 
-Research/modding only, non-commercial. Needs your own copy of the MAME set `cybsled` (28 files), unpacked into `rom/`.
-No leaked source is used.
+Research/modding only, non-commercial. ROM set from the user's download `Downloads/Cyber-Sled_Arcade_EN.zip`
+(inner MAME set `cybsled.zip`, 28 files), unpacked into `rom/`. No leaked source is used.
 
 ## Layout
 - `rom/` the original ROM chips (never publish). `bin/` derived images (never publish).
@@ -117,4 +117,18 @@ No leaked source is used.
 - Re-exported funcinfo + decomp: spr 1092 functions, 0 decompile failures; mpr 1310, 1 failure
   (game_unk_0002f370, 22 bytes, decompiler process dies; already flagged in hand_mpr.txt).
 - Tank struct at 0x904000 (stride 0x100) NOT defined: the field names are provisional; do it when refining globals.
-- Next: code-only GitHub repo (indieindie7/cybersled-decomp), then optional globals refinement.
+- PUBLISHED 10-12: github.com/indieindie7/cybersled-decomp (commit fd30909; local clone Documents/github/cybersled-decomp).
+  Next (optional): refine the provisional globals from the decompile, then define the tank struct.
+
+## Paused (10-12): globals refinement + seat struct
+- Findings so far: the "tank" block is a per-seat state record the master publishes for the slave
+  (shared_publish_player_state 0x173a). Offset = cabinet id << 8 (0x90020e, set by game_init_player_vars and
+  shared_select_cabinet_block from the table at 0x18e8), so blocks at 0x904000 and 0x904100, stride 0x100.
+  0x905000 / 0x905100 (offsets 0x1000 / 0x1100 in 0x900a10) are used the same way. Several labels are misnamed:
+  0x90020e is the own-seat offset (not an attract flag), 0x900204 the cabinet id, 0x900a10 a seat offset.
+- Nothing applied yet. Resume: build the struct from the publish function, then the agent refinement.
+- Reverify (10-12): ExportFuncInfo -readOnly -noanalysis: mpr 1310 / spr 1092 functions, 0 FUN_; CsDumpAll + globs.py:
+  unlabelled RAM DAT_ left mpr 28, spr 19. Local hand/globals/types files equal to repo fd30909. Gotcha: headless
+  WITHOUT -noanalysis re-analyses in memory and shows fake FUN_ / missing functions.
+- Label fixes applied (both CPUs): 0x900204 sh_cabinet_id, 0x90020e sh_own_seat_offset, 0x900a10 sh_seat_offset_b.
+  Seat struct still not defined (optional).
