@@ -1,0 +1,71 @@
+0x00000266 bogus halt_baddata, stray bytes
+0x0000026a bogus halt_baddata, 1 byte
+0x00000288 bogus halt_baddata, stray bytes
+0x0000028c bogus halt_baddata, 1 byte
+0x000002b0 bogus garbage in vector/string area (refs s_Z_ROLL_SPEED), calls exc dump on junk
+0x000002d0 bogus halt_baddata, stray bytes
+0x000002d4 bogus halt_baddata, 1 byte
+0x000002f4 bogus halt_baddata, stray bytes
+0x000002fa bogus halt_baddata, 1 byte
+0x0000031a bogus halt_baddata, stray bytes
+0x00000326 bogus halt_baddata, mid-instruction in text data
+0x00004918 bogus halt_baddata, 2 bytes
+0x0000491a bogus halt_baddata, 1 byte
+0x00005aec bogus decrements through code then halt_baddata, starts mid-instruction
+0x00006640 bogus halt_baddata after bit-toggle, mid-instruction
+0x000094c8 bogus halt_baddata, ors garbage 0xf0f0 pattern
+0x000094cc bogus halt_baddata, falls into 94ce
+0x000094ce bogus halt_baddata, garbage
+0x00009534 bogus halt_baddata, mid-instruction
+0x00009536 bogus halt_baddata, 1 byte
+0x000095b4 bogus halt_baddata, 1 byte
+0x0000cab0 bogus halt_baddata, 1 byte
+0x0000d5cc bogus bounds trap on junk pointer 0x2d463333
+0x0000d670 bogus byte stores through unaffected regs, halt_baddata
+0x0000d7a4 bogus byte stores through unaffected regs, halt_baddata
+0x0000d808 bogus byte stores through unaffected regs, halt_baddata
+0x0001df32 bogus garbage stores through unaffected regs, then sprite tail
+0x00002bee bogus starts mid-instruction (and.w/clr junk on unset A0); real tail from ~+0x1c draws 2 pal3f strings 0x2c38/0x2c4c
+0x00003df4 bogus starts mid-instruction (junk byte/long stores via A5/A0/A3); only tail calls hw_copy_pal_bytes_256 twice
+0x0000543e bogus starts mid-instruction (junk or.b/sub.b on A5/A6); tail emits sprite 0x423 from table 0x5518 indexed by D0&7
+0x0000652e bogus starts mid-instruction (add to (A3) junk); tail emits 4 sprites from table 0x661e
+0x0000659e bogus starts mid-instruction (junk or.b via A5/A6); tail emits sprite 0x423 from ptr table 0x666c
+0x00006cae bogus starts mid-instruction (bit ops on A5/A6, byte stores); tail emits sprite 0x39a at table 0x6d3c by 90200c
+0x00006d84 bogus junk or.w #0x30fc via A0 then sprite list pointer store; not a real entry
+0x00007636 bogus starts mid-instruction (add to (A3), or to (A1)); tail draws string 0x765c
+0x000076da bogus starts mid-instruction (junk on A5/A4); tail emits sprite 0x423 from table 0x77b4
+0x000093f4 bogus starts mid-instruction (bset junk on A0); tail is palette fade of 55 rgb entries to 0x101300 by 901bd6
+0x0000b1ac bogus ori.w #0x4e71 junk (misaligned, real code from +4 after the nop); draws gauge box 0x20b,0x118 and 2 strings
+0x0000b2c8 bogus ori.w #0x4e71 junk (misaligned, real from +4); gauge box 0x200,0x58 and strings
+0x0000b318 bogus starts with ori.b junk (misaligned, real from +4); gauge box 0x28b,0x100 and 3 strings
+0x0000b390 bogus ori.w #0x4e71 junk (misaligned, real from +4); gauge box 0x1c0,0xb0 and strings
+0x0000b3e0 bogus starts with ori.l junk via A0+D0; tail draws gauge box 0x284,0xa9 and strings
+0x0000b464 bogus ori.w #0x4e71 junk (misaligned, real from +4); gauge box 0x21a,0xf8 and strings
+0x0000eb90 bogus starts mid-instruction (junk byte stores via A0); tail calls spr_add_from_table_ofs if 901d64 set (sets 107304 bit1)
+0x0000ebdc bogus starts mid-instruction (junk via A0/A3); tail like eb90 using 901d68 / 107304 bit0
+0x0000ec28 bogus starts mid-instruction (junk via A0/A4); tail is banner/star sprite dispatch using 902708/902900
+0x0000ed52 bogus starts mid-instruction (bit ops via A2/A0); tail jumps through table 0xed7a by 902012&1
+0x0000f672 bogus starts mid-instruction (or/and junk via A0); tail emits 4 0x80x0x30 sprites from 10dae2/10daee
+0x00010ac4 bogus starts mid-instruction (bit junk via A0/A4); tail draws strings 0x10b74.. and a box from 901e00 flag
+0x00012c54 bogus starts mid-instruction (xor bit junk via A0/A2); tail emits 0x10x0x10 sprite at 0x1c8,0x90 from table 0x12cb8 by 901c24
+0x00012eb4 bogus starts mid-instruction (junk bit ops, trap 6); tail is a mass reset of state vars (107480, 902880, 901d40..)
+0x000131c0 bogus starts mid-instruction (add to byte via A0+D0); tail two spr_add_from_table_ofs
+0x00015672 bogus body is only rts, size 120 tail likely data/padding
+0x00016d96 bogus jump table target region at 16d74; decoded as 4 spr_add + 4 strings but first entry shares the table
+0x000171a2 bogus jump table (size 18, only rts decoded)
+0x0001746e bogus jump table (size 18, only rts decoded)
+0x0001849e bogus jump table (size 18, only rts decoded)
+0x0001875e bogus jump table (size 18, only rts decoded)
+0x000195f2 bogus starts mid-instruction (bit/or junk via A0/A4/A5); tail is full scene render same as 19616
+0x0001bb66 bogus starts mid-function (uses in_A0/A1/D6 as inputs, no setup); tail emits 2 sprites from table 0x1bc70
+0x0001be8a bogus only rts, size 14 tail likely data
+0x0001d89c bogus starts mid-instruction (and.b junk via A0); tail is test menu draw calls test_draw_*
+0x0001e058 bogus starts mid-instruction (or.b junk via A0); tail emits one 0x10x0x10 sprite
+0x0001f13e bogus only rts, size 18 tail likely data
+0x1dfaa bogus garbage unaff regs and stack refs, body starts mid-instruction
+0xc688 bogus mid-instruction start (garbage or/eor prefix); tail is string-sprite loop
+0xe272 bogus mid-instruction start (ori to A0 prefix, unaff regs); tail of sprite fill loop
+0xeda0 bogus ori.l garbage prefix then LZCOUNT jump, data-like
+0x139ca bogus ori.l/and.l garbage prefix, duplicate of 13982 body (data table region)
+0x16c3c bogus run of ori.b to A0 garbage then table jump; data bytes
+0x1922e bogus mid-instruction start (add.w #imm to A3 prefix), no callers

@@ -1,0 +1,9 @@
+Namco arcade game Cyber Sled (1993, System 21 C67, two 68000 CPUs: master = game logic, slave = HUD sprites, palette, link, test mode). Round 2 of naming: FILE holds the Ghidra decompile of the functions still called FUN_xxxx in the CPU program CPU; the functions they call already have descriptive names (from round 1), which is your main evidence. Also Grep the full decompile FULL for callers of an address (search "FUN_000xxxxx" or the address) when it helps.
+
+Memory map: 0x100000 work RAM, 0x180000 NVRAM (master), 0x1c0000 C148 IRQ ctl, 0x200000 DSP RAM, 0x400000/0x440000 pointram, 0x700000 C355 sprites, 0x740000 palette, 0x800000 data ROM, 0x900000 shared RAM (tank array 0x904000 stride 0x100), 0xa00000 I/O MCU dual-port RAM (inputs 0xa00000.., sound 0xa00420..), 0xb00000 C139 link, 0xc00000 edata ROM.
+
+For every function in FILE write exactly one line to OUT (Write tool):
+- if you can characterise it: 0x<hex addr> func <name> hand <short evidence>   (unique C identifier, max 40 chars, prefixes like the callees use: hw_, irq_, game_, player_, enemy_, shot_, col_, ai_, cam_, math_, mem_, io_, snd_, nv_, link_, hud_, spr_, pal_, txt_, test_, obj_; do not reuse a name that already exists in FULL)
+- if it is clearly not code (decompile shows halt_baddata, bad instruction, data bytes, a body that starts mid-instruction or falls into another function): 0x<hex addr> bogus <reason>
+- if it is real code but you truly cannot tell: 0x<hex addr> func <prefix>_unk_<hex addr> hand <what it does mechanically, e.g. "writes 3 words to 0x904010+idx">  -- give the mechanical role in the name where possible (e.g. tank_set_field_14, copy_8words) instead of unk.
+No other lines. Use only Read/Write/Grep. Final reply: counts of func / bogus lines.

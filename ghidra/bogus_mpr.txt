@@ -1,0 +1,113 @@
+0x00000266 bogus mid-instruction junk, bad instruction data
+0x0000026a bogus halt_baddata
+0x00000288 bogus mid-instruction junk, bad instruction data
+0x0000028c bogus halt_baddata
+0x000002b0 bogus mid-instruction junk bytes (A5 offsets 0x2d2d), not code
+0x000002d0 bogus mid-instruction junk, bad instruction data
+0x000002d4 bogus halt_baddata
+0x000002f4 bogus mid-instruction junk, bad instruction data
+0x000002fa bogus halt_baddata
+0x0000031a bogus mid-instruction junk, bad instruction data
+0x00000326 bogus bad instruction data branches, junk
+0x0000247c bogus offcut mid-instruction overlapping 0x2492 init code
+0x00002480 bogus offcut mid-instruction overlapping 0x2492 init code
+0x00002486 bogus offcut mid-instruction overlapping 0x2492 init code
+0x00002488 bogus offcut mid-instruction overlapping 0x2492 init code
+0x00002a54 bogus halt_baddata
+0x00002a68 bogus data table decoded as OR instructions (0x30600004.. values)
+0x00002a7c bogus data table decoded as OR instructions
+0x00002a90 bogus data table decoded as OR instructions
+0x00002aa4 bogus data table decoded as OR instructions
+0x00002ab8 bogus data table decoded as OR instructions
+0x00002acc bogus data table decoded as OR instructions
+0x00002ae0 bogus halt_baddata
+0x00002af4 bogus data table decoded as OR instructions
+0x00002b08 bogus data table decoded as OR instructions
+0x00002b30 bogus data table decoded as OR instructions
+0x00002b44 bogus data table decoded as OR instructions
+0x00002b58 bogus data table decoded as OR instructions
+0x00002b6c bogus data table decoded as OR instructions
+0x00002b80 bogus halt_baddata
+0x00002b94 bogus data table decoded as OR instructions
+0x00002ba8 bogus data table decoded as OR instructions
+0x00007a02 bogus halt_baddata
+0x0000a978 bogus bcdAdjust junk then halt_baddata
+0x0000a992 bogus halt_baddata
+0x0000c4a2 bogus halt_baddata
+0x000129ac bogus bcdAdjust junk then halt_baddata
+0x000129bc bogus halt_baddata
+0x000129be bogus halt_baddata
+0x00012bc2 bogus halt_baddata
+0x000145e4 bogus junk OR/bcd ops then halt_baddata
+0x00016016 bogus halt_baddata
+0x0001603c bogus halt_baddata
+0x00017a8c bogus halt_baddata
+0x00017a8e bogus halt_baddata
+0x00017ee8 bogus data decoded as code (0x4e71 nop opcode ORed, mid-instruction)
+0x00017efa bogus data decoded as code (0x4e71 nop opcode ORed, mid-instruction)
+0x00017fd0 bogus junk OR ops then halt_baddata
+0x00017fe2 bogus junk OR ops then halt_baddata
+0x00018124 bogus starts with junk OR ops mid-instruction
+0x0001917e bogus trap-6 chk junk then halt_baddata
+0x0001a0ec bogus junk then halt_baddata
+0x0001a104 bogus halt_baddata
+0x0001b01a bogus trap-6 chk junk then halt_baddata
+0x0001c122 bogus halt_baddata
+0x0001f618 bogus junk then halt_baddata
+0x0001f630 bogus halt_baddata
+0x000208ca bogus trap-6 chk junk then halt_baddata
+0x000219ec bogus junk stores then halt_baddata
+0x000219fc bogus halt_baddata
+0x00023654 bogus data table (gain table read as words by 231d8)
+0x00023680 bogus bcdAdjust/trap junk then halt_baddata
+0x000237f8 bogus halt_baddata
+0x0002f390 bogus halt_baddata
+0x0002f630 bogus bcdAdjust junk then halt_baddata
+0x0002f64e bogus halt_baddata
+0x00032f86 bogus halt_baddata
+0x00032f94 bogus halt_baddata
+0x00033e5a bogus junk then halt_baddata
+0x00033e7a bogus halt_baddata
+0x00034f30 bogus halt_baddata
+0x00034f34 bogus halt_baddata
+0x000354fc bogus trap junk then halt_baddata
+0x00035538 bogus halt_baddata
+0x0003d5e4 bogus bcdAdjust junk then halt_baddata
+0x0003d5fe bogus halt_baddata
+0x0003f184 bogus halt_baddata
+0x0003f190 bogus halt_baddata
+0x000004b4 bogus polls ROM-address variables 0x71e/0x5f2 then halt_baddata; not code
+0x000004bc bogus byte-swaps ROM-address data at 0x664/0x720, halt_baddata
+0x000004d6 bogus 16-byte entry into a data loop on ROM addresses 0x610-0x664
+0x000004e6 bogus writes through ROM-address vars 0x608-0x6e2; data region
+0x00000534 bogus copy loop on ROM-address vars 0x720-0x726 ending in infinite loop
+0x00000580 bogus unaff regs copy loop then infinite loop, no caller context
+0x000005a0 bogus stores via ROM-address vars 0x71e/0x722 then infinite loop
+0x3a00 bogus fragment with unset registers
+0x3c3c bogus fragment with unset registers
+0x3d00 bogus fragment with unset registers
+0x3e00 bogus fragment with unset registers
+0x3e9a bogus fragment with unset registers
+0x4a72 bogus fragment with unset registers
+0x8000 bogus fragment with unset registers
+0xa800 bogus uses undefined in_A1
+0x13800 bogus undefined in_A0 and ORI to (A0) at start, data bytes
+0x18582 bogus data bytes as ORs on unaffected regs, real code starts mid-way
+0x196da bogus data bytes as ORs on unaffected regs, real code starts mid-way
+0x1a5e0 bogus data bytes as ORs on unaffected regs, real code starts mid-way
+0x1fb70 bogus data bytes as ORs on unaffected regs, real code starts mid-way
+0x20202 bogus starts with junk negx on unaffected A6, real code starts mid-way
+0x20de0 bogus data bytes as ORs on unaffected regs, real code starts mid-way
+0x21fb0 bogus data bytes as ORs on unaffected regs, real code starts mid-way
+0x236fc bogus halt_baddata, bad instruction data
+0x450 bogus do-nothing infinite loop, vector/trap target not real code
+0x11c08 bogus decompile failed, 16 bytes, used as base of word-offset table lookup (data)
+0x129ae bogus bcdAdjust then halt_baddata
+0x12bc4 bogus halt_baddata
+0x17efc bogus mid-instruction start, ori/or garbage prefix then 64-byte record copy
+0x17fe4 bogus bcd/ori garbage then halt_baddata
+0x19180 bogus chk-trap garbage then halt_baddata
+0x24e84 bogus rtm instruction (68020 only), 2 bytes data
+0x25154 bogus rtm instruction (68020 only), 2 bytes data
+0x25364 bogus rtm instruction (68020 only), 2 bytes data
+0x2c6ee bogus mid-instruction start (ori garbage prefix); tail is 16-record sincos particle emit

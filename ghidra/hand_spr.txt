@@ -1,0 +1,1081 @@
+0x100 func exc_save_regs_dump_level7 hand saves regs to 0x600-0x664 then calls 0x490
+0x170 func exc_stub_call_dispatch hand exception stub calling dispatcher
+0x190 func exc_save_buserr_frame hand copies bus error frame to 0x6ec-0x71c
+0x22a func exc_trap_save_regs hand saves regs on trap
+0x3bc func exc_save_regs_short_frame hand saves regs short frame
+0x3ec func exc_clear_regs_and_hang hand clears regs then spins
+0x490 func exc_swap_regs_jump_handler hand swaps regs, jumps to handler
+0x1000 func main_reset_init_mainloop hand reset: clears RAM, init chain, then frame loop
+0x14ba func main_state_dispatch_14ba hand state dispatch (uncertain)
+0x159a func spr_clear_sort_add_bg hand resets sprite list 0x109000 and sort list 0x109004, adds bg
+0x1ca2 func spr_clear_sort_add_bg_b hand same as 159a variant
+0x15f2 func spr_add_fullscreen_blank hand adds blank full-screen sprite
+0x163c func pal_set_entry_3e6_on hand writes palette entry 0x3e6 on
+0x1660 func pal_set_entry_3e6_off hand writes palette entry 0x3e6 off
+0x1682 func irq_vblank_main hand level 1/2/3/6 vblank handler
+0x1750 func pal_upload_from_101300 hand 0x37 entries from 0x101300 to palette, high byte at +0x10001
+0x1856 func pal_cycle_anim_a hand palette cycling
+0x1972 func pal_cycle_anim_b hand palette cycling
+0x1a1a func io_read_inputs_analog hand 0xa00000 digital edge detect, 0xa00010-16 analog minus centres 0x9002c0-c6
+0x1b90 func main_wait_master_cmd_loop hand waits master command (uncertain)
+0x1cfa func irq_level5_link_update hand level 5 IRQ
+0x3188 func link_c139_rx_tx_buffers hand 0xb01000 frames to/from 0x900100 0x904000 0x102000
+0x3692 func link_c139_init hand C139 init
+0x3700 func link_build_tx_frames_checksum hand builds link tx frames with checksum
+0x37d8 func irq_link_c139_rx hand level 4 IRQ, C139 rx
+0x3a20 func link_copy_rx_to_shared hand copy rx to shared RAM
+0x3acc func hw_video_init_all hand calls video init chain
+0x3b10 func pal_init_regs_750000 hand palette regs at 0x750000
+0x3b2e func spr_init_pos_regs_720000 hand C355 position regs
+0x3b56 func spr_init_window_regs_702400 hand sprite window regs
+0x3c2e func spr_update_scroll_regs_702420 hand scroll regs
+0x3c66 func spr_set_fullscreen_window_702400 hand full-screen window
+0x3c7e func spr_init_table_704000 hand init table at 0x704000
+0x3d54 func hw_load_rom_pal_tables hand calls 3dd2 and 3d76
+0x3d76 func hw_copy_pal_table_x7 hand copies ROM palette table
+0x3dd2 func hw_copy_pal_table_loop9 hand copies ROM palette table loop of 9
+0x3e02 func hw_copy_pal_table_x2 hand copies ROM palette table
+0x3e82 func hw_copy_pal_table_x1 hand copies ROM palette table
+0x3ec4 func hw_copy_pal_bytes_256 hand copies 256 palette bytes
+0x3f16 func pal_blink_entry_7f14 hand blinks palette entry 0x7f14
+0x3f64 func pal_blink_entry_7f12 hand blinks palette entry 0x7f12
+0x3fb2 func spr_clear_ram_710000_714000 hand clears sprite RAM sort lists
+0x3fd6 func mem_clear_708000_forever hand clears 0x708000 (decode likely broken)
+0x403e func spr_copy_rom_to_705990 hand ROM copy to 0x705990
+0x405c func spr_copy_rom_to_708000 hand ROM copy to 0x708000
+0x407a func spr_load_and_build_704c00 hand loads and builds 0x704c00 table
+0x40de func spr_load_708000_pairs hand loads pairs to 0x708000
+0x4130 func spr_load_tile_set_by_index hand loads tile set by index
+0x4406 func test_clear_state_vars hand clears test state vars
+0x45be func test_init_items8_a hand copies 8x16 bytes from 0x47ac
+0x4a0e func test_init_items8_b hand copies 8x16 bytes from 0x47ac
+0x4c24 func test_update_items8_a hand updates 8 items
+0x45f8 func test_update_items8_b hand updates 8 items
+0x4c80 func test_item_x_dec hand decrement x, clamp at +0xe
+0x4c9e func test_item_x_inc hand increment x, clamp at +0xe
+0x4cbc func spr_add_item_from_struct hand adds sprite from item struct
+0x7244 func spr_add_from_table_ofs hand sprite from table with 0x902702/4 offsets
+0x728e func spr_add_from_ptr_save hand sprite from pointer saving state
+0x7320 func spr_advance_sort_list hand advances sort list
+0x7224 func main_reset_game_flags hand resets game flags
+0x70e8 func main_reset_game_flags_ret hand resets game flags variant
+0x9408 func pal_fade_to_white_table hand fade to white table
+0x94a2 func pal_copy_base_table_101300 hand copies base palette table to 0x101300
+0x9992 func pal_build_ramp_tables hand builds ramp tables
+0x9aa4 func pal_step_ramp_tables hand steps ramp tables
+0xa9de func spr_add_gauge_box_a hand gauge box sprites
+0xaa54 func spr_add_blink_box hand blinking box sprites
+0xae2e func txt_draw_string_sprites_ae2e hand string as sprites, pal 0x3f/0x2f
+0xae3a func txt_draw_string_sprites_ae3a hand string as sprites, pal 0x3f/0x2f
+0xaeca func test_dispatch_bits_902890 hand dispatch on bits of 0x902890
+0xb534 func spr_add_gauge_box_b hand gauge box sprites
+0xb9de func txt_draw_string_sprites_b9de hand string as sprites
+0xb9ea func txt_draw_string_sprites_b9ea hand string as sprites
+0xba7a func spr_add_from_table_a1 hand sprite from table via A1
+0xbb88 func main_clear_game_state_a hand clears game state
+0xbe20 func main_clear_game_state_b hand clears game state (same as bb88)
+0xbf8a func main_dispatch_flags_902894 hand 32 bit mask 0x902894, jump table at 0xbfb4
+0xc2aa func spr_add_three_from_a1 hand calls c754 three times
+0xc2ca func spr_add_two_from_a1 hand calls c754 twice
+0xc2e0 func spr_add_scaled_box_453 hand code 0x453 box scaled w*16+4 h*16+4 pal 0x30
+0xc6c4 func txt_draw_string_sprites_pal2f hand string from 0x105000 struct, pal 0x2f
+0xc754 func spr_add_item_from_a1 hand copies 6 words from A1 into sprite list
+0xc866 func main_clear_game_state_c866 hand clears many 0x901xxx 0x900fxx vars
+0xc9f6 func main_dispatch_flags_902898 hand 32 bit mask 0x902898, jump table at 0xca1a
+0xd154 func test_draw_menu_labels_d154 hand prints label strings at 0xd908-0xd9be
+0xd228 func txt_draw_text_grid_from_10d818 hand draws 6x24 + 3x24 char grid from 0x10d818
+0xd3ca func txt_copy_text_table_to_10d818 hand copies 0xd8 chars to 0x10d818
+0xd3e8 func txt_print_label_d3e8 hand prints label at 0xd820
+0xd402 func test_draw_label_pair hand label d820 then item then label d830
+0xd9d0 func spr_add_item_from_a1_b hand copies 6 words from A1 into sprite list
+0xda0a func main_call_1cab2_wrapper hand wrapper
+0xda12 func pal_load_ramps_all hand calls da30 and dad2
+0xda30 func pal_load_base_tables_sel hand writes 0x754201 and 0x744200 from selected tables
+0xdad2 func pal_load_depthcue_ramps hand builds 3-level shaded ramps at 0x754001 0x75be01
+0xdc7a func pal_fill_test_pattern hand fills 0x748000 and 0x74c000 with fixed patterns
+0xe01c func pal_load_ramps_wrapper hand wrapper calling e048
+0xe028 func pal_load_ramps_mode3 hand ramp load, selects table by 0x901d20==3
+0xe048 func pal_load_ramps_by_state hand ramp load, selects table by 0x902012 and 0x901d20
+0xe2a8 func test_draw_digit_column_string hand draws string 0123.. as column at x 0x110
+0xe312 func spr_draw_vertical_bar_column hand 10 sprites code 0x53 step 0x2c
+0xe372 func spr_draw_two_wide_bars hand 2 sprites code 0x45b
+0xe70a func txt_print_label_e70a hand prints label at 0xe736
+0xe748 func pal_set_entry_ccff44 hand writes 0x7403e6 0x7503e7 and 0x7423e6 0x7523e7 colour on
+0xe76a func pal_clear_entry_e76a hand clears the same palette entries
+0xe78c func pal_set_entry_white hand sets the same palette entries to 0xffbf/0xff
+0xe7ae func pal_clear_entry_e7ae hand clears the same palette entries
+0xe7d0 func main_dispatch_901c00_a hand jumps to e7e2
+0xe7d6 func main_dispatch_901c00_b hand jumps to e7e2
+0xe7e2 func main_dispatch_by_901c00 hand jump table on 0x901c00 and 3
+0xe976 func main_update_three_slots hand calls eb50 eb9c ebe8
+0xe984 func main_dispatch_by_901c40 hand jump table
+0xea1c func main_dispatch_by_901c42 hand jump table
+0xea92 func main_dispatch_by_901c44 hand jump table
+0xeb50 func main_slot_timer_a hand timer 0x901d60, sets 0x107304 bit 4
+0xeb9c func main_slot_timer_b hand timer 0x901d64, sets 0x107304 bit 2
+0xebe8 func main_slot_timer_c hand timer 0x901d68, sets 0x107304 bit 1
+0xec34 func main_frame_update_banner hand picks update path from 0x902708 and 0x902900
+0xecb4 func main_scan_bits_107300 hand finds highest bit of 0x107300
+0xecf8 func main_scan_bits_107304 hand finds highest bit of 0x107304
+0xed5e func main_dispatch_by_902012 hand jump table on bit 0
+0xedd4 func main_dispatch_by_901f08 hand two paths on 0x901f08
+0xf27c func spr_anim_banner_a hand banner animation counters 0x10dacc 0x10dace
+0xf372 func spr_anim_banner_b hand banner animation counter 0x10dad0
+0xf3fe func spr_add_banner_quads_a hand 4 sprites 0x90x0x50
+0xf494 func spr_add_banner_quads_b hand 2 sprites 0x90x0x50
+0xf538 func spr_random_star_sprites hand random positions via 0x10918 and 0x107100
+0xf68c func spr_add_star_quads hand 4 sprites 0x80x0x30
+0xf7c2 func main_init_flags_902902 hand sets 0x902902 and 0x107300 bit 5
+0xf80c func main_dispatch_by_901e8a hand jump table, increments 0x107600
+0xf908 func main_set_winner_flag_db02 hand 0 1 or 2 from 0x901d20 vs 0x901d22
+0xf964 func txt_print_result_labels hand three labels 0xf9ec 0xf9fa 0xfa08
+0xfa16 func main_dispatch_by_db02 hand jump table on 0x10db02
+0xfb70 func main_dispatch_by_900210 hand jump table, calls 7244 twice after 60 frames
+0xfdd2 func main_call_pair_7244 hand calls 7244 twice if 0x902012==0
+0x1001e func spr_draw_three_icon_rows hand rows codes 0x3c4-0x3c6 y 0x1c0 0x1d0 0x1e0
+0x1006e func spr_draw_icon_row hand D0 icons step 10 from x 0x210
+0x100ce func spr_update_window_regs_702430 hand computes window edges, writes 0x702430
+0x1017c func mem_copy_8words hand copies 8 words A0 to A1
+0x10196 func txt_draw_ending_text hand YOU HAVE FINALLY DEFEATED typewriter text
+0x103aa func txt_add_char_sprite_c0 hand one 16x16 char sprite code+0xc0 pal 0x3f
+0x10408 func spr_update_particles_80 hand updates 80 particle structs 0x10db2c
+0x1054a func spr_load_regs_702408 hand writes 4 regs at 0x702408
+0x105fc func mem_copy_particle_init_table hand copies 80 x 32 bytes table to 0x10db2c
+0x10670 func txt_draw_string_pal20 hand string sprites pal 0x20 with dot spacing
+0x10688 func txt_draw_string_pal2c hand string sprites pal 0x2c with dot spacing
+0x106a0 func txt_draw_string_pal2e hand string sprites pal 0x2e with dot spacing
+0x1067c func txt_draw_string_pal3c hand sets pal 0x3c then calls 106c0
+0x10694 func txt_draw_string_pal3e hand sets pal 0x3e then calls 106c0
+0x106ac func txt_draw_string_pal3f hand sets pal 0x3f in DAT_0010e532 then calls 106c0
+0x106c0 func txt_build_string_sprites hand reads string desc at DAT_00105000 (x,y,bpp) base DAT_00105004, one sprite per char into 0x109000 list
+0x107e8 func spr_build_icon_column_32 hand loop of sprite entries stepping y, 32px column
+0x1081c func spr_icon_column_tail hand tail part of icon column builder
+0x108b4 func spr_build_icon_row_16 hand row of 16px icon sprites
+0x10918 func math_lfsr_rand_step hand LFSR random at DAT_00107100
+0x10930 func txt_draw_two_strings hand two string descriptors drawn via 106ac
+0x10a42 func spr_draw_two_digit_number hand digit sprites for 2-digit value
+0x10bb4 func txt_draw_screen_a_flip hand screen text set A selected by flip flag
+0x10cec func txt_draw_screen_b_flip hand screen text set B selected by flip flag
+0x10da4 func txt_draw_default_pos hand text at default position
+0x10dae func txt_draw_at_x120 hand text at x=0x120
+0x10e18 func txt_draw_screen_c_flip hand screen text set C selected by flip flag
+0x11480 func obj_store_xy_from_c1d0 hand stores x,y from projection helper
+0x115a6 func txt_format_record_table hand formats record table lines
+0x11fa8 func main_calc_record_totals_6x hand totals loop over 6 records
+0x12046 func spr_push_five_entries hand pushes 5 sprite entries
+0x1206a func spr_push_entry_regs_32 hand sprite entry 32px from regs
+0x120be func spr_draw_big_letter_rows hand big letter sprite rows
+0x12196 func spr_push_entry_e7da hand sprite entry with code table at e7da
+0x12214 func spr_format_player_digits_4p hand per-player digits for 4 players
+0x12340 func spr_draw_score_panels hand score panel sprites
+0x123ea func spr_push_entry_8x16_plus60 hand 8x16 sprite entry offset 0x60
+0x1243e func spr_push_entry_32x32_e7e2 hand 32x32 sprite entry table e7e2
+0x1248a func main_init_tables hand init tables at boot
+0x12494 func mem_copy_901c50_table hand copies table to 0x901c50 shared RAM
+0x124b2 func mem_copy_strings_to_ram hand copies strings to RAM
+0x12688 func main_attract_init_a hand attract mode init
+0x127a2 func main_dispatch_mode3_a hand jump table dispatch on mode&3
+0x12846 func main_clear_game_vars_a hand clears game variables
+0x12966 func main_dispatch_mode3_b hand jump table dispatch on mode&3
+0x12a0e func spr_draw_select_screen hand select screen sprites
+0x12a46 func txt_draw_by_flag_ea46 hand text selected by flag
+0x12aca func spr_call_7244_x3 hand calls 7244 three times
+0x12b14 func spr_scroll_ea08_down hand scrolls sprite position
+0x12b36 func spr_push_entry_from_a1_a hand sprite entry from A1 params
+0x12b7a func spr_load_course_params_a hand load course icon params
+0x12bfa func spr_push_course_icon hand course icon sprite
+0x12c5c func spr_push_status_icon hand status icon sprite
+0x12cc0 func txt_draw_dispatch_901c24 hand text dispatch on 0x901c24
+0x12cf0 func txt_draw_ptr_list_5_a hand draws 5 strings from pointer list
+0x12d4c func txt_draw_ptr_list_5_a3 hand draws 5 strings variant
+0x12f02 func main_clear_game_vars_b hand clears game variables
+0x13028 func main_dispatch_mode3_c hand jump table dispatch on mode&3
+0x13278 func spr_push_entry_from_a1_b hand sprite entry from A1 params
+0x132bc func spr_load_course_params_b hand load course params
+0x13440 func txt_draw_ptr_list_5_b hand draws 5 strings from pointer list
+0x134c0 func txt_draw_ptr_list_term hand draws strings until terminator
+0x1395c func spr_draw_timer_hud hand timer HUD
+0x13966 func main_dispatch_902012 hand dispatch on 0x902012
+0x13aca func spr_update_bcd_countdown hand BCD timer 60 frame tick
+0x13b4c func spr_timer_check hand timer expiry check
+0x13b98 func spr_draw_timer_digits hand timer digit sprites
+0x13c6e func spr_push_timer_digit hand one digit sprite
+0x13cce func spr_draw_gauge_icons hand gauge icon sprites
+0x13ce8 func spr_setup_gauge_icon hand gauge icon setup
+0x13d2e func spr_draw_two_gauge_bars hand two gauge bars
+0x13d8e func spr_reset_gauge_pos hand reset gauge position
+0x13da0 func spr_step_gauge_pos hand step gauge position
+0x13dae func spr_push_gauge_entry hand gauge sprite entry
+0x13e0e func spr_push_gauge_entry_flip hand gauge sprite entry flipped
+0x13e7c func spr_draw_lives_bar hand lives bar
+0x13ea2 func spr_draw_lives_icons hand lives icons
+0x13ed0 func spr_draw_lives_empty hand empty life slots
+0x13f04 func spr_draw_extra_life_flash hand extra life flash
+0x13f2c func spr_push_lives_icon hand life icon sprite
+0x13fa0 func spr_push_lives_empty_icon hand empty life icon sprite
+0x14004 func spr_flash_notice_set hand notice flash set
+0x1401a func spr_push_notice_banner hand notice banner sprite
+0x1480c func spr_push_entries_loop_200_66 hand loop pushing entries x=0x200 code 0x66
+0x14af6 func spr_draw_radar hand radar
+0x14b3c func spr_radar_enemies hand radar enemy dots
+0x14b88 func spr_radar_item hand radar item dot
+0x14bc6 func spr_radar_pickups hand radar pickups
+0x14c2a func spr_push_radar_dot_3x3 hand 3x3 radar dot sprite
+0x14c76 func spr_radar_project_dot hand project world pos to radar
+0x14d4c func pal_fade_set_14d4c hand writes palette fade regs 0x7403e6
+0x14d70 func pal_fade_set_14d70 hand writes palette fade regs
+0x154f6 func pal_fade_set_154f6 hand writes palette fade regs
+0x1551a func pal_fade_set_1551a hand writes palette fade regs
+0x156ec func pal_fade_set_156ec hand writes palette fade regs
+0x15710 func pal_fade_set_15710 hand writes palette fade regs
+0x15b48 func pal_fade_set_15b48 hand writes palette fade regs
+0x15b6c func pal_fade_set_15b6c hand writes palette fade regs
+0x15eb6 func pal_fade_set_15eb6 hand writes palette fade regs
+0x15eda func pal_fade_set_15eda hand writes palette fade regs
+0x16134 func pal_fade_set_16134 hand writes palette fade regs
+0x16158 func pal_fade_set_16158 hand writes palette fade regs
+0x169cc func pal_fade_set_169cc hand writes palette fade regs
+0x169f0 func pal_fade_set_169f0 hand writes palette fade regs
+0x19412 func pal_fade_set_19412 hand writes palette fade regs
+0x19436 func pal_fade_set_19436 hand writes palette fade regs
+0x14f08 func spr_draw_target_markers hand target markers
+0x14f96 func spr_draw_warning_icons hand warning icons
+0x14fb0 func spr_warning_a hand warning icon a
+0x15020 func spr_warning_b hand warning icon b
+0x15088 func spr_push_warning_entry hand warning sprite entry
+0x150d8 func spr_project_marker_list_a hand project marker list
+0x151ee func spr_project_marker_single hand project single marker
+0x152f6 func spr_project_marker_list_b hand project marker list b
+0x1540c func spr_push_marker_bob hand bobbing marker sprite
+0x1553c func spr_draw_status_lights hand status lights
+0x15558 func spr_call_7244_loop hand loop calling 7244
+0x1564c func spr_call_7244_x4 hand calls 7244 x4
+0x15732 func spr_draw_gauges hand gauges
+0x1574c func spr_draw_gauge_frames hand gauge frames
+0x157ea func spr_blink_counter hand blink counter
+0x1582a func spr_draw_needle_1 hand needle 1
+0x1592c func main_dispatch_902012_b hand dispatch on 0x902012
+0x15952 func spr_needle2_dispatch hand needle 2 dispatch
+0x15968 func spr_draw_needle_2 hand needle 2
+0x15ae4 func spr_push_entry_eb0c hand sprite entry table eb0c
+0x15b8e func spr_draw_message_banner hand message banner
+0x15bc0 func spr_push_message_bar hand message bar sprite
+0x15c30 func spr_draw_start_msg hand start message
+0x15c7c func spr_push_start_banner hand start banner sprite
+0x15d04 func txt_draw_start_strings hand start strings
+0x15e08 func spr_screen_shake_update hand writes 0x902702/4 shake offsets
+0x15efc func spr_draw_hit_markers hand hit markers
+0x15f66 func spr_push_marker_a6 hand marker sprite
+0x15fb6 func spr_anim_frame_inc hand anim frame increment
+0x15fc8 func spr_marker_project hand project marker
+0x16046 func spr_marker_load_params hand load marker params
+0x160c6 func spr_marker_world_to_cam hand marker world to camera
+0x1617a func main_attract_init_b hand attract init
+0x16288 func spr_draw_player_markers hand player markers
+0x163d6 func spr_player_marker_check hand player marker check
+0x16430 func spr_push_player_marker hand player marker sprite
+0x16508 func spr_push_player_marker_extra hand extra player marker sprite
+0x16588 func spr_draw_edge_arrows hand edge arrows
+0x1677a func spr_push_edge_arrow_1677a hand edge arrow sprite
+0x16782 func spr_push_edge_arrow_16782 hand edge arrow sprite
+0x1685a func spr_push_edge_arrow_1685a hand edge arrow sprite
+0x16934 func spr_push_edge_arrow_anim hand animated edge arrow
+0x16a12 func spr_draw_minimap hand minimap
+0x16a2a func spr_minimap_frame hand minimap frame
+0x16a68 func spr_minimap_player hand minimap player
+0x16ab0 func spr_minimap_dots hand minimap dots
+0x16bec func spr_push_entry_eb68 hand sprite entry table eb68
+0x16f04 func txt_draw_menu_strings_8 hand 8 menu strings
+0x17128 func main_object_slot_dispatch hand object slot dispatch
+0x17162 func main_set_slot_state_3_a hand set slot state 3
+0x1716c func main_set_slot_state_3_b hand set slot state 3
+0x17186 func main_dispatch_900f82 hand dispatch on 0x900f82
+0x17312 func spr_calc_scale_a000_div hand scale = 0xa000/z
+0x17364 func spr_push_scaled_obj hand scaled object sprite
+0x173b2 func spr_load_obj_params hand load object params
+0x17452 func main_dispatch_900f84 hand dispatch on 0x900f84
+0x17680 func main_object_update_all hand update all objects
+0x17714 func main_dispatch_900f90 hand dispatch on 0x900f90
+0x177d2 func spr_obj_project_a hand project object a
+0x17828 func spr_obj_frame_from_dist_a hand frame from distance a
+0x1787e func spr_obj_scale_a hand scale object a
+0x178c0 func spr_push_obj_a hand push object a sprite
+0x17916 func spr_obj_load_params_a hand load params object a
+0x17a7c func main_dispatch_900f92 hand dispatch on 0x900f92
+0x17b3a func spr_obj_project_b hand project object b
+0x17b90 func spr_obj_frame_from_dist_b hand frame from distance b
+0x17be6 func spr_obj_scale_b hand scale object b
+0x17c28 func spr_push_obj_b hand push object b sprite
+0x17c7e func spr_obj_load_params_b hand load params object b
+0x17f9c func main_dispatch_900f94 hand dispatch on 0x900f94
+0x1805a func spr_obj_project_c hand project object c
+0x180b0 func spr_obj_frame_from_dist_c hand frame from distance c
+0x18106 func spr_obj_scale_c hand scale object c
+0x1815c func spr_push_obj_c hand push object c sprite
+0x181cc func spr_obj_load_params_c hand load params object c
+0x1825c func main_dispatch_900f86 hand dispatch on 0x900f86
+0x1831a func spr_obj_project_d hand project object d
+0x18370 func spr_obj_frame_from_dist_d hand frame from distance d
+0x183c6 func spr_obj_scale_d hand scale object d
+0x18408 func spr_push_obj_d hand push object d sprite
+0x1845e func spr_obj_load_params_d hand load params object d
+0x18482 func main_dispatch_900f88 hand dispatch on 0x900f88
+0x18528 func spr_obj_list_update_loop_18528 hand object list update loop
+0x1863c func spr_push_obj_200 hand object sprite at x 0x200
+0x18742 func main_dispatch_900f8a hand dispatch on 0x900f8a
+0x187e8 func spr_obj_list_update_loop_187e8 hand object list update loop
+0x18900 func spr_push_obj_scaled hand scaled object sprite
+0x18c78 func spr_push_obj_flipped hand flipped object sprite
+0x18cc2 func spr_load_obj_params_fa hand load object params fa
+0x18ce0 func math_scale_obj_size hand scale object size
+0x1911e func spr_call_7244_x2 hand calls 7244 x2
+0x19150 func spr_draw_target_hud hand target HUD
+0x19166 func obj_project_three_points hand project three points
+0x191b0 func spr_call_7244_x4b hand calls 7244 x4
+0x192fe func spr_draw_ammo_columns hand ammo columns
+0x193cc func spr_push_ammo_icons hand ammo icon sprites
+0x19458 func main_dispatch_901f44 hand dispatch on 0x901f44
+0x194be func main_clear_slots hand clear object slots
+0x195ac func main_start_object_update hand start object update
+0x195c6 func main_stop_object_update hand stop object update
+0x197b2 func main_dispatch_901d70 hand dispatch on 0x901d70
+0x1996e func main_clear_game_vars_c hand clears game variables
+0x19a36 func main_attract_update hand attract update
+0x1a1a4 func main_dispatch_902012_and1 hand dispatch on 0x902012 and 1
+0x1a308 func main_dispatch_902010 hand dispatch on 0x902010
+0x1a504 func spr_call_7244_x6 hand calls 7244 x6
+0x1a7e4 func main_attract_stop hand attract stop
+0x1a806 func math_cam_setup_a hand stores DAT_00107050..54
+0x1a830 func math_cam_rel_a hand camera relative a
+0x1a880 func math_cam_setup_b hand stores DAT_00107000..04
+0x1a8aa func math_cam_rel_player hand camera relative player
+0x1a922 func math_cam_setup_b2 hand camera setup b2
+0x1a94c func math_cam_rel_player2 hand camera relative player 2
+0x1a9c4 func math_cam_setup_c hand camera setup c DAT_00107020
+0x1a9ee func math_cam_rel_c hand camera relative c
+0x1aa3c func math_cam_setup_d hand camera setup d
+0x1aa66 func math_cam_rel_d hand camera relative d
+0x1aab4 func math_build_cam_matrix hand build camera matrix
+0x1ab1a func main_attract_init_c hand attract init
+0x1ad16 func math_matrix_vec_mul_3x3 hand fixed point 3x3 multiply (+0x8000 >>16) 902600-610 x 107006/8/a -> 107040/42/44
+0x1adfe func obj_build_particle_tables hand particle tables
+0x1ae60 func math_neg_sincos hand negate sincos
+0x1ae82 func obj_copy_cam_rel_128 hand copy cam-rel 128 entries
+0x1aeb8 func obj_copy_cam_rel_8 hand copy cam-rel 8 entries
+0x1aefe func math_rotate_pair_a hand 2D rotate pair
+0x1af32 func math_rot2d_sum hand 2D rotate sum
+0x1af58 func math_scale_pair hand scale pair
+0x1b0f6 func spr_draw_effect_1 hand effect 1
+0x1b146 func spr_effect1_project hand effect 1 project
+0x1b186 func spr_effect1_anim hand effect 1 anim
+0x1b19a func spr_effect1_frame hand effect 1 frame
+0x1b1de func spr_effect1_scale hand effect 1 scale
+0x1b218 func spr_push_effect1 hand effect 1 sprite
+0x1b26a func spr_draw_effect_2 hand effect 2 counter DAT_00900e26 sprite DAT_0010fc48
+0x1b2ca func spr_effect2_project hand c18a projection to DAT_0010fc4a/4c (+0x200,+0x108)
+0x1b30a func spr_effect2_anim_tick hand increments frame when DAT_00100006 bit0
+0x1b31e func spr_effect2_pal_from_depth hand palette from DAT_00107034 into DAT_0010fc50
+0x1b362 func spr_effect2_size_from_depth hand size 0x14000/z clamp 0xff into DAT_0010fc4e
+0x1b39c func spr_push_effect2 hand pushes sprite entry from DAT_0010fc48-50
+0x1b3f0 func pal_fade_set_ff7f_1b3f0 hand writes 0xff7f to 0x7403e6 and 0x7423e6
+0x1b414 func pal_fade_set_ff00_1b414 hand writes 0xff00 to 0x7403e6 and 0x7423e6
+0x1b436 func spr_draw_effect_3_list hand loop 4 entries at 0x900f00 stride 8, fade timer 0x2e
+0x1b500 func spr_effect3_load_cam_rel hand cam-rel pos from 0x900808/a/c to 107006/8/a
+0x1b544 func spr_push_effect3 hand pushes effect 3 sprite entry
+0x1b588 func spr_effect3_anim hand frame increment cap 0x401
+0x1b5aa func spr_effect3_depth_check hand compares DAT_0010fcb6 with 0x2000 no effect
+0x1b5e4 func pal_fade_set_447f_1b5e4 hand writes 0x447f/0x44 to palette regs
+0x1b608 func pal_fade_set_ff00_1b608 hand writes 0xff00 to palette regs
+0x1b62a func spr_draw_effect_4 hand single effect timer 0x902706 same pattern
+0x1b6fa func spr_effect4_load_cam_rel hand cam-rel from 0x900800/2/4
+0x1b740 func spr_push_effect4 hand pushes effect 4 sprite
+0x1b786 func spr_effect4_anim hand frame increment cap 0x401
+0x1b7ae func spr_effect4_depth_check hand compares DAT_0010fd1c with 0x2000 no effect
+0x1b7e8 func pal_fade_set_447f_1b7e8 hand writes 0x447f/0x44 to palette regs
+0x1b80c func pal_fade_set_ff00_1b80c hand writes 0xff00 to palette regs
+0x1b82e func spr_draw_effect_5 hand effect 5 timer 0x902706
+0x1b870 func spr_push_effect5 hand pushes 0xc0x0xc0 sprite
+0x1b8ca func spr_effect5_anim_tick hand frame increment
+0x1b8de func spr_effect5_project hand c18a projection into DAT_0010fd22/24
+0x1b92a func spr_effect5_pick_frame hand atan2 f45e selects frame table 1b972
+0x1b9f2 func spr_effect5_cam_rel hand matrix multiply result to 10fd2c-30
+0x1ba1c func spr_effect5_load_cam_rel hand cam-rel from 0x904000 table index 0x901af0
+0x1ba7a func spr_draw_scrolling_backdrop hand 3 backdrop sprites from tables, scroll by 0x90080e
+0x1bbe2 func spr_push_backdrop_a hand sprite code 0x1d4 at 0x200,0xa0
+0x1bc2a func spr_push_backdrop_b hand sprite code 0x1d4 at 0x200,0x60
+0x1c030 func hw_fill_column_wrapper hand calls 1c170
+0x1c170 func hw_fill_column_32 hand 32 iterations write word to A1 and byte to A2 stride 0x200
+0x1c18a func math_project_to_screen hand x*0x14d/z, y*0x155/z with clip +-0xf3/0xf9, -1 if clipped
+0x1c1d0 func math_split_decimal_2digit hand splits value under 100 into tens/ones
+0x1c274 func math_split_decimal_5digit hand splits into 5 digits at 0x107806-0e, cap 32767
+0x1c320 func math_build_rot_matrix_902400 hand builds 3x3 rotation matrix from sin/cos at 0x902412-1a into 0x902400
+0x1c548 func math_build_rot_matrix_902500 hand same for 0x902500 from 0x902512-1a
+0x1c716 func math_build_rot_matrix_902600 hand same for 0x902600 from 0x902612-1c
+0x1c8e4 func math_build_rot_matrix_902600b hand alternate order matrix into 0x902600
+0x1cab2 func spr_push_icon_5f hand sprite code 0x5f at 0x2d0,0x50
+0x1cb02 func test_clear_sel_9 hand clears 9 words at 0x10fd9c marks selection 0x60
+0x1cb2a func test_draw_menu_9_items hand 9 strings, highlighted via 10694 else 106ac
+0x1ccae func test_draw_strings_7 hand 7 strings from table
+0x1ccd2 func test_draw_dip_bits_8 hand 8 strings by bits of 0xa00026 input
+0x1cd12 func test_draw_input_bit5 hand string by bit 0x20 of 0xa00004
+0x1cd4e func test_clear_sel_3 hand clears 3 words at 0x10fdae
+0x1cd62 func test_draw_input_bit6 hand string by bit 0x40 of 0xa00004
+0x1cd92 func test_draw_menu_3_dispatch hand jump table by 0x10a000 then draws 3 strings
+0x1ce46 func test_mark_sel_1 hand writes 0x60 at A1+2
+0x1ce4e func test_mark_sel_0 hand writes 0x60 at A1
+0x1ce54 func test_mark_sel_2 hand writes 0x60 at A1+4
+0x1ce5c func test_draw_adjuster_screen hand AD JUSTER, jump table by 0xa0000a, draw hex words and strings
+0x1cf48 func test_draw_adjuster_axes hand calls nine axis draw helpers
+0x1cf6e func test_draw_axis_label_a00c hand label by sign of 0x10a00c
+0x1cfbe func test_draw_axis_label_a010 hand label by sign of 0x10a010
+0x1d00e func test_draw_axis_label_a00a hand label by sign of 0x10a00a
+0x1d05e func test_draw_axis_label_a00e hand label by sign of 0x10a00e
+0x1d0ae func test_draw_axis_mark_a00c hand mark if 0x10a00c out of range
+0x1d0e0 func test_draw_axis_mark_a00a hand mark if 0x10a00a out of range
+0x1d112 func test_draw_axis_mark_a010 hand mark if 0x10a010 out of range
+0x1d13e func test_draw_axis_mark_a00e hand mark if 0x10a00e out of range
+0x1d16a func test_draw_hex_words_x4 hand 4 nibble/digit pairs
+0x1d1aa func test_split_nibbles_fdb4 hand splits D0.w into 4 nibbles at 0x10fdb4-ba
+0x1d20c func test_push_hex_digits_2 hand pushes 2 digit sprites 16x16 pal 3f
+0x1d56e func test_draw_screen_dispatch hand 2 strings then jump table by 0x901ed0 and 3
+0x1d652 func test_clear_sel_4 hand clears 4 words at 0x10fdc8
+0x1d67a func test_draw_menu_4_items hand 4 strings highlight
+0x1d6c2 func test_draw_hex_words_x3 hand 3 nibble/digit pairs
+0x1d6f4 func test_split_nibbles_fdc0 hand splits D0.w into nibbles 0x10fdc0-c6
+0x1d756 func test_push_hex_digits_2b hand pushes 2 digit sprites
+0x1d8d6 func test_draw_string_1db50 hand draws one string
+0x1d8f0 func test_clear_sel_9b hand clears 9 words at 0x10fdd0
+0x1d918 func test_draw_menu_9b_items hand 9 strings highlight
+0x1d960 func test_draw_strings_3 hand 3 strings from table
+0x1d984 func test_draw_marker_icons hand marker icons by flags
+0x1d9ea func test_draw_marker_by_901b38 hand string and icons by 0x901b38
+0x1da6c func test_push_icon_16 hand pushes 16x16 icon sprite pal 3f
+0x1daac func test_draw_toggle_pair_a hand two strings by 0x901b3c/3e
+0x1dafe func test_draw_toggle_pair_b hand two strings by 0x901b52/54
+0x1dda0 func test_draw_string_1e192 hand one string
+0x1ddba func test_clear_sel_10 hand clears 10 words at 0x10fde2
+0x1dde2 func test_draw_menu_10_items hand 10 strings highlight
+0x1de42 func test_push_icons_x8 hand 8 icon pushes
+0x1debc func test_draw_five_rows hand copies tables and draws 5 rows of strings
+0x1e0ca func test_push_icon_16b hand pushes 16x16 icon sprite
+0x1e10a func test_draw_toggle_901b52 hand string by 0x901b52
+0x1e130 func txt_draw_string_tail_e130 hand tail jump to 106ac
+0x1e138 func test_draw_toggle_901b50 hand string by 0x901b50
+0x1e166 func test_draw_toggle_10d14e hand string by 0x10d14e
+0x1e33c func txt_draw_ptr_list_until_ffff hand draws strings until pointer -1
+0x1e362 func test_split_nibbles_fe70 hand splits D0.w into nibbles 0x10fe70-76
+0x1e3c4 func test_push_hex_digits_4 hand pushes 4 digit sprites
+0x1e412 func test_push_hex_digits_5 hand pushes 5 digit sprites
+0x1e460 func test_push_hex_digits_2c hand pushes 2 digit sprites
+0x1e4ae func test_push_hex_digits_4_narrow hand pushes 4 digit sprites 8 wide
+0x1e6e8 func test_draw_if_input_a002 hand string if 0x10a002 bits 0x41
+0x1e99c func test_draw_string_1e9c4 hand one string
+0x1e9b6 func test_call_7244 hand calls 7244
+0x1e9fa func test_call_7244_x8_a hand calls 7244 x8
+0x1ea5c func test_call_7244_x8_b hand calls 7244 x8
+0x1eb84 func test_draw_string_1eb9e hand one string
+0x1ebc4 func test_draw_three_strings hand 3 strings
+0x1ebfe func test_select_item_902280 hand clears 8 words at 0x10fe78 marks selection by 0x902280
+0x1ec34 func test_draw_flags_902282 hand draws strings by flags at 0x902282
+0x1ec64 func test_draw_menu_8_items hand 8 strings highlight by 0x10fe78
+0x1ee46 func test_draw_string_1ee84 hand one highlighted string
+0x1ee60 func test_draw_ten_strings hand 11 strings from table
+0x1f122 func test_dispatch_900380 hand jump table on 0x900380 and 3
+0x1f19e func test_ram_check hand writes pattern to RAM and compares, writes 0x1e6000 watchdog, state 0x900382
+0x1f246 func test_draw_string_1f358 hand one highlighted string
+0x1f268 func test_dispatch_900384 hand jump table on 0x900384 and 3
+0x1f412 func math_table_lookup_long hand reads long from table by D0&0xfffe *2
+0x1f43c func math_sincos_lookup hand sin and cos words from table at 0x40000 with +0x4000 offset
+0x1f45e func math_atan2_table hand octant atan2 using ratio table at 0x1f56c, result 0..0xffff
+0x1f564 func math_ret_7fff hand returns 0x7fff
+0x0000163a func hw_rts_stub_163a hand body is only rts
+0x0000165e func hw_rts_stub_165e hand body is only rts
+0x00001734 func hw_rts_stub_1734 hand body is only rts
+0x00001736 func spr_add_table_ofs_wrap hand calls spr_add_from_table_ofs once
+0x00001d56 func test_draw_str_1dfc hand txt_draw_string_pal3f str 0x1dfc, attr 0x60
+0x00001d70 func test_clear_d010_4longs hand zeroes 16 bytes at 0x10d010
+0x00001d84 func test_draw_menu_8items hand 8 strings via ptr table 0x1ee6, attr from 0x10d010
+0x00001dac func test_spr_cursor_box_900014 hand adds 16x16 sprite code from 0x900014 at x200 y1f0
+0x00001f18 func test_spr_item_902202 hand adds sprite from 0x902202 fields, pal=(0x90220e&0xf)+0x30
+0x00001f72 func test_draw_menu_9items hand marks sel 0x902212 in 0x10d022, draws 9 strings
+0x000020f8 func test_draw_nibble_sprites hand calls nibble split 2102 then sprite add 2142
+0x00002102 func test_split_nibbles_902202 hand 8 words at 0x902202 -> 32 nibbles at 0x10d034
+0x00002142 func test_spr_nibbles_32_8x16 hand 32 sprites 8x16 from 0x10d034 nibbles at table 0x21da
+0x00002196 func test_apply_tileset_902210 hand on input bits 0x41 loads tile set by 0x902210, pal copy
+0x00002270 func test_draw_menu_b hand calls 2364,2378,238e
+0x0000227e func test_split_nibbles_ptrs hand 8 words via ptr table 0x24b4 -> nibbles at 0x10d05c
+0x000022c0 func test_spr_nibbles_32_b hand 32 sprites from 0x10d05c at table 0x24d4
+0x00002314 func test_draw_str_by_90230c hand string index 0x90230c via ptr table 0x2554
+0x0000233c func test_draw_str_by_90230e hand string index 0x90230e via ptr table 0x25c0
+0x00002364 func test_clear_d0ac_6longs hand zeroes 24 bytes at 0x10d0ac
+0x00002378 func test_mark_sel_902300 hand writes 0x60 to 0x10d0ac[0x902300]
+0x0000238e func test_draw_menu_11items hand 11 strings ptr table 0x2488 attrs 0x10d0ac
+0x000025f8 func test_clear_d0c4_32longs hand zeroes 128 bytes at 0x10d0c4
+0x0000260c func test_expand_bits_x4 hand calls 264e four times
+0x0000264e func test_expand_bits_byte hand for each of 8 bits of (A0) set 0x60 in A1 word array
+0x0000266e func test_draw_str_list_10 hand 10 strings ptr table 0x29ca, first/last attr 0x60
+0x000026c2 func test_draw_input_bits hand calls 26d0,2710,2764
+0x000026d0 func test_split_nibbles_a00a hand 4 words 0x10a00a -> nibbles at 0x10d104
+0x00002710 func test_spr_nibbles_16 hand 16 sprites 16x16 from 0x10d104 table 0x27c0
+0x00002764 func test_spr_bits_32 hand 32 sprites tile=bit(0x10d0c4)+1 table 0x2800
+0x00002a10 func test_spr_big_box_d0 hand sprite code D0 at x200 y118 size 20x20 pal ff
+0x00002a7a func test_draw_str_2a94 hand txt_draw_string_pal3f str 0x2a94 attr 0x60
+0x00002aa8 func test_clear_mark_90221a hand zero 4 words at 0x10d124, mark sel 0x90221a=0x60
+0x00002ad0 func test_draw_menu_4items hand 4 strings ptr table 0x2bd6 attrs 0x10d124
+0x00002af8 func test_spr_nibbles_8 hand splits 2 words then 8 sprites from 0x10d12c table 0x2be6
+0x00002b6c func math_split_nibbles_d0_a0 hand D0 word -> 4 nibble words at (A0)
+0x00002c62 func hw_rts_stub_2c62 hand body is only rts
+0x00002c76 func test_draw_str_2c90 hand txt_draw_string_pal3f str 0x2c90 attr 0x60
+0x00002ca8 func test_spr_column_16 hand 16 sprites x150 y from 0x1a6 step -0x14 tiles 0..f
+0x00002cfa func test_spr_flag_901b06 hand sprite tile = (0x901b06!=0) at x120 y120
+0x00002d58 func test_spr_toggle_overlay hand toggles 0x10d13e on input bit 1, draws 0x100 box tile 455
+0x00002df6 func test_draw_page_14spr_5str hand 14 table sprites + 5 strings x attr 0x120
+0x00003114 func spr_add_16x16_d7_a6 hand sprite code D7 pos from (A6) size 16x16 pal 3f
+0x00004462 func spr_add_table_ofs_x4_4462 hand calls spr_add_from_table_ofs 4 times
+0x000044c4 func spr_add_table_ofs_x4_44c4 hand calls spr_add_from_table_ofs 4 times
+0x000046d6 func hud_draw_2digit_label_4798 hand str 0x4798 then 2-digit sprites tile 0x34e table 0x4790
+0x000046fe func hud_spr_2digit_4790_zero hand spin loop, 2 digit sprites from 0x10d372 table 0x4790 (mid-function entry)
+0x00004a48 func hud_draw_str_4a62 hand txt_draw_string_pal3f str 0x4a62
+0x00004a84 func hud_draw_str_if_flag8 hand draws str 0x4aaa if 0x100006 bit3
+0x00004ac0 func hud_draw_2digit_label_4b5e hand str 0x4b5e then 2-digit sprites tile 0x34e table 0x4b4a
+0x00004b72 func hud_draw_2digit_big_ge10 hand if 0x10d49a>=10 str 0x4c10 + 2 big digits tile 0x37c
+0x00004e14 func hud_copy_48words_510c hand copies 48 words 0x510c -> 0x10d5c0
+0x00004e2c func hud_scroll_anim_d5c0 hand flips sprite tiles 2d/2e by 0x90200a, scrolls x 0x10d5c2/0x10d5ce
+0x000051ac func hud_spr_2digit_5224 hand 2 digit sprites tile 0x34e table 0x5224 pal 2d
+0x000052fc func hud_draw_3str_106b8 hand 2-3 strings via 0x106b8, third if 0x100006 bit5
+0x000053a6 func hw_rts_stub_53a6 hand body is only rts
+0x000053a8 func hud_draw_str_53c2 hand str 0x53c2 via 0x106b8
+0x000053dc func hud_spr_4_by_902000 hand 4 sprites, pal table indexed (0x902000&7)*8 at 0x5446
+0x00005528 func hw_rts_stub_5528 hand body is only rts
+0x00006448 func hud_draw_str_6462 hand str 0x6462 via 0x106b8
+0x0000647a func hud_draw_str_by_902000 hand sprite add + string from table 0x64b4 index (0x902000&f)-5
+0x00006670 func hud_spr_2digit_6726_cond hand 2 digit sprites tile 0x34e table 0x6726, entry mid-function if 0x900221 bit0
+0x0000669c func hud_spr_2digit_6726 hand math_split_decimal_2digit, 2 digit sprites table 0x6726
+0x000067c8 func hud_draw_str_set_a hand pal2e str 0x68b6 + 2 strs via 0x106b8
+0x000067fa func hud_draw_str_set_b hand pal2e str 0x68c6 + 2 strs via 0x106b8
+0x000069b0 func hud_adjust_spr_ofs_up hand adds 0x20 and 0x10 to word+2 of 16-byte entries D0,D1 at A2
+0x000069d8 func hud_adjust_spr_ofs_down hand adds -0x10 and -0x20 to word+2 of 16-byte entries D0,D1 at A2
+0x000069ee func hud_spr_from_table_d0 hand copies 16-byte entry D0 at A2 into sprite, alt big sprite if 0x901e92
+0x00006a92 func hud_set_tile_by_90200c hand if 0x902100==0 writes tile 0x394/0x94 into 16-byte entries via table 0x6ad8
+0x00006baa func hud_spr_6_tiles_6d3c hand 6 sprites tile 1..6 pos table 0x6d3c size 30x30 pal 2f
+0x00006c06 func hud_spr_6_strip_3d2 hand 6 sprites tile 0x3d2 x from 0x6cae y b0 size 50 pal 2c
+0x00006c58 func hud_spr_6_strip_tbl hand 6 sprites tiles from 0x6cba x from 0x6cae y b0 pal 2c
+0x0000733a func spr_icon_col_ptr_ff hand sets 0x10d6e0=ffff, builds icon column from A1 table
+0x00007346 func spr_icon_col_ptr_0 hand sets 0x10d6e0=0, builds icon column from A1 table
+0x0000735e func spr_icon_col_a1 hand loads params from A1 into 0x105020.., spr_build_icon_column_32
+0x00007396 func spr_icon_a1_via_1084e hand loads params from A1 into 0x105020.., calls 0x1084e
+0x00007460 func hud_screen_7460_draw hand clears 901bd0.., calls 4526,7678,7584,77c4,787c,7494
+0x00007584 func hud_spr_str_by_902000_and7 hand sprite add + string from table 0x75bc index 0x902000&7
+0x00007678 func hud_spr_4_by_902000_b hand 4 sprites pal table (0x902000&7)*8 at 0x76e2
+0x000077e2 func hud_spr_2digit_786c hand 2 digit sprites tile 0x34e table 0x786c
+0x000078b4 func hud_screen_78b4_draw hand calls 44c4,7cf0,791e,7e72,78d4,7f2a,7fcc
+0x0000791e func hud_spr_dispatch_902016 hand sprite add then jump table by 0x902016&3 at 0x7946
+0x00007a70 func spr_add_ptr_and_table_x4 hand 4x spr_add_from_ptr_save + 4x spr_add_from_table_ofs
+0x00007cc2 func hud_draw_str_7cdc hand str 0x7cdc via 0x106b8
+0x00007cf0 func hud_spr_3x3_grid hand 9 sprites tiles 0x7d5c pos 0x7d6e pal by 0x902016&3
+0x00007e04 func hud_spr_ptr_tbl_d0 hand sprite tile 423, geometry from ptr table 0x7e66[D0]
+0x00007e90 func hud_spr_2digit_7f1a hand 2 digit sprites tile 0x34e table 0x7f1a
+0x00008010 func hud_screen_8010_draw hand clears 901bd0.., calls 8048,80b2, str 4a48/4ac0 if 0x900106 bit3
+0x000080b2 func hud_draw_page_counter hand str 0x81d6 + page digits from 0x900296 and 0x900286/0x900280
+0x0000812e func hud_spr_digit_clamp9 hand sprite tile 0x10d6ec clamped to 9 at x 0x10d6ee y 1a0
+0x0000818c func hud_spr_digit_d6ec hand sprite tile 0x10d6ec at x 0x10d6ee y 1a0
+0x000081e6 func hud_screen_score_sel_901ee0 hand 3 strs, 2 digit sprites, highlight pal3c/3f by 0x901ee0
+0x00008320 func hud_screen_score_sel_901ee2 hand 3 strs, 2 digit sprites, highlight pal3c/3f by 0x901ee2
+0x00008468 func hud_draw_str_8658 hand str 0x8658 via 0x10664
+0x0000847c func hud_draw_rank_screen hand 8 pal3e strs, 1 pal3f str, animated sprite by 0x901eb4/60&3
+0x00008f90 func hw_rts_stub_8f90 hand body is only rts
+0x0000910a func game_clear_902180_2w hand zeroes words 0x902180,0x902182
+0x00009276 func hud_clear_107602 hand zeroes word 0x107602
+0x00009280 func hud_draw_10spr_str hand 10x spr_add_from_table_ofs then str 0x932e
+0x0000933a func hud_draw_str_if_flag10 hand draws str 0x9360 if 0x100006 bit4
+0x00009376 func hud_draw_2str_93a0 hand strs 0x93a0 and 0x93bc
+0x000093da func hud_draw_str_93f4 hand str 0x93f4
+0x0000987a func spr_big_box_d6f8 hand sprite tile 0x10d6f8 at x200 y120 size 120x120 pal 1
+0x000098c2 func spr_inc_d6f8_on_vbl hand 0x10d6f8++ if 0x100006 bit0
+0x00009936 func spr_big_box_d6fa hand sprite tile 0x10d6fa at x200 y108 size 17f pal 30
+0x0000997e func spr_inc_d6fa_on_vbl hand 0x10d6fa++ if 0x100006 bit0
+0x00009d84 func hud_draw_str_if_flag10_b hand draws str 0x9d3c if 0x100006 bit4
+0x00009daa func hud_screen_dispatch_901e8a hand clears 901bd0.., icon push, jump table by 0x901e8a&3 at 0x9dde
+0x0000b4c2 func hud_gauge_screen_b4c2 hand sets 106104=ffff, gauge box at 262,75, 2 strs via b9de
+0x0000da28 func pal_load_planes_by_900300 hand copies 16x64 longs to 0x754201 (bytes stride 2) and 16x128 longs to 0x744200 from tables by 0x900300
+0x00010192 func hw_rts_stub_10192 hand body is only rts
+0x00011498 func hud_set_2f_call_1154c hand empty delay loop, sets 0x10e7ac=2f, calls 0x1154c
+0x000114c8 func hud_call_1154c_delayed hand empty delay loop then calls 0x1154c
+0x000114f2 func hud_set_2f_call_1154c_b hand empty delay loop, sets 0x10e79e=2f, calls 0x1154c
+0x0001157c func hud_fill_triple_10_10_107804 hand writes 0x10,0x10,0x107804 to (A6)
+0x00011590 func hud_fill_triple_10_107802_4 hand writes 0x10,0x107802,0x107804 to (A6)
+0x00014d4a func hw_rts_stub_14d4a hand body is only rts
+0x00014d6e func hw_rts_stub_14d6e hand body is only rts
+0x00014d92 func hud_call_14da0_14e22_14e56 hand calls three subs in sequence
+0x00014f90 func hud_warning_icons_wrap hand calls spr_draw_warning_icons
+0x000154f4 func hw_rts_stub_154f4 hand body is only rts
+0x00015518 func hw_rts_stub_15518 hand body is only rts
+0x000156ea func hw_rts_stub_156ea hand body is only rts
+0x0001570e func hw_rts_stub_1570e hand body is only rts
+0x00015b46 func hw_rts_stub_15b46 hand body is only rts
+0x00015b6a func hw_rts_stub_15b6a hand body is only rts
+0x00015eb4 func hw_rts_stub_15eb4 hand body is only rts
+0x00015ed8 func hw_rts_stub_15ed8 hand body is only rts
+0x00016132 func hw_rts_stub_16132 hand body is only rts
+0x00016156 func hw_rts_stub_16156 hand body is only rts
+0x000169ca func hw_rts_stub_169ca hand body is only rts
+0x000169ee func hw_rts_stub_169ee hand body is only rts
+0x0001715e func hw_rts_stub_1715e hand body is only rts
+0x00017160 func hw_rts_stub_17160 hand body is only rts
+0x00017310 func hw_rts_stub_17310 hand body is only rts
+0x000174f8 func obj_unk_174f8 hand loop over 8-byte entries decrementing word0, calls 17600/1765c/17510/17566/175bc (mid-function entry)
+0x00018fd0 func hud_call_18fda_19058 hand calls two subs in sequence
+0x00019410 func hw_rts_stub_19410 hand body is only rts
+0x00019434 func hw_rts_stub_19434 hand body is only rts
+0x0001b3ee func hw_rts_stub_1b3ee hand body is only rts
+0x0001b412 func hw_rts_stub_1b412 hand body is only rts
+0x0001b5e2 func hw_rts_stub_1b5e2 hand body is only rts
+0x0001b606 func hw_rts_stub_1b606 hand body is only rts
+0x0001b7e6 func hw_rts_stub_1b7e6 hand body is only rts
+0x0001b80a func hw_rts_stub_1b80a hand body is only rts
+0x0001bbe0 func hw_rts_stub_1bbe0 hand body is only rts
+0x0001bc28 func hw_rts_stub_1bc28 hand body is only rts
+0x0001c31e func hw_rts_stub_1c31e hand body is only rts
+0x00003174 func link_exchange_shared_ram_3174 hand reads C139 link b00020..b01000 ports, copies 0x58-word records into 0x900100 and 0x102000 per tank bit 0..15
+0x000037c4 func link_rx_packet_verify_37c4 hand b80000 status; scans b82000 ring for 0x99 header, sums 0x5a words, checksum, copies to b01000+n*0x100
+0x00003eba func pal_split_rgb_256_two_banks_3eba hand loop 255x copies 3 bytes of src to two dest planes (R,G / B) then writes zero terminators
+0x0000459c func test_clear_and_draw_459c hand clears 106000,901bd0/4/6 then test_update_items8_b and hud_draw_2digit_label_4798
+0x0000552a func hud_draw_2digit_if_flag_552a hand if 900221 bit0: split decimal 2 digits, emit 2 digit sprites (code 0x34e+digit) to sprite list
+0x00005548 func hud_draw_2digit_sprites_5548 hand math_split_decimal_2digit then emits 2 digit sprites base 0x34e using table 0x55d2 (no flag check)
+0x0000682c func test_draw_strings_682c hand txt_draw_string_pal2e 0x68d6 then 2 strings 0x688e,0x68a8 via 0x106b8
+0x0000d428 func hud_label_item_str_d428 hand txt_print_label_d3e8, spr_add_item_from_a1_b, draw pal3f string 0xd848
+0x0000d44e func hud_label_item_str_d44e hand txt_print_label_d3e8, spr_add_item_from_a1_b, draw pal3f string 0xd860
+0x0000d474 func hud_label_item_str_d474 hand txt_print_label_d3e8, spr_add_item_from_a1_b, draw pal3f string 0xd878
+0x0000d49c func hud_label_item_str_d49c hand txt_print_label_d3e8, spr_add_item_from_a1_b, draw pal3f string 0xd890
+0x00010f90 func game_record_screen_update_10f90 hand if 901d20>=6 main_object_update_all; if 107102==0 calc record totals, formats record table; calls 0x10ffa/0x11044/0x111d8/0x1192c/0x11e3c
+0x000120b0 func spr_push_text_row_sprites_120b0 hand pushes 3 lists of sprites (tables 0x121e4, 0x121fc, 0x1220a) via spr_push_entry_e7da at x step 0x16, pal 0x3f/0x30
+0x0001304a func game_flag_set_106000_106002 hand writes 106002=1 and 106000=0xffff
+0x0001306c func game_load_course_pal_tiles_1306c hand spr_load_course_params_b, load rom pal tables, ramps, copy pal x2, loads tile set, sets 106002=2
+0x00016cfe func game_init_scene_16cfe hand copies particle init table, sets 900302 (0x24, 0x20 if 901d20==3), clears 901c28..2c, loads ramps mode3 and planes, tile set 5
+0x00016d62 func game_scene_ready_16d62 hand sets 106000=0xffff and 901e8a=1
+0x00016d74 func game_dispatch_901c26_16d74 hand clears 106000 then jumps via table at 0x16d96 indexed by 901c26&1
+0x00016e1e func spr_add_pair_16e1e hand two spr_add_from_table_ofs calls
+0x00017176 func spr_dispatch_900f82_17176 hand jump through table 0x171a2 indexed by 900f82&3
+0x000171b4 func spr_init_slots_171b4 hand copies 8 or 18 words from 0x173e6/0x173d0 into 0x10ee8a stride 8 then 900f82=2
+0x000171ee func spr_update_slots_171ee hand loops 8 or 18 slots at 0x10ee8a stride 8; counts down timer, loads obj params, calc scale a000 div, emits sprite
+0x00017480 func spr_init_slot_17480 hand copies 1 word from 0x1767a to 0x10ef26 then 900f84=2
+0x000184b0 func spr_init_slots_184b0 hand copies 16 words from 0x186a2 to 0x10f792 stride 8, 900f88=2
+0x00018770 func spr_init_slots_18770 hand copies 32 words from 0x1896e to 0x10f81e stride 16, 900f8a=2
+0x00018e8e func hud_scene_tail_18e8e hand spr_call_7244_x2, if 901d74 then 0x18ede and hud_call_18fda_19058
+0x00018eb6 func hud_scene_tail_18eb6 hand spr_call_7244_x2, if 901d74 then hud_call_18fda_19058
+0x00018eca func hud_scene_tail_18eca hand if 901d74 then 0x18ede and hud_call_18fda_19058
+0x00018efa func spr_add_pair_18efa hand two spr_add_from_table_ofs calls
+0x00018f14 func spr_add_pair_18f14 hand two spr_add_from_table_ofs calls
+0x00018f2e func spr_add_pair_18f2e hand two spr_add_from_table_ofs calls
+0x00018f48 func txt_draw_str_pal3f_18fba hand draws pal3f string 0x18fba at x=0
+0x00019616 func game_render_scene_19616 hand builds rot/cam matrices, cam setups, scrolling backdrop, particle tables, effects, hit markers, object dispatch, HUD target/timer/gauges
+0x00019ade func hud_draw_screen_19ade hand draws 5 pal3f strings (0x19b86..0x19c1e) and 4 spr_add_from_table_ofs
+0x0001a1c4 func game_dispatch_attract_1a1c4 hand dispatch through tables 0x1a2c0/0x1a2e8/0x1a2c8 by 902014, 901c34, 107100 and per-slot flags at 106210
+0x0001be98 func cam_sub_107400_by_900300 hand 107400 -= long table 0x1bec8[900300]
+0x0001beb0 func cam_add_107400_by_900300 hand 107400 += long table 0x1bee8[900300]
+0x0001cf0e func spr_call_pair_1cf0e hand calls 0x1cf28 and 0x1cf38
+0x0001d5ba func txt_draw_two_strs_pal3f_3f hand strings 0x1d7c0 and 0x1d7e4 both pal3f
+0x0001d5ec func txt_draw_two_strs_pal3f_3e hand string 0x1d7c0 pal3f, 0x1d7e4 pal3e
+0x0001d60e func txt_draw_two_strs_pal3e_3f hand string 0x1d7c0 pal3e, 0x1d7e4 pal3f
+0x0001d630 func txt_draw_two_strs_pal3e_3e hand strings 0x1d7c0 and 0x1d7e4 both pal3e
+0x0001f150 func txt_draw_str_pal3e_1f2f8 hand draws pal3e string 0x1f2f8 at x=0
+0x0001f16a func txt_draw_str_pal3f_1f318 hand draws pal3f string 0x1f318 at x=0
+0x0001f184 func txt_draw_str_pal3e_1f338 hand draws pal3e string 0x1f338 at x=0
+0x0001f426 func mem_read_word_40000_idx hand returns word at 0x40000 + ((D0+0x4000)&0xfffe)
+0x482 func spr_cmd_wait_dispatch hand waits for bit15 of 0x71e then scans 4-byte cmd table 0x5f2..0x606 and jumps (table truncated by Ghidra); 3 pointer sites
+0x12a2 func hw_rts_stub_12a2 hand bare rts in state table
+0x12a4 func hw_rts_stub_12a4 hand bare rts in state table
+0x12a6 func state_dispatch_900002_12a6 hand jump table indexed by 900002 then call 12c2
+0x14b8 func hw_rts_stub_14b8 hand bare rts, 5 table sites
+0x152e func state_dispatch_900002_152e hand jump table indexed by 900002
+0x1596 func hw_rts_stub_1596 hand bare rts in state table
+0x1598 func hw_rts_stub_1598 hand bare rts in state table
+0x1c9a func test_page_bg_1c9a hand calls spr_clear_sort_add_bg_b; test page table 1c24-1c90
+0x1d30 func test_page_cursor_menu8_1d30 hand test_draw_menu_8items, cursor box
+0x1f06 func test_page_menu9_nibbles_1f06 hand test_draw_menu_9items, nibble sprites, tileset
+0x225a func test_page_menu_nibbles_225a hand test_draw_menu_b, split nibbles, strs
+0x25e6 func test_page_input_bits_25e6 hand test_draw_input_bits, expand bits, str list
+0x29ec func test_page_big_box_29ec hand txt_draw_string_pal3f and test_spr_big_box_d0
+0x2a68 func test_page_menu4_nibbles8_2a68 hand test_draw_menu_4items, nibbles_8
+0x2c64 func test_page_column_overlay_2c64 hand test_spr_column_16, toggle overlay
+0x2dc4 func spr_add_4_table_ofs_2dc4 hand 4x spr_add_from_table_ofs
+0x30fc func spr_add_5_16x16_30fc hand loop 5x spr_add_16x16_d7_a6
+0x4314 func hud_state_dispatch_4314 hand push icon, table by 901e8c&3, pal copy
+0x4350 func hud_state_reset_4350 hand push icon, clear 106000 901bd0 d370
+0x4376 func hud_state_init_4376 hand clear vars, load ramps, tile set, items8 init
+0x43ee func hud_state_to1_43ee hand 106000=ffff, 901e8c=1, d370=0
+0x4654 func hud_dec_y_step16_4654 hand A0+6 -= 0x10 clamped to A0+0xe
+0x4672 func hud_inc_y_step16_4672 hand A0+6 += 0x10 clamped to A0+0xe
+0x483c func hud_draw_4str_2digit_483c hand 4 strings pal3f, split decimal, 2 sprites
+0x497a func hud_state_dispatch_497a hand push icon, table by 901e8c&3
+0x49ac func hud_state_set1_49ac hand 901e8c=1
+0x49b6 func hud_state_set3_49b6 hand d49a=0, 901e8c=3
+0x49c6 func hud_state_set0_49c6 hand 901e8c=0
+0x49d0 func hud_state_run_49d0 hand clear vars, draw str or update items8_a, d49a++
+0x4d82 func hud_page_update_4d82 hand calls 4526 4db0 4dca scroll anim, 7f2a
+0x5278 func hud_page_update_5278 hand clear vars, 4526, hud_spr_4_by_902000, 7f2a
+0x5684 func hud_page_update_5684 hand clear vars, table_ofs_x4, 56b0 573a 59e8
+0x60ae func hud_page_update_60ae hand calls 60bc 613a 629e
+0x62be func hud_page_update_62be hand calls 62c8 6306
+0x6326 func hud_page_update_6326 hand clear vars, 4526, str by 902000, 653a 667e
+0x68f0 func hud_page_update_68f0 hand 7f2a once, strips, tile by 90200c, reset flags
+0x7962 func txt_draw_2str_7962 hand two strings via ptr_106b8 dot-sprite drawer
+0x798c func txt_draw_2str_798c hand two strings via ptr_106b8
+0x7f2a func hud_copy_6x6words_7f2a hand copies 6 records of 6 words to 10d67c stride 16
+0x8ef6 func hud_state_dispatch_8ef6 hand push icon, table by 901e8a
+0x8f20 func hud_state_init_8f20 hand clear vars, ramps, tile set 0, pal table, 901e8a=0
+0x8f72 func hud_state_idle_8f72 hand 106000=0 and rts stub
+0x8f7e func hud_state_to1_8f7e hand 106000=ffff, 901e8a=1
+0x8f92 func hud_state_dispatch_8f92 hand clear bd0 bd4 bd6, push icon, table by 901e8a
+0x9026 func hud_state_set4_9026 hand 901e8a=4
+0x9030 func hud_state_set3_9030 hand 901e8a=3
+0x903a func hud_state_to1_903a hand 106000=ffff, 901e8a=1
+0x9054 func hud_state_dispatch_9054 hand push icon, clear vars, table by 901e8a&3
+0x9098 func hud_state_init_9098 hand clear vars, ramps, tile set, 901e8a=0
+0x90ea func hud_state_clear_902180_90ea hand calls game_clear_902180_2w
+0x90f0 func hud_state_to1_90f0 hand 106000=ffff, 900302=0, 901e8a=1
+0x9118 func hud_page_draw_9118 hand clear 107602, push icon, hud_draw_10spr_str
+0x9140 func hud_state_dispatch_9140 hand draw 10spr str, table by 901e8a&3
+0x9170 func hud_page_fade_white_9170 hand strs, fade_to_white when 901bd6 in d2..10d
+0x91c4 func hud_state_init_91c4 hand clear vars, ramps, tile set, 901e8a=0
+0x9216 func hud_page_draw_9216 hand draw strs, 106000=0 after 0x14 frames
+0x9254 func hud_state_to1_9254 hand reset d6f4 bd6, pal copy base, 901e8a=1
+0x981c func spr_countdown_box_981c hand 902180 countdown, big box d6f8, inc on vbl
+0x9c7e func hud_state_dispatch_9c7e hand push icon, table by 901e8c&3
+0x9cb0 func hud_state_idle_9cb0 hand 106000=0
+0x9cb8 func hud_state_init_9cb8 hand clear vars, ramps, tile set, 901e8c=0
+0x9d0a func hud_state_to1_9d0a hand 106000=ffff, 901e8c=1
+0x9d1c func hud_page_draw_9d1c hand 10spr str, page counter, str if flag10
+0x9d5e func hud_page_draw_9d5e hand 900302=0x28, label 4b5e, page counter
+0x9dee func hud_state_init_9dee hand 900300=8, tile set 2, 901d80=8
+0x9e38 func hud_state_call_9e58_9e38 hand wraps 9e58
+0x9e3e func hud_state_to1_9e3e hand 106000=ffff, 900302=0, 901e8a=1
+0x9f80 func hud_popup_6str_box_9f80 hand gauge box a, 6 sprite strings, 3 table_ofs
+0xa032 func hud_popup_special_items_a032 hand strings SPECIAL ITEMS, blink box
+0xa114 func hud_popup_shield_repair_a114 hand strings SHIELD REPAIR, blink box
+0xa1f6 func hud_popup_3str_blink_a1f6 hand gauge box, 3 strings, blink box
+0xa290 func hud_popup_2str_a290 hand gauge box, 2 strings
+0xa2de func hud_popup_2str_blink_a2de hand gauge box, 2 strings, blink box
+0xa360 func hud_popup_1str_blink_a360 hand gauge box, 1 string, blink box
+0xa3d2 func hud_popup_2str_blink_a3d2 hand gauge box, 2 strings, blink box
+0xa454 func hud_popup_missile_locked_a454 hand strings YOUR MISSILE IS LOCKED
+0xa546 func hud_popup_1str_blink_a546 hand gauge box, 1 string, blink box
+0xa5b8 func hud_popup_2str_blink_a5b8 hand gauge box, 2 strings, blink box
+0xa642 func hud_popup_2str_blink_a642 hand gauge box, 2 strings, blink box
+0xa6c6 func hud_popup_extra_missiles_a6c6 hand strings EXTRA MISSILES
+0xa7a0 func hud_popup_supply_items_a7a0 hand strings SUPPLY ITEMS
+0xa884 func hud_popup_1str_blink_a884 hand gauge box, 1 string, blink box
+0xa8fa func hud_popup_opponent_a8fa hand OPPONENT string, blink box
+0xaf7a func hud_popup2_2str_af7a hand gauge box b, 2 strings via b9de
+0xafc0 func hud_popup2_2str_blink_afc0 hand gauge box b, 2 strings, blink 459
+0xb0cc func hud_popup2_2str_b0cc hand gauge box b, 2 strings
+0xb208 func hw_rts_stub_b208 hand bare rts in table
+0xb20a func hud_popup2_2str_b20a hand gauge box b, 2 strings
+0xbab4 func hud_state_dispatch_bab4 hand clear vars, push icon, table 901e8a&3, copy 901d80
+0xbb0c func hud_state_init_bb0c hand ramps, tile set from table by 901d80, 901e8a=0
+0xbb70 func hud_state_clear_a_bb70 hand calls main_clear_game_state_a
+0xbb76 func hud_state_to1_bb76 hand 106000=ffff, 901e8a=1
+0xbc4a func game_frame_draw_all_bc4a hand math cam setup, effects, hud draws, banner
+0xbd48 func hud_state_dispatch_bd48 hand clear vars, push icon, table 901e8a&3, clear_b
+0xbda4 func hud_state_init_bda4 hand ramps, tile set from table, 901e8a=0
+0xbe08 func hud_state_clear_b_be08 hand calls main_clear_game_state_b
+0xbe0e func hud_state_to1_be0e hand 106000=ffff, 901e8a=1
+0xbee2 func game_frame_draw_effects_bee2 hand cam setup, effects, object slot dispatch, flags_902894
+0xc034 func spr_add_2_items_a1_c034 hand 2x spr_add_item_from_a1
+0xc04a func spr_add_2_items_a1_c04a hand 2x spr_add_item_from_a1
+0xc060 func spr_add_2_items_a1_c060 hand 2x spr_add_item_from_a1
+0xc076 func spr_add_2_items_a1_c076 hand 2x spr_add_item_from_a1
+0xc08c func spr_add_2_items_a1_c08c hand 2x spr_add_item_from_a1
+0xc0a2 func spr_add_2_items_a1_c0a2 hand 2x spr_add_item_from_a1
+0xc0b8 func txt_page_3str_pal3f3e_c0b8 hand 3 strings pal3f/3e/3f
+0xc0f2 func txt_page_3str_pal3f_c0f2 hand 3 strings pal3f
+0xc12c func txt_page_2str_pal3f_c12c hand 2 strings pal3f
+0xc17a func txt_page_1str_pal3f_c17a hand 1 string pal3f
+0xc194 func txt_page_1str_pal3f_c194 hand 1 string pal3f
+0xc1ae func txt_page_3str_pal3f_c1ae hand 3 strings pal3f
+0xc1e8 func txt_page_3str_pal3f_c1e8 hand 3 strings pal3f
+0xc222 func txt_page_2str_pal3f_c222 hand 2 strings pal3f
+0xc24c func txt_page_1str_pal3f_c24c hand 1 string pal3f
+0xc266 func spr_add_2_items_a1_c266 hand 2x spr_add_item_from_a1
+0xc27c func spr_add_1_item_a1_c27c hand 1x spr_add_item_from_a1
+0xc288 func spr_add_1_item_a1_c288 hand 1x spr_add_item_from_a1
+0xc294 func spr_add_2_items_a1_c294 hand 2x spr_add_item_from_a1
+0xc78e func hud_state_dispatch_c78e hand clear vars, push icon, table 901e8a&3, clear_c866
+0xc7ea func hud_state_init_c7ea hand ramps, tile set from table, 901e8a=0
+0xc84e func hud_state_clear_c866_c84e hand calls main_clear_game_state_c866
+0xc854 func hud_state_to1_c854 hand 106000=ffff, 901e8a=1
+0xc952 func game_frame_draw_effects_c952 hand cam setup, effects, flags_902898
+0xcbc8 func hud_scroll_text_item_d49c_cbc8 hand label d49c, scroll counter be8, text grid
+0xcce4 func hud_scroll_text_item_d474_cce4 hand label d474, scroll counter be6, text grid
+0xce00 func hud_scroll_text_item_d44e_ce00 hand label d44e, scroll counter be4, text grid
+0xcf1c func hud_scroll_text_item_d428_cf1c hand label d428, scroll counter be2, text grid
+0xd038 func hud_scroll_text_label_d038 hand test_draw_label_pair, counter be0, text grid
+0xe80e func hw_rts_stub_e80e hand bare rts in table
+0xe810 func spr_add_2_table_ofs_e86c_e810 hand 2x table_ofs then e86c
+0xe846 func spr_add_table_ofs_e86c_e846 hand table_ofs then e86c
+0xe864 func hw_call_1a19e_e864 hand wraps 1a19e
+0xe9b0 func hw_rts_stub_e9b0 hand bare rts, 2 table sites
+0xe9b2 func hud_blink_a_start_e9b2 hand 107440=0x1e, 901c40=2
+0xe9c4 func hud_blink_a_tick_e9c4 hand 107300|=8, table_ofs, countdown 107440
+0xea48 func hud_blink_b_clear_ea48 hand 901c42=0, 107442=0
+0xea56 func hud_blink_b_start_ea56 hand 107442=0x1e, 901c42=2
+0xea68 func hud_blink_b_tick_ea68 hand 107300|=0x100, countdown 107442
+0xeabe func hud_blink_c_clear_eabe hand 901c44=0, 107444=0
+0xeacc func hud_blink_c_start_eacc hand 107444=0x1e, 901c44=2
+0xeade func hud_blink_c_tick_eade hand 107300|=0x80, countdown 107444
+0xf83c func hud_state_init_result_f83c hand 900302 by 902012/901d20, ramps, planes, particle table
+0xf8cc func hud_state_to1_f8cc hand 106000=ffff, 901e8a=1
+0xf8de func hud_page_result_f8de hand winner flag, object update, ending text, result labels
+0xfa5e func hud_page_dispatch_900210_fa5e hand jump table by 900210, 2 table_ofs after 3c frames
+0xfab2 func hud_page_window_dispatch_fab2 hand window regs, table by 900210, table_ofs, scroll db04/db08
+0xfb12 func hud_page_dispatch_900210_fb12 hand table at fb58 by 900210, table_ofs if 902012
+0xfbce func hud_page_2items_particles_fbce hand 2x table_ofs, update particles 80
+0xfbec func hud_page_2items_particles_fbec hand 2x table_ofs, update particles 80
+0xfc0a func hud_page_2items_particles_fc0a hand 2x table_ofs, update particles 80
+0xfc28 func hud_page_2items_particles_fc28 hand 2x table_ofs, update particles 80
+0xfc46 func hud_page_2items_particles_fc46 hand 2x table_ofs, update particles 80
+0xfc64 func hud_page_2items_particles_fc64 hand 2x table_ofs, update particles 80
+0xfc82 func spr_add_2_table_ofs_fc82 hand 2x spr_add_from_table_ofs
+0xfc9c func spr_add_2_table_ofs_fc9c hand 2x spr_add_from_table_ofs
+0xfcb6 func spr_add_2_table_ofs_fcb6 hand 2x spr_add_from_table_ofs
+0xfcd0 func spr_add_2_table_ofs_fcd0 hand 2x spr_add_from_table_ofs
+0xfcea func spr_add_2_table_ofs_fcea hand 2x spr_add_from_table_ofs
+0xfd04 func spr_add_2_table_ofs_fd04 hand 2x spr_add_from_table_ofs
+0xfd1e func hud_page_pair_2items_fd1e hand main_call_pair_7244 + 2x table_ofs
+0xfd3c func hud_page_pair_2items_fd3c hand main_call_pair_7244 + 2x table_ofs
+0xfd5a func hud_page_pair_2items_fd5a hand main_call_pair_7244 + 2x table_ofs
+0xfd78 func hud_page_pair_2items_fd78 hand main_call_pair_7244 + 2x table_ofs
+0xfd96 func hud_page_pair_2items_fd96 hand main_call_pair_7244 + 2x table_ofs
+0xfdb4 func hud_page_pair_2items_fdb4 hand main_call_pair_7244 + 2x table_ofs
+0x106b8 func txt_draw_dot_str_sprites_106b8 hand draws string at 105000 as sprites, '.' special width
+0x11e60 func txt_draw_str_by_table_11e60 hand sprite entry then string from table by e7cc; uses A0 A1 D0 inputs
+0x1202c func hud_page_score_panels_1202c hand five entries, big letters, 4p digits, score panels
+0x127d4 func state_to_ready_127d4 hand 106002=1, 106000=ffff
+0x127e6 func state_init_game_vars_127e6 hand clear game vars a, rom pal tables, ramps, tile set
+0x1283a func state_clear_vars_a_1283a hand 106000=0, main_clear_game_vars_a
+0x12998 func state_to_ready_12998 hand 106002=1, 106000=ffff
+0x129aa func state_init_course_params_129aa hand course params a, rom pal tables, ramps, tile set
+0x129fe func state_select_screen_129fe hand draw select screen, clear game vars b
+0x12d28 func txt_draw_ptr_list5_wrap_12d28 hand wraps txt_draw_ptr_list_5_a3
+0x12d34 func txt_draw_ptr_list5_wrap_12d34 hand wraps txt_draw_ptr_list_5_a3
+0x12d40 func txt_draw_ptr_list5_wrap_12d40 hand wraps txt_draw_ptr_list_5_a3
+0x131cc func spr_add_2_table_ofs_131cc hand 2x spr_add_from_table_ofs
+0x131e6 func spr_add_2_table_ofs_131e6 hand 2x spr_add_from_table_ofs
+0x13200 func spr_add_2_table_ofs_13200 hand 2x spr_add_from_table_ofs
+0x13478 func txt_draw_ptr_list_term_wrap_13478 hand wraps txt_draw_ptr_list_term
+0x13484 func txt_draw_ptr_list_term_wrap_13484 hand wraps txt_draw_ptr_list_term
+0x13490 func txt_draw_ptr_list_term_wrap_13490 hand wraps txt_draw_ptr_list_term
+0x1349c func txt_draw_ptr_list_term_wrap_1349c hand wraps txt_draw_ptr_list_term
+0x134a8 func txt_draw_ptr_list_term_wrap_134a8 hand wraps txt_draw_ptr_list_term
+0x134b4 func txt_draw_ptr_list_term_wrap_134b4 hand wraps txt_draw_ptr_list_term
+0x176e4 func hw_rts_stub_176e4 hand bare rts in state table
+0x176e6 func obj_list_a_state_set3_176e6 hand 900f90=3
+0x176f0 func obj_list_b_state_set3_176f0 hand 900f92=3
+0x176fa func obj_list_c_state_set3_176fa hand 900f94=3
+0x17740 func hw_rts_stub_17740 hand bare rts in state table
+0x17742 func obj_list_a_init_17742 hand copy 32 words to f044 stride 16, 900f90=2
+0x17768 func obj_list_a_update_17768 hand loop 32 objs load/project/scale/push a
+0x17aa8 func hw_rts_stub_17aa8 hand bare rts in state table
+0x17aaa func obj_list_b_init_17aaa hand copy 128 words to f256 stride 8, 900f92=2
+0x17ad0 func obj_list_b_update_17ad0 hand loop 128 objs load/project/scale/push b
+0x17fc8 func hw_rts_stub_17fc8 hand bare rts in state table
+0x17fca func obj_list_c_init_17fca hand copy words to f65c stride 8, 900f94=2
+0x17ff0 func obj_list_c_update_17ff0 hand loop objs load/project/scale/push c
+0x1822c func hw_rts_stub_1822c hand bare rts in state table
+0x1822e func obj_list_d_state_set3_1822e hand 900f8a=3
+0x18238 func obj_list_e_state_set3_18238 hand 900f88=3
+0x18242 func obj_list_f_state_set3_18242 hand 900f86=3
+0x18288 func hw_rts_stub_18288 hand bare rts in state table
+0x1828a func obj_list_f_init_1828a hand copy words to f77c stride 8, 900f86=2
+0x182b0 func obj_list_f_update_182b0 hand loop objs load/project/scale/push d
+0x18ada func hw_rts_stub_18ada hand bare rts in state table
+0x18adc func obj_list_g_init_18adc hand clear fa22 area, fill from 18cf6 18e16 stride 10
+0x18b18 func obj_list_g_update_18b18 hand loop 48 objs from fa2e, project, scale, push
+0x19480 func state_wait_start_19480 hand 106000=ffff, 901f44=1, fc28=0
+0x19498 func state_wait_end_19498 hand after 10 frames 901f44=2, clear slots, depthcue ramps
+0x19538 func game_frame_draw_demo_19538 hand cam setup, effects, hit markers, object update all
+0x197d4 func spr_add_2_table_ofs_197d4 hand 2x spr_add_from_table_ofs
+0x197ee func spr_add_2_table_ofs_197ee hand 2x spr_add_from_table_ofs
+0x19808 func spr_add_2_table_ofs_19808 hand 2x spr_add_from_table_ofs
+0x19822 func spr_add_2_table_ofs_19822 hand 2x spr_add_from_table_ofs
+0x1a334 func hud_page_icons_table_ofs_1a334 hand call_7244_x6, 3 icon cols, table_ofs
+0x1a36a func hud_page_2icons_1a36a hand call_7244_x6, 2 icon cols
+0x1a388 func hud_page_2icons_1a388 hand call_7244_x6, 2 icon cols
+0x1a3a6 func hud_page_3icons_1a3a6 hand call_7244_x6, 3 icon cols
+0x1a3d0 func hud_page_2str_1a3d0 hand call_7244_x6, 2 strings pal3f
+0x1a3fe func hud_page_2str_1a3fe hand call_7244_x6, 2 strings pal3f
+0x1a42c func hud_page_2str_1a42c hand call_7244_x6, 2 strings pal3f
+0x1a45a func hud_page_3str_1a45a hand call_7244_x6, 3 strings pal3f
+0x1a498 func hud_page_3str_1a498 hand call_7244_x6, 3 strings pal3f
+0x1a4d6 func hud_page_2str_1a4d6 hand call_7244_x6, 2 strings pal3f
+0x1caf8 func test_page_clear_menu9_1caf8 hand test_clear_sel_9, test_draw_menu_9_items
+0x1cc8c func test_page_dip_adjuster_1cc8c hand dip bits, input bits, adjuster screen
+0x1ce24 func test_mark_sel_1_2_1ce24 hand test_mark_sel_1 and 2
+0x1ce2e func test_mark_sel_2_0_1ce2e hand test_mark_sel_2 and 0
+0x1ce38 func test_mark_sel_1_0_2_1ce38 hand test_mark_sel_1, 0, 2
+0x1d55c func test_page_menu4_hex_1d55c hand screen dispatch, menu 4, hex words x3
+0x1d8b4 func test_page_menu9b_markers_1d8b4 hand menu 9b, marker icons, toggle pairs
+0x1dd82 func test_page_menu10_rows_1dd82 hand menu 10, icons x8, five rows, toggles
+0x1e2fc func test_page_dispatch_901b26_1e2fc hand jump table by 901b26
+0x1e4fc func test_page_hex_digits_1e4fc hand ptr list, decimal split, push hex digits 5/2c, draw str
+0x1e710 func test_page_nibble_rows_1e710 hand ptr list, 3 loops split nibbles hex4, table_ofs
+0x1e7ac func test_page_nibble_grid_6x6_1e7ac hand ptr list, 6x6 nibble narrow
+0x1e7e4 func test_page_nibble_grid_6x6_1e7e4 hand ptr list, 6x6 nibble narrow
+0x1e81c func test_page_nibble_row9_1e81c hand ptr list, 9 nibble hex4
+0x1e846 func test_page_nibble_grid_8x4_1e846 hand ptr list, 8x4 nibble hex4
+0x1e886 func test_page_nibble_grid_8x4_1e886 hand ptr list, 8x4 nibble hex4
+0x1e8c6 func test_page_nibble_rows_1e8c6 hand ptr list, 3+1+7+6 nibble hex4
+0x1e930 func test_page_nibble_grid_6x7_1e930 hand ptr list, 6x7 nibble narrow
+0x1e968 func test_page_nibble_row7_1e968 hand ptr list, 7 nibble hex4
+0x1e992 func test_page_str_call_7244_1e992 hand test_draw_string_1e9c4, test_call_7244
+0x1e9e4 func test_page_call_7244_x8_1e9e4 hand choose x8_a or x8_b by 901b2a
+0x1eb7e func test_page_str_1eb7e hand test_draw_string_1eb9e
+0x1ebb2 func test_page_menu8_flags_1ebb2 hand three strings, select item, menu 8, flags
+0x1ee3c func test_page_ten_strings_1ee3c hand draw string, ten strings
+0x1f04c func test_page_1str_pal3e_1f04c hand 1 string pal3e
+0x1f07c func test_page_3str_adjuster_1f07c hand 3 strings pal3f, adjuster axes
+0x1f114 func test_page_dispatch_ram_1f114 hand dispatch 900380, ram check, dispatch 900384
+0x1f294 func hw_rts_stub_1f294 hand bare rts in table
+0x1f296 func test_page_1str_pal3e_1f296 hand 1 string pal3e
+0x1f2b0 func test_page_1str_pal3f_1f2b0 hand 1 string pal3f
+0x1f2ca func test_page_1str_pal3e_1f2ca hand 1 string pal3e
+0x000014d6 func spr_clear_flag_106002_14d6 hand writes 0 to 0x106002 only
+0x00004526 func spr_add_four_tbl_4526 hand 4x spr_add_from_table_ofs
+0x00004588 func hud_clear_106210_10w_4588 hand zeroes 10 words at 0x106210
+0x00004690 func spr_add_rec_from_a0_4690 hand builds one C355 sprite entry from record at A0 (+2..+c)
+0x00004db0 func spr_add_one_tbl_4db0 hand single spr_add_from_table_ofs
+0x00004dca func hud_draw_text_901ec2_zero_4dca hand if 901ec2==0 txt string pal3f at 4df8 + hud_draw_str + 2digit
+0x00004ef4 func spr_add_two_tbl_4ef4 hand 2x spr_add_from_table_ofs
+0x00004f0e func spr_add_two_tbl_4f0e hand 2x spr_add_from_table_ofs
+0x00004f28 func hud_draw_dot_text_by_90200a_4f28 hand two dot-strings per branch of 90200a (4f88/4fb6 or 4fd2/4ffc)
+0x00005018 func hud_draw_dot_text_5018 hand one dot-string at 505c
+0x00005032 func hud_draw_dot_text2_5032 hand two dot-strings 50b2 50ce
+0x00005234 func hud_reset_counters_5234 hand clears 107102.. 106102.. 901bd0..901bd6 state
+0x000052aa func hud_draw_test_screen_52aa hand rts stub, then dot-strings by 900221 bit0 and 100006 bit5
+0x000056b0 func spr_add_nine_tbl_56b0 hand loop 9x spr_add_from_table_ofs
+0x0000573a func hud_copy_pal_dispatch_573a hand copies 24 words 59b8 to 10d624 then jump table by 900228
+0x000059e8 func hud_draw_ten_strings_59e8 hand loops 10 string pointers via txt_draw_string_pal3f
+0x000060bc func spr_icon_two_60bc hand 2x spr_icon_col_ptr_0
+0x0000613a func hud_init_tables_both_613a hand calls FUN_6144 and FUN_61a4
+0x00006144 func hud_init_sprtbl_a_6144 hand copies ROM 6204/625e records into 10eb76 sprite table
+0x000061a4 func hud_init_sprtbl_b_61a4 hand copies ROM 622c/627e records into 10ec76 sprite table
+0x0000629e func hud_reset_counters_629e hand clears 107480 106000 901bd0..901bd6
+0x000062c8 func spr_icon_three_62c8 hand 3x spr_icon_col_ptr_0
+0x00006306 func hud_reset_counters_6306 hand clears 107480 106000 901bd0..901bd6
+0x00006358 func hud_draw_test_screen_6358 hand hud_draw_str_6462 then dot-strings by 900221 bit0 (63e4/6408/642a)
+0x00006736 func hud_draw_spr_dispatch_6736 hand spr_add then jump table by D1 byte then FUN_679e
+0x0000679e func hud_draw_dot_text2_679e hand two dot-strings 685e 6870
+0x0000693c func hud_draw_dot_text_693c hand dot-string 695c then hud_draw_str_7cdc
+0x0000697a func hud_spr_select_ring_697a hand sprite list for 6-entry rotating select by 90200c and 902100 direction
+0x00006b38 func spr_add_two_recs_a2_6b38 hand emits two sprite entries from A2+D0 and A2+D1
+0x00006d5c func hud_spr_by_90200c_6d5c hand sprite x/y from table 6db2 indexed by 90200c, pal 2c
+0x00006e5e func hud_draw_2digit_num_6e5e hand math_split_decimal_2digit then two digit sprites (0x34e base) pal 2d
+0x00006ee6 func hud_draw_shield_menu_6ee6 hand FUN_708c SHIELD text, then 3 dot-strings via table by 90200c
+0x00006f20 func hud_draw_dot_pair_by_90200c_6f20 hand two dot-strings from ptr tables indexed by 90200c
+0x0000708c func hud_draw_shield_labels_708c hand 3 dot-strings from SHIELD string area at 70e6
+0x000072e8 func spr_add_rom_rec_pal20_72e8 hand sprite code 0x453 pos offset by 902702/902704 pal 20 from A1
+0x000073ce func spr_add_anim_frame_73ce hand looks up anim ptr table 8a6458 by A1, scans to terminator, calls 7404
+0x00007404 func spr_add_code453_pal30_7404 hand emits sprite code 0x453 pal 30 with D0/D1 params
+0x00007494 func hud_draw_test_screen_7494 hand func 7642 then dot-strings by 900221 bit0 (74c4/7520/7544/7566)
+0x000077c4 func hud_draw_2digit_num_77c4 hand if 900221 bit0, two digit sprites base 0x34e at 10d6e4 table 786c
+0x0000787c func hud_check_trigger_787c hand sets 106180 when 10a002+10a012==0x4a, then calls 6736
+0x000078d4 func hud_draw_test_screen_78d4 hand dot-strings by 900221 bit0 (7902/7c64/7c88/7ca4) and FUN_7b32
+0x00007b32 func hud_draw_dot3_spr4_7b32 hand 3 dot-strings 7bfc/7c0c/7c1c then 4 spr_add
+0x00007e72 func hud_draw_2digit_num_7e72 hand if 900221 bit0, two digit sprites base 0x34e at 10d6e8 table 7f1a
+0x00007fcc func hud_reset_counters_7fcc hand clears 107102.. 106102.. 901bd0..901bd6
+0x00008048 func hud_draw_str2_8048 hand two txt_draw_string_pal3f 8072 8096
+0x00009e58 func game_clear_hud_state_9e58 hand zeroes many 1074xx 901xxx 900fxx 9027xx state words and 4 words in 900f00 array
+0x0000b5e6 func hud_spr_gated_100006b2_b5e6 hand if 100006 bit2 emits sprite from 10d74e..10d756 pal 30
+0x0000cc2c func hud_load_menu_names_cc2c hand copies vehicle/weapon name strings (BLUE LIGHTNING, HOMING LASER, MOTORIZED CANNON) to 10d826.. table
+0x0000cd48 func hud_load_menu_names_cd48 hand copies G SPIDER, HOMING LASER, SUPER VULCAN name strings to 10d826.. table
+0x0000ce64 func hud_load_menu_names_ce64 hand copies CENTAUR 2, LONGRANGE MISSILES/MACHINE GUNS name strings
+0x0000cf80 func hud_load_menu_names_cf80 hand copies HOMING MISSILES, MACHINE GUNS name strings
+0x0000d09c func hud_load_menu_names_d09c hand copies HOMING MISSILES, MACHINE GUNS name strings (vehicle 1)
+0x0000d31a func hud_spr_cursor_8x16_d31a hand if 10d7ec!=0x20 emit sprite 8x16 pal 3f from 10d7ec..10d7f0
+0x0000d372 func hud_spr_cursor_16x16_d372 hand if 10d7ec!=0x20 emit sprite 16x16 pal 3f from 10d7ec..10d7f0
+0x0000e86c func hud_draw_gauge_901c24_e86c hand if 902010, spr_add + gauge sprite by 901c24 pal 3d
+0x0000e968 func main_dispatch_901c40_44_e968 hand calls main_dispatch_by_901c40/42/44
+0x0000edf2 func hud_draw_msg_blink_edf2 hand message box with two strings efd4 f004, timers 107450 and 902880
+0x0000ee8a func hud_draw_msg_902882_ee8a hand message box strings f04c f068 with countdown 902882
+0x0000eed4 func hud_draw_msg_blink_eed4 hand message box variant strings efec f01c, timers 107450 902880
+0x00010410 func spr_update_particles_10410 hand updates 80 particles in 10db2e array with bounds from 104b8 table, emits via 105b0
+0x00010538 func spr_set_702408_by_900210_10538 hand copies 4 words from table 10570 indexed by 900210 into C355 regs 702408
+0x000105b0 func spr_add_particle_105b0 hand emits sprite pal 13d from A6/D6 particle record
+0x00010664 func txt_draw_dot_str_sprites_10664 hand string renderer body: char sprites with '.' special width, from 105000 ptr
+0x0001084e func hud_draw_icon_column_1084e hand loop sprites code+0x182 stepping y by 0x16 until -1, from 105024
+0x00010f46 func hud_spr_code230_10f46 hand sprite code 0x230 x=10e540 y=400 pal f5
+0x00010ffa func spr_add_three_tbl_10ffa hand 3x spr_add_from_table_ofs
+0x00011044 func hud_draw_13_strings_11044 hand 13 strings by ptr table 1118a with positions then 3 spr_add
+0x000111d8 func hud_set_six_flags_22_111d8 hand writes 0x22 into 6 entries of 10e544 indexed by list at 111f8
+0x00011204 func hud_split_6_numbers_11204 hand 6x math_split_decimal_2digit storing digit pairs
+0x00011258 func hud_rand_fill_10e5b0_11258 hand 6x pair of FUN_1c20e rand triples into 10e5b0 table
+0x000112b4 func hud_rand_fill_10e604_112b4 hand 6x pair of FUN_1c20e rand triples into 10e604 table
+0x00011522 func hud_noop_loop_then_1154c_11522 hand empty 6-count loop then FUN_1154c
+0x0001154c func hud_rand_triple_clamp_1154c hand FUN_1c20e then writes triple at A6 with 0x10 clamp by D5 thresholds 10/100
+0x0001192c func hud_draw_starfield_1192c hand loops 10e66e list, emits dots via 11c4e or 11c9a (index>=0x90), advances 107102 by 2
+0x00011c4e func hud_spr_dot_8x16_11c4e hand emits 8x16 pal 3f sprite from 10e7be/c0/c2
+0x00011c9a func hud_spr_dot_8x16_p60_11c9a hand adds 0x60 to code at 10e7be then emits 8x16 pal 3f sprite
+0x00011cee func hud_range_bucket_10e7ca_11cee hand buckets 10e7ca by 2000 steps into 10e7cc (0-6) and 901d38 (6-0)
+0x000140b2 func hud_draw_radar_reticle_140b2 hand selects crosshair sprite codes 3ac/3d3 by 902010 and dispatches by 901c12 range to 143c0/470c/45a4/4658
+0x000143c0 func hud_proj_and_draw_crosshair_143c0 hand math_project_to_screen then 14402 else sets 10eac6=ffff
+0x00014402 func hud_draw_crosshair_quad_14402 hand emits 4x4 sprite grid from 10eabe at projected pos, plus lock-on sprite 3d6 using 104600 timer
+0x00014658 func hud_draw_lead_marker_14658 hand sin/cos offset marker sprite from 10eaba, gated by 100006 bit2
+0x0001470c func hud_draw_side_arrow_1470c hand edge arrow sprite shifts by 10eac0 anim when abs(901c12)<0x6a00
+0x000147a2 func hud_draw_radar_147a2 hand calls radar bg 147e0, centre 186c, blips 4930 by 901d62 and 901c2e
+0x000147e0 func hud_spr_radar_bg_147e0 hand radar background 60x80 sprites at 902702/902704 offset, count by 901d80 and 901c2e
+0x0001486c func hud_spr_radar_centre_1486c hand 16x16 sprite code from table 148da by 900210 at radar centre
+0x00014930 func hud_draw_radar_blips_14930 hand rotates 8 tank positions 901ab0/901ad0 by sin/cos into radar, draws via 149f6 code 3ba 6x6
+0x000149f6 func hud_spr_radar_blip_149f6 hand emits sprite from 10eadc..10eae4 pal 3f
+0x00014da0 func hud_draw_map_blips16_14da0 hand loops 16 entries at 906000 stride 0x10 within radius, projects to 0x148,0x6e via 14eac
+0x00014e22 func hud_draw_map_blip_906400_14e22 hand single entry at 906400 within radius then 14eac
+0x00014e56 func hud_draw_map_blips4_14e56 hand loops 4 entries at 906200 stride 0x10 within radius then 14eac
+0x00014eac func hud_spr_map_blip_3x3_14eac hand 3x3 sprite at scaled 0x226/0x28c coords pal 3f, code D2
+0x00015a66 func hud_set_gauge_window_15a66 hand sets 702470 window regs from 901d04 scaled and pushes spr_push_entry_eb0c with code 3b2
+0x00017266 func hud_proj_marker_a_17266 hand math_project_to_screen -> 10ee82/84 screen x+0x200, y*0x15554>>16+0x108
+0x000172bc func hud_marker_a_palette_172bc hand palette index 10ee86 from distance 107004 (0..7, 0x30 if <0)
+0x00017510 func hud_proj_marker_b_17510 hand math_project_to_screen -> 10ef1e/20 screen pos
+0x00017566 func hud_marker_b_palette_17566 hand palette index 10ef22 from distance 107004
+0x000175bc func hud_marker_b_size_175bc hand size 10ef24 = 0x1e000/107004 clamp 0x17e, ffffffff if invalid
+0x00018540 func hud_proj_marker_c_18540 hand math_project_to_screen -> 10f78a/8c screen pos
+0x00018596 func hud_marker_c_palette_18596 hand palette index 10f78e from distance 107054
+0x000185ec func hud_marker_c_size_185ec hand size 10f790 = 0xa000/107054 clamp 0x7f, else emits fallback sprite 0x3eb-.. pal 30 200x200
+0x00018684 func hud_marker_lookup_18684 hand loads 10f812/14 from table 186c2 indexed by D7
+0x00018800 func hud_proj_marker_d_18800 hand math_project_to_screen -> 10f816/18 screen pos
+0x00018856 func hud_marker_d_palette_18856 hand palette index 10f81a from distance 107054/0x400
+0x000188b0 func hud_marker_d_size_188b0 hand size 10f81c = 0x3200/107054 clamp 0x27, else fallback sprite from A1 record pal 30
+0x00018948 func hud_marker_lookup_18948 hand loads 10fa1e/20 and A1+8 from 8-byte table 189ae indexed by D7
+0x00018b82 func hud_proj_marker_e_18b82 hand math_project_to_screen -> 10fa22/24 screen pos
+0x00018bd8 func hud_marker_e_palette_18bd8 hand palette index 10fa26 from distance 107004/0x400
+0x00018c26 func hud_marker_e_size_18c26 hand size 10fa28 = 0xa000/107004 clamp 0x7f
+0x00018e76 func hud_scene_tail_dispatch_18e76 hand jump table hud_scene_tail_18e8e indexed by 901d72
+0x00018ede func hud_dispatch_by_901d70_18ede hand jump table 18f62 indexed by 901d70&3
+0x00018fda func hud_draw_three_strings_18fda hand strings 1902e 1903c and 1904a if 901d24
+0x00019058 func hud_draw_2_3_numbers_19058 hand split_decimal_2digit twice (thrice if 901d24), draws via 190d0
+0x000190d0 func hud_spr_2digit_pair_190d0 hand emits 2 digit sprites 10x20 pal ff from A5 positions
+0x000195d8 func spr_add_two_tbl_195d8 hand 2x spr_add_from_table_ofs
+0x000196be func game_clear_hud_state_196be hand zeroes hud/msg/state words incl 902880 107450 901c40.. 900f00 array
+0x00019a80 func hud_set_107400_ffa00000_19a80 hand writes 0xffa00000 to 107400
+0x00019a8c func hud_dispatch_by_107480_19a8c hand clamp 107480 to 0x167, jump via tables 19ece/19ade or func 19aea if 902012 and 902010
+0x0001ac0e func game_clear_hud_state_1ac0e hand zeroes hud/msg/state words incl 902880 107450 901c40.. 900f00 array
+0x0001af82 func hud_draw_marker_f_900e06_af82 hand timer 900e06: >=0x2e shows 3eb else project, palette, size, emit sprite
+0x0001afd2 func hud_proj_marker_f_1afd2 hand math_project_to_screen -> 10fc36/38 screen pos
+0x0001b026 func hud_marker_f_palette_1b026 hand palette index 10fc3c from distance 107004
+0x0001b06a func hud_marker_f_size_1b06a hand size 10fc3a = 0x16800/107004 clamp 0x11f
+0x0001b0a4 func hud_spr_marker_f_1b0a4 hand emits square sprite from 10fc34..10fc3c
+0x0001bda8 func hud_draw_two_sprites_901c28_bda8 hand picks record via ptr tables by 901c28/900300, emits 3 sprites 0x100 apart at y 107400
+0x0001be72 func hud_dispatch_by_9020f0_be72 hand jump table 1be8a indexed by 9020f0
+0x0001c20e func math_split_decimal_3digit_1c20e hand D0<1000 split into hundreds/tens/ones in 107800/02/04, else 9 9 9
+0x0001cf28 func hud_inc_901b90_cf28 hand increments 901b90 and sets 10fdbc=10
+0x0001cf38 func hud_inc_901b92_cf38 hand increments 901b92 and sets 10fdbe=10
+0x98dc func pal_ramp_step_vbl_98dc hand calls pal_build/step_ramp_tables, spr_big_box, decs 902182
+0xed7a func spr_jump_by_902010_ed7a hand indexes code-pointer table by DAT_00902010&3
+0xef6c func hud_msg_timer_text_ef6c hand spr_add_from_table_ofs + txt_draw_string_pal3f x2, countdown 902882
+0x11310 func hud_draw_six_scores_11310 hand loop 6x math_split_decimal_5digit over 0x906800 entries
+0x11dc0 func spr_sort_entries_11dc0 hand bubble-sort of 9 8-byte records at 901c50 by key
+0x13982 func spr_load_ptr_by_902014_13982 hand 4-entry ptr table indexed DAT_00902014&3 into 10ea98
+0x144e0 func spr_draw_radar_dot_144e0 hand math_sincos_lookup then adds one sprite at 0x140-scaled pos
+0x15944 func spr_needle2_thunk_15944 hand only calls spr_draw_needle_2
+0x17600 func spr_add_icon_17600 hand adds one C355 sprite entry from A1 record, callee of 17510 region
+0x181ee func main_dispatch_slots_181ee hand calls main_dispatch_900f8a/88/86, called by main_frame 198a0
+0x198a0 func game_frame_slave_198a0 hand calls cam/rot matrices, spr_draw_* effects, huds, shake, gauges
+0x1ce18 func hw_rts_stub_1ce18 hand 2-byte rts only

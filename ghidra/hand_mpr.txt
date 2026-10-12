@@ -1,0 +1,1296 @@
+0x1000 func hw_main_loop_reset hand reset entry: clears C148 regs 0x1c0000-0x1e6000, zeroes shared RAM 0x900000 and work RAM, inits DSP/NVRAM, waits IO MCU 0xa00074==0xa6, then per-frame loop calling state table 0x1ba8 indexed by 0x100900
+0x1526 func game_pause_overlay_update hand 0x100890/892 pause flags, 0x901eb2 countdown 900, stick 0xa00014/16 deadzone 0xe, sets 0x900002=0x11, exits to attract (0x100900=0) via 0x11120a/0x271a
+0x16fc func hud_emit_fullscreen_quad hand writes 13-word display-list entry type 0x100 (flat quad) to DSP list ptr 0x100824, terminator 0xffff
+0x173a func shared_publish_player_state hand copies 0x100100..0x100892 and 0x103a00.. to 0x904000+0x90020e per-cabinet block for the slave CPU, increments frame counter 0x90404e
+0x1852 func shared_publish_camera_ctrl hand copies camera/position words 0x100100..0x100b0a to shared ctrl block 0x900800..0x90081x
+0x18b8 func shared_select_cabinet_block hand loads 0x90020e/214/216/218 from table at 0x18e8 indexed by cabinet id 0x900204 (<<4)
+0x1908 func link_publish_remote_words hand loops 15 entries at 0x900100 stride 16 bytes, copies word 4 into 0x904050 block of remote cabinet
+0x1936 func nv_flush_play_time_counter hand increments 0x100070 each frame; when > 0x34bbf calls nv_save_counters (0x26d4)
+0x1950 func hud_pack_stick_bytes hand packs 0x100180..186 stick values into two words at record+0x28/0x2a
+0x1992 func irq_vblank_level1 hand C148 level1: bumps 0x10080a/0x100806, reads IO status 0xa00026, flips DSP double buffer 0x1008f2 -> 0x200206, sets 0x100802, ticks 0x100050/0x100054 play timers
+0x1a86 func game_frame_attract_retry hand variant of main loop tail: runs 0x8360 inputs, coin/credit countdown 0x900280, dispatches via table 0x1ad6 indexed by cabinet and 0x100e00
+0x1b3a func hud_clear_dsp_header hand writes 0x7fff into three longs at 0x100820 (DSP control list header)
+0x1b56 func hw_palette_fade_white hand sets palette words 0x7403e4/0x7423e4=0xff00, 0x7503e5/0x7523e5=0
+0x1b7a func hw_palette_fade_black hand sets palette words 0x7403e4/0x7423e4=0, 0x7503e5/0x7523e5=0xff
+0x1eec func hw_init_system_boot hand IO MCU 0xa00074 handshake loop (0xa6), reads NVRAM 0x180024 cabinet bit to 0x900228, calls nv/dsp init, enables C148 bits 0x1e2000/0x1ce000
+0x20d2 func irq_vblank_level2 hand C148 level2: flips DSP double buffer 0x1008f2 -> 0x200206, counter 0x100c00 and 0x903000, sets 0x100802
+0x2168 func irq_level2_stub_count hand increments 0x903000 and sets 0x100802 (shortened vblank tail)
+0x21aa func nv_validate_or_default hand checks NVRAM signature 0x180000/2 ('}' 0x03) and byte-sum at 0x18002d; on fail copies defaults from rom 0x217e (22 words) and rewrites checksum
+0x221a func nv_load_settings_to_ram hand copies NVRAM 0x180004 (21 vals) to 0x901b30 and 0x180050 (8) to 0x901b70, bookkeeping counters 0x181000.. to 0x903000/0x903004
+0x2274 func nv_store_settings_from_ram hand writes 0x901b30/0x901b70 back to NVRAM with checksum, waits ready bit 0x1e0001, restores counters from 0x903000/4
+0x22d8 func nv_wait_write_ready hand polls 0x1e0001 bit0 with 5000 loop timeout, kicks watchdog 0x1e6000, hangs on timeout
+0x22f4 func nv_apply_settings_to_game hand loads 0x180002.. (&0x7f) into 0x900290.. option bytes, play timers 0x100050/54, stick centres 0x180040..46 -> 0x9002c0..c6, 0x180050 deadzones -> 0x9002d0
+0x2390 func nv_calibrate_sticks hand stores stick raw 0xa00010..16 into NVRAM 0x180040..46 then rereads after write-ready wait
+0x2428 func nv_check_ram_signature hand compares 12 longs at 0x2474 with 0x100000; on mismatch inits defaults and flags 0x100830
+0x261a func hw_dsp_reset_init hand sets 0x1008f0/0x400000=0x800f, calls dsp/pointram init routines 0x34e60 0x355f4 0x355de 0x355c8 0x34fbe, 0x356e4 if 0x200102 != 2
+0x267a func game_init_player_vars hand loads cabinet id 0x900204 from 0x180024 bit0, 0x90020e=id<<8, zeroes 0x100870..878 and 0x103a00/0x103a20
+0x26d4 func nv_save_counters hand writes 0x100050/0x100054 play timers into NVRAM 0x181000/0x181008 and verifies via 0x2a18
+0x2704 func nv_count_coin_a hand increments 16-bit counter at NVRAM 0x181010 then waits ready
+0x271a func nv_count_game_start hand increments 16-bit counter at NVRAM 0x18101c then waits ready
+0x2730 func nv_count_game_stats hand increments NVRAM bookkeeping 0x181030/0x181040/0x181050/0x181080 per mode 0x902010 and map 0x901d80
+0x27c0 func nv_count_map_stat hand increments NVRAM counter at 0x181100 + 0x900210*4
+0x27e2 func nv_count_results_stats hand increments NVRAM 0x181018, 0x1812c0 matrix by 0x901d20/22, 0x181200/0x181400 time buckets (0x100060/0x708), then nv_save_counters
+0x2906 func nv_count_continue_stat hand increments NVRAM 0x181014 and 0x1810c0 table indexed by 0x100904
+0x294c func nv_count_game_over_stat hand increments NVRAM 0x181014, 0x1810e0, 0x181120 (by 0x901d38)
+0x29d2 func nv_clear_bookkeeping hand zeroes NVRAM 0x181000 24 blocks of 16 words, waiting ready each block
+0x29f2 func nv_load_hiscore_tables hand copies 37 table entries from NVRAM bytes (even bytes) into RAM via pointer list at 0x2a3e
+0x2a18 func nv_wait_ready_short hand polls 0x1e0001 bit0 with 5000 loop timeout then returns
+0x2c82 func game_init_options_menu hand zeroes option-menu vars 0x902202..0x90231c, sets 0x902202=0x180, 0x90231c=0x40
+0x2e08 func game_menu_cursor_update hand cursor 0x100c20 from 0x902202 via 0x893a stick repeat, updates 0x902202
+0x2f5e func game_menu_start_pressed hand sets 0x10c012 when trigger bit 0x10 in 0x100a12
+0x2f74 func game_menu_load_color_from_pram hand reads 0x704002+idx*8 sprite palette nibbles into 0x90220a/0x90220c
+0x2fce func game_option_menu_dispatch hand 0x900014=2; stick up/down in 0x100ac3 changes 0x902300 (&7) and jumps through table 0x304e
+0x32a4 func io_stick_deadzone_pair hand 0x100ab4/ab6 rejected when |v|<0x10 into 0x10c018/0x10c01a
+0x32c4 func io_stick_deadzone_right hand 0x100ab6 deadzone 0x10 into 0x10c01a
+0x3308 func hud_emit_option_object hand display-list entry with three math values from 0x2a220 and 0x90230c, advances rotation accumulators 0x902310..14
+0x34c2 func hud_emit_quad_rect hand emits type-0x100 quad using corner words 0x10c01c..0x10c024
+0x3512 func hud_emit_sprite_object hand emits type 1 model entry id 0x10c026 at origin scale 0x100
+0x3664 func nv_calibrate_sticks_variant hand writes stick raw values to NVRAM 0x180040.. and reloads 0x9002c0..c6 (second copy of calibrate routine)
+0x38a4 func game_option_stick_dispatch hand dispatches on 0x100ac0 low/high nibbles through tables 0x38f4/0x3904 then fills 6 entries at 0x902220
+0x393c func hud_emit_menu_objects hand emits 6 type-1 model entries from table 0x3998 with scale 0x400
+0x3b30 func hud_emit_grid_test_quads hand emits 512 type-0x100 quads in 32x16 grid (0x8 x 0x10 steps), colour 0x901c38
+0x3b96 func hud_emit_cursor_object hand dispatch on 0x100a24 low nibble (table 0x3c2e), emits type 1 model id 0xba at 0x10c030/34 +0x8000
+0x3cc6 func game_toggle_view_button hand when button 0x41 mask in 0x100a12 flips 0x901f08 view bit and calls 0x3e28
+0x3e28 func cam_load_view_preset hand loads camera offsets 0x901e80/82/84 from table 0x3e62 indexed by 0x90200c and 0x901f08
+0x3ff8 func game_menu_cursor_inc hand increments 0x100c20
+0x4120 func game_init_attract_vars hand clears attract/test vars 0x901b22.. 0x901ba8 0x902280 and calls 0x41d0/0x419c, sound reg 0xa00424=0
+0x419c func snd_cmd_stop_all hand writes 0xa00090..98: 0xa00096=0, 0xa00098=8, 0xa00094=0, 0xa00090=2 if 0xa00091==0
+0x41d0 func game_clear_input_log hand zeroes 8 words at 0x902282
+0x4542 func snd_read_status_to_flag hand reads 0xa00424 byte: 0x80->0x901ed0=1, 0x81->2, else 0
+0x4944 func game_menu_cursor_clamp5 hand 0x893a then 0x10c05e = clamp 0x100c20 to 0..4
+0x49c8 func game_restore_cabinet_id hand 0x900228 = 0x901b50, clears 0x901b80
+0x4bea func snd_cmd_stop_all_alt hand same as 0x419c but 0xa00094=3
+0x4d3e func game_calib_step_center hand stores D0 to 0x901b76, 0x902280++, 0x902288=0xffff
+0x4d5a func game_calib_step_left hand stores stick 0xa00010 minus centre to 0x901b78, flag 0x90228a
+0x4d8c func game_calib_step_right hand stores stick 0xa00010 minus centre to 0x901b7a, flag 0x90228c
+0x4dbe func game_calib_step_other hand stores stick 0xa00014 minus 0x9002c4 to 0x901b7c, flag 0x90228e
+0x4fb4 func game_attract_button_check hand reads 0x100a22/0x100a12 mask 0x70; sets 0x901ee0, 0x101984 start flag
+0x50b2 func hud_emit_black_quad hand emits type-0x100 quad corners 0xfe70..400 colour 0xe0
+0x50f0 func attract_screen_dispatch hand 0x901ec0=ffff, calls 0x1b3a then jumps via table 0x514c indexed by 0x101200; plays sfx 0xa00420 when 0x900106 start bit
+0x51b2 func attract_draw_floor_grid hand 2x9x9 loop emitting tiles with step 0x40/0x54 base 0x10c062/64, uses 0x10c066=0x101210
+0x51fc func attract_draw_floor_grid_row hand continuation of grid emit loop using D5-D7 counters, row step 0x20/0x2a
+0x52ea func attract_draw_logo_pieces hand loops 13 entries at 0x536a with model 0xc2 into emitter 0x5312
+0x5562 func attract_init_state hand clears attract vars 0x101244 0x901eb0 0x101984 0x101240 0x901c2a..32 and loads 0x902020/22 from table 0x561c indexed by 0x9002ae/b0
+0x563c func snd_cmd_stop_all_b hand same sound-stop writes as 0x419c
+0x57f2 func attract_tick_second_timer hand one-second countdown: 0x902008 counts 0x3b frames, then 0x902006--, mirrored to 0x904010+cab
+0x5a30 func attract_tick_second_timer_nopub hand same as 0x57f2 without shared copy
+0x5ab6 func attract_wait_start hand 0x901e88=ffff; start button 0x10 or 0x90010c; times out after 0xb3 frames to 0x101200=6
+0x5af8 func attract_latch_player_input hand copies 0x100880 random seed to 0x900222 when 0x900220 bit0
+0x5b10 func attract_draw_title_models hand emits title objects, dispatch on 0x900228 (side), shifts 0x10c080/82 by 0x100
+0x5bb6 func attract_emit_player_tank_cards hand picks tank model ids from table 0x5c12 by 0x90200c and 0x90010a; calls 0x5c84 and 0x5c2a
+0x5c2a func attract_emit_player2_model hand emits type-1 model 0x10c0ac pos 0x10c0a4/b0/a6
+0x5c84 func attract_emit_player1_model hand emits type-1 model 0x10c0ae pos 0x10c0a8/b2/aa
+0x5ce6 func hud_emit_title_backdrop hand type-0x100 quad at 0xff18..0xe8 colour 0x600
+0x5ef4 func attract_countdown_decr_if_pos hand if 0x902006-1>=0 then 0x902008=0, 0x902006--
+0x5f0e func attract_tick_second_timer_b hand one-second countdown on 0x902008/0x902006
+0x5f2e func attract_tick_second_timer_p2 hand one-second countdown into 0x902022
+0x5f4e func attract_mode_select_idle hand sets 0x900000=2 0x900002=1, 0x901e8c=2, sfx 0xa00420; start/coin bits 0x900106 choose 0x100e00=1 or 3
+0x60d4 func game_select_map_from_cursor hand 0x901d80 from table 0x60fe indexed by 0x902000&0xf, copied to 0x900300/0x900304
+0x6110 func cam_load_view_from_table hand 0x901e80/82/84 from 8-entry table 0x6140 by 0x90200c
+0x6170 func io_latch_player_control_byte hand 0x100832 = 0x900222 or 0x900108 low byte
+0x61a6 func game_select_tank_from_table hand 0x900210 from table 0x61c2 by 0x90200c&7
+0x61d2 func game_select_opponent_from_table hand 0x901f80 from table 0x61ee by 0x902000&7
+0x61fe func game_start_new_game_init hand sets 0x901f08=1, zeros 0x101650.., sets 0x100ad0..da=0x4c (weapon timers), 0x902010 mode=0x902016&0xf, 0x100e00=0
+0x62b6 func game_load_remote_difficulty hand loads 0x901c2a/2e/30 from remote cabinet shared word 0x904012 (opposite side), 0 in single mode
+0x63c2 func game_init_select_timer hand zeroes 0x902000..08, 0x902006=0x14, 0x101200=0x13
+0x63f2 func game_emit_if_ingame hand when 0x900220 bit0 calls 0x79a6
+0x6406 func game_init_selection_state hand 0x902000=0, 0x90200c=0x900228, 0x900224=(side&0xf)+0xf0
+0x6620 func cam_set_default_view hand 0x901e80=0x220 0x901e82=0x2e0 0x901e84=0x700 0x901f08=1
+0x6642 func game_start_new_game_init_p1 hand same init as 0x61fe with 0x902014=0
+0x672e func game_start_new_game_init_p2 hand same init with 0x902014=1 and 0x901f08=1
+0x6980 func attract_tick_second_timer_pub hand one-second countdown, mirror to 0x904010+cab
+0x69b4 func game_reset_difficulty_slot hand 0x901c32=0, loads default 0x6a34/36 into 0x901c2a/30, publishes 0x904012
+0x69c0 func game_cycle_difficulty hand button mask 0x41 advances 0x901c32 (0..2) and loads pair from table 0x6a34
+0x6b66 func game_select_stick_dispatch hand when 0x902100==0 jumps via table 0x6b92 indexed by 0x100a24&3
+0x6c18 func hud_scroll_select_objects hand scrolls 6 select-screen objects (0x10c0b8, stride 0x20) by +/-0x40 while 0x902100 is 1 or 0x10, counter 0x10c178
+0x6cf6 func hud_emit_select_objects hand emits 6 object pairs (type 1 model, 2 nested) using 0x10c0b8 table and wobble 0x101214/16/18
+0x6e8a func attract_tick_second_timer_c hand one-second countdown
+0x6eb6 func hud_offset_object_x_ac hand adds 0xac to 0x10c186
+0x6fcc func game_select_stick_dispatch_b hand when 0x902100==0 dispatch via table 0x6ff2 on 0x100a24&3
+0x7078 func hud_scroll_select_objects_b hand variant of 0x6c18 using 0x10c19c counter
+0x7142 func hud_emit_select_objects_b hand variant of 0x6cf6 with temps 0x10c1a2..b8
+0x72d6 func attract_tick_second_timer_d hand one-second countdown 0x902008/0x902006
+0x7302 func hud_offset_object_x_ac_b hand adds 0xac to 0x10c1a8
+0x75d0 func attract_tick_second_timer_e hand one-second countdown mirrored to 0x904010+cab
+0x7604 func game_cycle_difficulty_b hand button 0x4a pattern cycles 0x901c32; publishes 0x904012
+0x7888 func attract_tick_second_timer_f hand one-second countdown mirrored to 0x904010+cab
+0x79a6 func hud_emit_model_pair_7e hand emits 2 type-1 entries model 0x7e at positions from table 0x79fa
+0x7cca func hud_init_select_object_table hand copies 6 records (7 words) from table 0x7d00 into 0x10c0b8 stride 0x20
+0x7de2 func hud_emit_select_objects_c hand third copy of select-object emitter using temps 0x10c1c2..d2
+0x7f42 func game_select_screen_logic hand 0x101210=0x86, countdown 0x902004 (0x3b), sets 0x900000=2/0x900002=8..9, else resets select vars 0x902002/0x902006=0x14/0x101200=0xc
+0x7f8c func game_select_finish_cursor hand sets 0x900000=2 0x900002=8, 0x902002=ffff, calls 0x81e2
+0x81ce func game_emit_if_ingame_b hand when 0x900220 bit0 calls 0x79a6
+0x81e2 func hud_emit_spinning_pair_ba hand model 0xba pairs using accumulators 0x10c1ec..f8 stepping +/-0x1362d4, +/-0xe2604, only after 0x902004>=2
+0x81ee func hud_emit_spinning_pair_bb hand same as 0x81e2 with model 0xbb
+0x81fa func hud_emit_spinning_pair_bc hand same as 0x81e2 with model 0xbc
+0x8290 func hud_reset_spin_accumulators hand 0x10c1ec=0xfe0be2ec 0x10c1f0=0xfea2923f 0x10c1f4=0x234cf4c 0x10c1f8=0x1762877
+0x82ba func hud_emit_model_at_d6_da hand type-1 entry model 0x10c1fc at 0x10c1d6/0x10c1da, scale 0xe0
+0x8312 func hud_emit_model_c1_scaled hand type-1 model 0xc1 at D1,D1 scale 0x200
+0x8360 func io_read_controls_main hand reads 0xa00000 buttons (edge 0x100a12, held 0x100a10) and sticks 0xa00010..16 minus centres 0x9002c0..c6 into 0x100ab0..b6, builds direction nibbles 0x100ac0/ac4/a20 with hold-repeat 0x100a24
+0x85cc func io_read_controls_replay hand same decoding but from replay/demo stick words 0x100180..186 and deadzone 0x14
+0x87fc func io_read_remote_controls hand decodes opposite cabinet sticks from shared 0x904028/2a (cab id 0x900204 toggled) into 0x100aa0..a6 directions 0x100aa8/ac
+0x893a func io_menu_repeat_up_down hand buttons 0x10/0x20 on 0x100a12 adjust 0x10c20e and 0x100c20 with auto-repeat table 0x8a34
+0x8a48 func game_menu_inc_if_not_held hand 0x100c20++ unless 0x100a10 bit1
+0x8a5c func game_menu_dec_if_not_held hand 0x100c20-- unless 0x100a10 bit1
+0x8a70 func io_send_lamp_and_sound_cmds hand calls 0x8a7e,0x8bb4,0x8c1a each frame
+0x8a7e func snd_dispatch_event_queue_a hand maps event flags 0x102000..0x102080 to sound commands in IO dual-port 0xa00834/838/83c (e.g. 0x260040 0x10040 0x50040)
+0x8bb4 func snd_dispatch_event_queue_b hand maps 0x102008/0x102010/0x102020/0x102050 flags to 0xa00438/0xa0023c/0xa0043c commands
+0x8c1a func snd_dispatch_stub hand empty
+0x8c1c func snd_clear_event_flags hand zeroes 16+2 event flags at 0x102000 stride 8
+0x8c4a func hw_screen_mode_dispatch hand 0x900014=0xd, jumps via table 0x8c6e indexed by 0x100ae0&7
+0x8fbc func hud_emit_scaled_entry_tail hand tail helper writing entry words for type 2 with two 0x2a220 values, terminator 0xffff
+0x8fe6 func hud_load_palette_cells hand copies 9 records from 0x9064 to 0x10c214 stride 0x20 and sets word 0x14 from table by 0x100880&7
+0x9234 func hud_emit_two_models_26 hand emits 2 type-2 models from table 0x9296 at y=0x26 z=0x1b0
+0x9914 func game_init_stage_from_table hand 0x10c402 from table, 0x100e00++, 0x900000=1 0x900002=0x23, runs 0xb6d0 camera, 0x303f4, 0x2bf90
+0x9c44 func game_set_trigger_flags_by_time hand 0x902890 bit set for ranges in table (via 0x101006) when 0x10c404 in [lo,hi]
+0x9d14 func game_set_flag_by_time_range hand 0x901bc4=1 when 0x10c404 in table range
+0xa0a2 func game_replay_read_stick_frame hand reads 2 words from replay stream ptr 0x101002 into 0x10c3f6/f8 and unpacks 4 nibbles to 0x100180..186
+0xa108 func game_load_stage_start_pose hand reads player pose words from stream 0x101002 into 0x100100..106, 0x103a00.., 0x904000 block; sets 0x100104=0xffb5
+0xa1f6 func game_init_demo_shared_state hand 0x900a10=0x1000 0x900a12=0x1100, 0x905014=7, 0x905050=0x900222
+0xa242 func shared_clear_enemy_slots_6000 hand zeroes word at 0x906004 stride 0x10 x16
+0xa260 func shared_clear_enemy_slots_6200 hand 0x906400=0 and zeroes 0x906204 stride 0x10 x4
+0xa286 func game_spawn_flags_handler hand bit0 of 0x10c3f6 spawns object (sets 0x902700=0x1e, 0x102080=1), bit1 sets 0x102018 and calls 0x25864
+0xa4b4 func game_run_two_object_lists hand runs object routine on lists 0x102000 and 0x102068 via 0x10c406
+0xad02 func player_subtract_ammo_cost hand 0x901d04 -= cost from table at 0x25004 indexed by weapon (0x904026)*0x10+8
+0xb030 func hud_emit_stage_objects hand emits type-4 header plus type-2 entries from stage object table filtered by 0x10c404 time window
+0xb2ec func snd_cmd_stop_all_c hand 0xa00090..98 sound reset writes
+0xb320 func game_state_wait_countdown hand 0x900000=1 0x900002=0x26, decrements 0x101040, then 0x101000=5 0x100e00++
+0xb494 func game_state_advance_after_5 hand 0x100f30 counts 0..4, then 0x900002=0x1d and 0x100e04=1
+0xb4d4 func game_state_enter_result hand 0x900220=2, 0x900002=0x1d, draws 0x9234
+0xb4f4 func game_state_game_over_wait hand 0x900000=3 0x900002=0xc, 300 frame wait for button 0xa00000&0x30, then resets 0x100e00=3
+0xb57e func game_state_continue_screen hand 0x900002=0x1c, sfx 0xa00420, after 4 frames 0x900002=0x1e and 0x100e12=1
+0xb672 func shared_copy_slave_time hand 0x901d10 = 0x103b00
+0xb67e func io_read_buttons_and_coin hand reads 0xa00000 buttons into 0x100a00 (edge 0x100a02 release 0x100a04), shifts coin bit 0xa00004&0x40 into 0x10c40a, decrements credits 0x900280 on pattern 3
+0xb6d0 func cam_update_follow_player hand smooths camera offsets 0x100b00/0x100b02/0x100b04 toward target (clamp +-0x100 per frame), mirrors to 0x100b12/14/16, calls 0xb938/0xb98c
+0xb7a4 func link_record_replay_frame hand records one 0x40-byte frame in 0x906e00 ring (index 0x906d02 &0x7fff): button bits from 0x906d20, stick nibbles 0x100180..186, pose 0x100100.. and player block 0x904000
+0xb8ca func shared_queue_push_event_if_input hand queue ptr 0x906d02, flag 0x906d00
+0xb90e func shared_queue_check_space hand shared queue free-space test 0x906d00
+0xb938 func dsp_set_params_by_course hand writes DSP RAM 0x208050/56 and 0x20c050/56 by course
+0xb98c func cam_build_scene_list_full hand builds scene list 0x100824, camera 0x100b06/08/0a
+0xb9f0 func cam_build_scene_list_demo hand demo variant of scene list build, 0x100824
+0xba3e func cam_build_scene_list_core hand core scene list builder, map ptrs 0xbd60/0xbd64
+0xbbb4 func obj_emit_list_entry_a hand emits scene list entry
+0xc1a6 func obj_emit_list_entry_b hand emits scene list entry
+0xc46c func obj_emit_list_entry_c hand emits scene list entry
+0xbbde func cam_apply_tilt_offset hand adds tilt to camera 0x100b06..0a
+0xbda0 func hw_sprite_flags_a hand C355 sprite RAM flags 0x7403e4/0x7423e4/0x7503e5/0x7523e5
+0xbdc2 func hw_sprite_flags_b hand C355 sprite RAM flags 0x7403e4/0x7423e4/0x7503e5/0x7523e5
+0xe94e func hw_sprite_flags_c hand C355 sprite RAM flags 0x7403e4 family
+0xe972 func hw_sprite_flags_d hand C355 sprite RAM flags 0x7403e4 family
+0x11ffc func hw_sprite_flags_e hand C355 sprite RAM flags 0x7403e4 family
+0x12020 func hw_sprite_flags_f hand C355 sprite RAM flags 0x7403e4 family
+0x14968 func hw_sprite_flags_g hand C355 sprite RAM flags 0x7403e4 family
+0x1498a func hw_sprite_flags_h hand C355 sprite RAM flags 0x7403e4 family
+0x14bd6 func hw_sprite_flags_i hand C355 sprite RAM flags 0x7403e4 family
+0x14bf8 func hw_sprite_flags_j hand C355 sprite RAM flags 0x7403e4 family
+0x181b6 func hw_sprite_flags_k hand writes 0xff00/0 to 0x7403e4,0x7503e5,0x7423e4,0x7523e5
+0xbde4 func cam_load_chase_and_build hand loads chase camera then builds scene
+0xbe50 func cam_load_title_and_build hand loads title camera then builds scene
+0xbece func cam_smooth_build_scene_a hand smoothed camera 0x100bc0..ca, sun sprite 0xee/0xed
+0xc210 func cam_smooth_build_scene_b hand smoothed camera 0x100bc0..ca, sun sprite
+0xceca func game_init_attract_camera_a hand attract camera setup
+0xec50 func game_init_attract_camera_b hand attract camera setup
+0xdc06 func game_state_adv_1 hand state 0x100900 += 1, timer 0x100922
+0xdc1e func game_state_adv_2a hand state 0x100900 += 2, timer 0x100922=0x78
+0xdc42 func game_state_adv_2b hand state 0x100900 += 2, timer 0x100922=0xb4
+0xdc5e func game_state_adv_3 hand state 0x100900 += 3, win counts 0x901d20/22/24
+0xe34a func cam_next_path_point_a hand path pointer 0x100950
+0x114a2 func cam_next_path_point_b hand path pointer 0x100950
+0x141ee func cam_next_path_point_c hand path pointer 0x100950
+0xe418 func obj_set_default_light_a hand 0x100820 = 0x7fff x3
+0x11570 func obj_set_default_light_b hand 0x100820 = 0x7fff x3
+0x14754 func obj_set_default_light_c hand 0x100820 = 0x7fff x3
+0xe42c func obj_emit_course_preview_a hand table indexed by 0x100904
+0x1194c func obj_emit_course_preview_b hand table indexed by 0x100904
+0xe5a0 func obj_emit_title_logo hand title logo objects
+0xe634 func snd_reset_cmd_block hand clears MCU sound cmd block 0xa00420..
+0xe656 func obj_spawn_debris_ring_a hand debris array 0x104e00 16 slots x 0x20
+0x11c18 func obj_spawn_debris_ring_b hand debris array 0x104e00
+0x14796 func obj_spawn_debris_ring_c hand debris array 0x104e00
+0x11c92 func obj_spawn_debris_at_player hand debris array 0x104e00 at player pos
+0xe6d0 func obj_spawn_explosion_jitter_a hand explosion array 0x103800 lifetime 0x96
+0x11d10 func obj_spawn_explosion_jitter_b hand explosion array 0x103800 lifetime 0x96
+0x14314 func obj_spawn_explosion_jitter_c hand explosion array 0x103800 lifetime 0x96
+0x11d7e func obj_spawn_explosion_and_spark hand explosion 0x103800 plus spark
+0xe73e func ai_find_nearest_target hand tank structs 0x904014, 0x1078c0/c8, target stored 0x901d04
+0xe7d8 func obj_emit_quad_a hand emits quad object
+0x113a4 func obj_emit_quad_b hand emits quad object
+0xe816 func snd_time_warning_a hand timer 0x10c42e/0x10c934 == 0x708, 0x902880/82
+0x14810 func snd_time_warning_b hand timer == 0x708, 0x902880/82
+0xe83a func snd_idle_warning_a hand idle warning sound cmd
+0x1483c func snd_idle_warning_b hand idle warning sound cmd
+0xe864 func snd_engine_params_a1 hand engine sound params DPRAM 0xa00a02..07
+0xe880 func snd_engine_params_a2 hand engine sound params DPRAM 0xa00a02..07
+0x11f12 func snd_engine_params_b1 hand engine sound params DPRAM 0xa00a02..07
+0x11f2e func snd_engine_params_b2 hand engine sound params DPRAM 0xa00a02..07
+0x1486e func snd_engine_params_c1 hand engine sound params DPRAM 0xa00a02..07
+0x1488a func snd_engine_params_c2 hand engine sound params DPRAM 0xa00a02..07
+0xe89c func io_mcu_cmd_countdown_a hand MCU cmd countdown DPRAM 0xa00090..98
+0x11f4a func io_mcu_cmd_countdown_b hand MCU cmd countdown DPRAM 0xa00090..98
+0x148a6 func io_mcu_cmd_countdown_c hand MCU cmd countdown DPRAM 0xa00090..98
+0xe8e4 func io_mcu_cmd_1_a hand MCU cmd 1 DPRAM 0xa00090..98
+0x11f92 func io_mcu_cmd_1_b hand MCU cmd 1 DPRAM 0xa00090..98
+0x148ee func io_mcu_cmd_1_c hand MCU cmd 1 DPRAM 0xa00090..98
+0xe918 func io_mcu_cmd_0_a hand MCU cmd 0 DPRAM 0xa00090..98
+0x11fc6 func io_mcu_cmd_0_b hand MCU cmd 0 DPRAM 0xa00090..98
+0x14922 func io_mcu_cmd_0_c hand MCU cmd 0 DPRAM 0xa00090..98
+0xfe80 func game_state_gameover_update hand game over state, score 0x901900 < 0x15 -> state 0x29 else 0x22
+0xff0c func game_gameover_tail_a hand tail variant of game over update
+0xff24 func game_gameover_tail_b hand tail variant of game over update
+0xff6c func game_gameover_tail_c hand tail variant of game over update
+0xff78 func game_gameover_tail_d hand tail variant of game over update
+0x104f8 func game_state_title_update hand title state update
+0x10820 func game_state_replay_cam_a hand replay camera state
+0x1093e func game_state_replay_cam_b hand replay camera state
+0x10a3a func game_state_replay_cam_c hand replay camera state
+0x10b9e func game_replay_load_record hand buffer 0x906e00 stride 0x40, ptr 0x10c460
+0x10ca0 func game_replay_run_subsystems hand runs subsystems during replay
+0x110a4 func game_replay_save_player_pos hand saves player position to replay buffer
+0x1120a func game_save_state_block hand saves state block
+0x11290 func game_restore_state_block hand restores state block
+0x1131c func player_init_title_tank hand initialises title-screen tank
+0x113e2 func player_apply_knockback_decay hand knockback decay
+0x11434 func player_apply_recoil_to_aim hand recoil applied to aim
+0x1146a func player_set_knockback_from_angle hand knockback from angle via sincos
+0x11584 func shot_spawn_and_update_bullets hand bullets 0x105800 8 slots x 0x20
+0x11754 func io_handle_buttons_a hand button word 0x10c45c
+0x117b4 func io_handle_buttons_b hand button word 0x10c45c
+0x11b4a func mem_clear_shared_906800 hand clears shared RAM 0x906800
+0x11b5e func game_record_replay_frame hand records replay frame
+0x11b9c func game_replay_accumulate_frame hand accumulates replay frame
+0x11bea func game_replay_write_marker hand writes replay marker
+0x11de8 func shot_spawn_missile hand missile array 0x103840
+0x11e2e func shot_spawn_missile_from_player hand missile array 0x103940
+0x11e9a func shared_send_aim_vector_a hand aim to 0x104c00, 0x900e10
+0x11ea4 func shared_send_aim_vector_b hand aim to 0x104c00, 0x900e10
+0x13342 func game_round_end_a hand round end handling
+0x13432 func game_round_end_b hand round end handling
+0x134a0 func game_round_end_c hand round end handling
+0x1378a func game_check_match_over hand match over check
+0x13a1c func game_init_gameover_screen hand game over screen init
+0x13e1c func snd_play_course_music hand course music command
+0x142bc func obj_emit_sun_object hand sun sprite object
+0x14382 func game_load_course_params hand course table 0x14490 stride 0x40
+0x14684 func game_calc_score_diff_handicap hand score difference handicap
+0x14718 func link_save_scroll_state hand saves scroll state for link
+0x14768 func snd_lap_warning hand lap warning sound
+0x14956 func hw_mask_dpram_a00434 hand masks DPRAM 0xa00434
+0x149ac func player_update_tank hand per-tank update
+0x14c1a func io_read_twin_sticks hand analog sticks DPRAM 0xa00010..16
+0x15364 func io_read_sticks_scaled hand scaled stick values
+0x14d54 func player_update_physics hand tank physics update
+0x1514c func player_calc_drift_vector hand drift vector
+0x151b4 func player_decay_drift hand drift decay
+0x15234 func player_decay_collision_push hand collision push decay
+0x156b0 func snd_calc_engine_pitch hand engine pitch from speed
+0x15754 func col_sample_terrain_height hand terrain height from data ROM 0x81ede0
+0x1582e func col_sample_terrain_height_alt hand terrain height from data ROM 0x822032
+0x158b6 func col_sample_terrain_corners hand terrain height at tank corners
+0x15bf0 func col_check_walls hand wall collision check
+0x15c88 func col_apply_wall_bounce hand wall bounce
+0x15e16 func col_commit_bounce hand commit bounce result
+0x15e80 func col_wall_check_a hand wall check
+0x15eb6 func col_wall_check_b hand wall check
+0x15fd6 func col_add_wall_hit_effect hand hit effect slots 0x900fa0
+0x16096 func col_resolve_tank_vs_obstacles hand 12-iteration obstacle loop over 0x101700, bounce uses 0x10c964/66
+0x162fa func col_obstacle_tail_damp_a hand damps velocity 0x100110/0x100140 by 0xeb85
+0x1632e func col_obstacle_tail_damp_b hand damps velocity 0x100110/0x100140 by 0xc000
+0x16362 func col_obstacle_commit_push hand commits push 0x101a00/02 to pos 0x100100/02
+0x16460 func col_add_hit_effect_slot hand 4 slots at 0x900fa0 stride 0x10
+0x164a0 func col_clear_obstacle_hit_flags hand clears 32 flags at 0x10c968
+0x164b8 func col_resolve_tank_vs_buildings hand building list 0x104600 stride 0x10, push 0x10ca6c/6e
+0x166ae func col_test_building_box hand box test, flags 0x10ca70, 0x101a90
+0x16776 func col_compare_axis_dominance hand compares axis offsets from 0x100100/02
+0x167b0 func obj_load_target_table hand fills 0x104600 table from ROM by 0x901d80
+0x16912 func shot_check_players_vs_targets hand iterates 0x904000 tanks
+0x16960 func shot_check_target_list hand 16 targets 0x104600, hit flag 0x100992
+0x169ac func col_point_in_box_a hand box 0x80 half-size test
+0x169e4 func col_point_in_box_b hand box 0x80 half-size test
+0x16a94 func col_clear_building_hit_flags hand clears 32 flags at 0x10ca70
+0x16aac func obj_spawn_hit_marker hand marker 0x103920 lifetime 0x96
+0x16ae0 func game_state_adv_init_stage hand 0x100900++, timer 0x100922=0xf0, clears 0x906900
+0x16ae8 func game_dispatch_by_course_a hand jump table 0x16cdc indexed by 0x100904
+0x16ce8 func game_dispatch_by_course_b hand jump table 0x17166 indexed by 0x100904
+0x16b5a func enemy_dispatch_update_all hand loops 0x900a10..0x900a12, table 0x171a8
+0x16d00 func enemy_run_update_list hand loop over enemies, calls 0x228cc/229c6/22bf4
+0x17238 func enemy_init_course_table_a hand inits enemy structs 0x904000 from table 0x173c6
+0x178e2 func enemy_init_course_table_b hand inits enemy structs from table 0x17a2c
+0x17bf8 func enemy_set_all_state_f hand 0x904014 = 0xf for all enemies
+0x17c1c func enemy_mask_all_state_2 hand 0x904014 &= 2
+0x17c40 func enemy_clear_all hand clears 0x904014 and 0x904050
+0x17c6c func enemy_set_all_state_10 hand 0x904014 = 10
+0x17c94 func enemy_clear_slots_1000 hand clears 8 slots from 0x905014
+0x17cb0 func ai_select_nearest_visible_enemy hand min dist 0x1078c0, flag 0x1078e0
+0x17db6 func ai_line_of_sight_check hand ray steps sampled in map, result 0x10cc70
+0x17e7c func enemy_copy_type_params_a hand copies enemy param table by 0x100904
+0x17f68 func enemy_copy_type_params_b hand copies enemy param table by type
+0x181d8 func ai_update_enemy_type_a hand state dispatch via 0x182b0, writes 0x901840/42/44
+0x182e4 func ai_save_target_dist_a hand stores 0x100c4c
+0x182ee func ai_find_nearest_player_a hand nearest tank, dist 0x10cc74, angle 0x10cc78
+0x18474 func ai_set_state_fire_timer hand sets state 0x20 timer 0x3c
+0x18908 func ai_behavior_turn_left hand heading offset -0x1800, steering 0xfff0
+0x189bc func ai_behavior_turn_right hand heading offset +0x1800, steering 0x10
+0x18f0a func ai_choose_path_node_a hand path map 0x388c2/0x386c2, uses atan2 and random
+0x1931a func ai_update_enemy_type_b hand state dispatch via 0x193f6
+0x1942a func ai_save_target_dist_b hand stores 0x100c4c
+0x19434 func ai_find_nearest_player_b hand nearest tank, dist 0x10cca0, angle 0x10cca4
+0x194aa func ai_behavior_wander hand random timers, heading to target
+0x19b7c func ai_behavior_pursue hand pursue target, state 8 timer 0x1e
+0x19c1c func ai_behavior_idle_turn hand heading from tank + 0x1800
+0x19dbc func ai_behavior_pursue_b hand pursue variant
+0x19e5c func ai_choose_path_node_b hand path map 0x3a8c2/0x386c2, writes 0x90185c
+0x19ee2 func ai_choose_path_node_b2 hand path choice variant, map 0x3a8c2
+0x1adb0 func ai_choose_path_node_c hand path map 0x388c2, node table 0x1b05e
+0x1b2aa func ai_find_nearest_enemy_a hand scans tank array 0x904000 stride 0x100 for nearest enemy-team tank
+0x1f8d6 func ai_find_nearest_enemy_b hand duplicate variant of nearest-enemy scan
+0x20b5a func ai_find_nearest_enemy_c hand duplicate variant of nearest-enemy scan
+0x1b8fc func ai_choose_turn_dir_a hand picks steering direction from heading error to target
+0x1b9b0 func ai_choose_turn_dir_b hand variant of turn direction choice
+0x1ff3a func ai_choose_turn_dir_c hand variant of turn direction choice
+0x21166 func ai_choose_turn_dir_d hand variant of turn direction choice
+0x1beac func ai_waypoint_select_a hand path index/waypoint selection via A3 AI state
+0x1f388 func ai_waypoint_select_b hand waypoint selection variant
+0x1f40e func ai_waypoint_select_c hand waypoint selection variant
+0x216f0 func ai_waypoint_select_d hand waypoint selection variant
+0x1c336 func ai_tank_move_update hand moves tank x/y by heading+speed, steering state in A3
+0x1c61c func ai_steer_smooth hand smooths heading toward target heading (A3 -0x74)
+0x1ca2c func ai_calc_drift_vectors hand sincos of heading to velocity components
+0x1ca7c func ai_knockback_decay hand decays knockback speed fields +0x54/+0x56 of tank
+0x1cbce func ai_avoid_enemy_missile hand reacts to missile array 0x103a00
+0x1ce22 func ai_steer_left_preset hand loads fixed steering left
+0x1ce48 func ai_steer_right_preset hand loads fixed steering right
+0x1ce6e func ai_get_path_branch hand reads path branch index
+0x1ceac func ai_target_acquire hand picks target tank/player, uses atan2 FUN_0002a0b4
+0x1d11e func ai_calc_dist2_to_player hand dx*dx+dy*dy vs DAT_00100100/102
+0x1d144 func ai_los_check hand line of sight test toward player
+0x1d1de func ai_probe_terrain_ahead hand terrain lookup ahead of tank
+0x1d23e func ai_probe_terrain_from_player hand terrain lookup from player pos
+0x1d2a2 func ai_terrain_probe_grid hand multi-point terrain probe
+0x1d3b8 func ai_state_change_track hand tracks AI state change
+0x1d3ea func ai_player_in_front_counter_a hand counts frames player is in front
+0x1d41a func ai_player_in_front_counter_b hand variant counter
+0x1d59a func ai_speed_wobble hand randomizes speed with FUN_00032f0c
+0x207c4 func ai_aim_angle_a hand aim angle helper
+0x20818 func ai_aim_angle_b hand aim angle helper
+0x20838 func ai_aim_angle_c hand aim angle helper
+0x2088c func ai_aim_angle_d hand aim angle helper
+0x2196a func ai_aim_angle_e hand aim angle helper
+0x219be func ai_aim_angle_f hand aim angle helper
+0x227f2 func ai_aim_angle_g hand aim angle helper
+0x22846 func ai_aim_angle_h hand aim angle helper
+0x208ac func math_abs_sin_times_speed hand |sin| scaled by speed
+0x22886 func hud_sprite_ram_write_a hand writes sprite RAM 0x7403e4 region
+0x228aa func hud_sprite_ram_write_b hand writes sprite RAM 0x7423e4 region
+0x228cc func col_tank_box_corners hand computes rotated box corners from heading
+0x229c6 func col_player_bump_check hand tank vs player bump test
+0x22a38 func col_apply_knockback hand sets knockback speed fields on tank
+0x22b08 func col_rect_test_a hand rect test vs list DAT_00100918
+0x22b52 func col_rect_test_b hand rect test helper
+0x22bf4 func col_rect_test_c hand rect test helper
+0x22c66 func col_rect_test_d hand rect test helper
+0x22dc0 func col_rect_test_e hand rect test helper
+0x22ea8 func col_rect_test_f hand rect test helper
+0x2318c func ai_pick_next_waypoint hand advances path waypoint
+0x23254 func ai_random_wobble hand random heading wobble via FUN_00032f0c
+0x2329c func ai_target_select hand chooses target among tanks
+0x23f94 func ai_follow_path hand follows path nodes
+0x241e4 func col_bullet_vs_player_corners hand bullet test vs player box corners
+0x243f4 func col_point_in_ellipse hand ellipse point test
+0x24486 func cam_shake_update hand camera shake/kick on hit
+0x2462a func cam_knockback_velocity hand knockback velocity applied to player
+0x24894 func player_damage_and_hud_update hand reduces DAT_00901d02 health (max 0x1000) and flashes HUD
+0x2579c func cam_shake_init hand camera shake init
+0x25962 func player_fire_shot hand reads DAT_00a00000 bit 0x10, spawns into shot array 0x105800 (8x0x20)
+0x25b68 func shot_update_positions hand advances shot x/y with velocity
+0x25c10 func shot_collide_with_tanks hand shots vs tank array 0x904000
+0x25f8a func shot_score_event_a hand kill/score event
+0x25f9a func shot_score_event_b hand kill/score event
+0x25fbe func shot_clear_array_a hand clears shot arrays
+0x25ff0 func shot_clear_array_b hand clears shot arrays
+0x26010 func shot_clear_array_c hand clears shot arrays
+0x2602c func shot_clear_active_mask hand clears active mask bits in DAT_00100876
+0x26154 func col_shot_rect_hit hand rect hit check for shots
+0x2618c func shot_spawn_effect_a hand spawns hit effect
+0x261ce func shot_spawn_effect_b hand spawns hit effect
+0x2622c func shot_count_fired hand counter shots fired
+0x26242 func shot_count_hits hand counter hits
+0x26258 func shot_vs_terrain hand shot vs terrain
+0x262f8 func shot_vs_building hand shot vs building collision
+0x263c4 func enemy_missile_update hand missile array 0x103a00 (2x0x20) movement and collision
+0x267f4 func missile_update_slot hand per-slot update of 0x104600 slots: spawn from player pos, gravity, terrain/box hit, fuse timer +0xe
+0x2694e func missile_hit_tanks hand checks tanks 0x904000 stride 0x100, team DAT_00900222, damage, explosion events 0x900f00
+0x27280 func missile_link_cancel hand 2P link: cancels slot if remote flag 0x10 in 0x904016+DAT_00900216
+0x272ba func missile_update_loop_tail hand loop over slots (stride 0x20, 2 slots), fire button DAT_00a00000 bit 0x20, DAT_00103b00 count
+0x27328 func missile_homing_seek hand picks best target tank by angle/distance, steers missile heading
+0x27522 func math_offset_by_heading_a hand x/y offset via sin/cos scaled (0x4ec if DAT_00900210==2)
+0x27590 func math_offset_by_heading_b hand x/y offset scaled by 0x469
+0x275ae func col_missile_vs_rect_quadrant hand rect test, sets DAT_00100992, quadrant to DAT_0010cfc6
+0x2762a func col_missile_vs_square hand 0x100 square hit test sets DAT_00100992
+0x27662 func col_shot_vs_rect hand shot at DAT_00103a00 vs rect, sets DAT_00100992
+0x276aa func fx_spawn_big_explosion hand big explosion at 0x103800 (2x0x10) and event 0x900f00
+0x2773a func fx_spawn_hit_marker hand effect at 0x103920 and shared 0x900e20
+0x27794 func fx_spawn_hit_marker_at_tank hand effect at 0x103920 from tank xyz, DAT_00100874 |= 0x40
+0x277fa func fx_spawn_debris_burst hand 8 debris at 0x104c00 stride 0x10, shared 0x900e10
+0x2785c func fx_spawn_debris_burst_b hand debris at 0x103820/0x103830, shared 0x900e10
+0x278c4 func fx_spawn_directional_hit hand effect at 0x103940 with direction DAT_0010cfc6
+0x27958 func shot_cooldown_tick hand decrements timers at 0x104480 (3), counts free in DAT_00103b00
+0x27996 func missile_set_volume_by_distance hand sets +0x10 from heading distance to tanks (0x7fff - dist*8)
+0x27a2a func missile_set_owner_dist hand copies 0x1078c0 to 0x1078c4 per tank
+0x27a84 func cam_calc_pitch_limits hand from DAT_00100930/34, sets 0x901850/0x901852 and DAT_00103b18/22
+0x27fa2 func col_edge_check_pos hand sets DAT_0010cfc8 if y <0x8000 and <= A3
+0x27fc6 func col_edge_check_neg hand sets DAT_0010cfc8 if y>=0x8000 and > A3+2
+0x2806e func stat_count_missile_fired hand DAT_001009b4++ when DAT_00906900>=0
+0x28084 func stat_count_missile_hit hand DAT_001009b0++ when DAT_00906900>=0
+0x2810a func shot_clear_enemy_missiles hand clears 8 entries stride 0x20 at 0x103a00 and sprite RAM 0x7403e4/0x7423e4
+0x2814e func hud_clear_sprite_flags hand writes 0xff00 to 0x7403e4/0x7423e4
+0x28170 func player_fire_from_remote_bits hand from 0x90403a bits spawns shots into 0x105800 for tank DAT_00900216
+0x283e8 func fx_play_remote_hit_events hand handles 0x90402e hit bits, effects at 0x103920/103940, shared 0x900e20
+0x28636 func player_shot_cycle_fast hand shot spawn/update loop, heat 0x1078d0 decreases, shots 0x105800
+0x28650 func player_shot_cycle hand fire gated by heat 0x1078d0 (cap 0x1000), spawns/moves/collides shots 0x105800, hit sets 0x10780e=3
+0x28c9a func enemy_missile_fire_and_update hand fires missiles into 0x103a00/0x103a40, ammo 0x107896, copies target to 0x904018/0x904030
+0x2901e func col_shot_vs_tank_table hand loops 20 tanks stride 0x100 at 0x904000, distance check, clears shot
+0x292da func shot_update_all hand shot slot loop stride 0x20, spawn from tank, move, hit, expire
+0x2935c func ai_shot_homing_aim hand picks nearest target angle, adjusts heading +4
+0x29506 func shot_calc_muzzle_pos hand sin/cos of heading, offset 0x4ec on type 2
+0x29574 func col_shot_vs_box_zone hand box test, sets DAT_00100992
+0x295f0 func shot_spawn_ground_burst hand writes 0x103920 table and 0x900e20
+0x2964e func shot_spawn_impact_effect hand writes 0x103940 table
+0x296cc func shot_init_speed_from_pitch hand speed derived from pitch
+0x296f6 func shot_init_damage_by_range hand damage by range
+0x2971c func shot_clear_aim_assist hand DAT_00103b18=0xc00, DAT_00103b22=0
+0x2974e func col_shot_range_check_low hand sets DAT_0010cfea
+0x2976c func col_shot_range_check_high hand sets DAT_0010cfea
+0x2980e func ai_enemy_fire_decision hand distance + heading + LOS, DAT_0010cff2
+0x29904 func ai_line_of_sight_scan hand ray steps against a 0x17ff map
+0x29b60 func ai_turret_fire_check hand turret fire condition
+0x29be4 func ai_goal_los_check hand uses 0x103a00 goal pos
+0x29ce8 func ai_select_waypoint_table_by_pos hand position thresholds 0x240000/0x483fff
+0x29da2 func enemy_apply_damage_table hand damage tables 0x24cd4/0x29e7c/0x29e9c
+0x29e2c func player_apply_damage_table hand sets _DAT_00102018
+0x29e74 func game_dec_counter_1009d4 hand decrements DAT_001009d4
+0x29ea4 func enemy_set_hit_knock_vel hand knockback velocity on hit
+0x29ebe func obj_calc_tank_tilt_from_corners hand 4 corners at 0x109810, pitch/roll at 0x109802/4
+0x2a0b4 func math_atan2_16 hand atan table 0x33616
+0x2a1ba func math_return_7fff hand returns 0x7fff
+0x2a1c2 func math_isqrt32 hand 32-bit integer sqrt
+0x2a220 func math_sincos_pair hand table 0x90000
+0x2a234 func math_cos hand sin(x+0x4000)
+0x2a238 func math_sin hand table 0x80000
+0x2a24a func math_sincos_lookup_a hand 0x80000 pair
+0x2a26c func math_sincos_lookup_b hand 0xb0000 pair
+0x2a292 func math_sin_lookup_b hand 0xb0000 sin
+0x2a2a4 func pickup_update_all hand 906000 array stride 0x10, pickup radius, collect
+0x2a38e func pickup_respawn_pick_slot hand respawn timer at +6
+0x2a460 func pickup_init_random hand random placement
+0x2a532 func pickup_init_fixed_layout hand fixed layout
+0x2a59a func pickup_take_by_other_tank hand other tank collects
+0x2a626 func pickup_clear_and_tick_flash hand flash timers
+0x2a63e func pickup_tick_flash_timers hand flash timers
+0x2a660 func powerup_update_all hand 906200 array
+0x2a8b6 func snd_send_pickup_sound hand writes 0xa0043c cmds 0x28-0x2b
+0x2a94e func pickup_update_repair_item hand 906400 single repair item
+0x2a9e6 func powerup_collect_by_tank1 hand collect by tank 1
+0x2aa48 func util_rts_stub hand empty
+0x2aa4a func powerup_remove_near_other_tanks hand removes near other tanks
+0x2aac8 func powerup_spawn_random hand random spawn
+0x2ab90 func item_spawn_repair_pos hand repair item position
+0x2abb4 func item_spawn_repair_conditional hand conditional repair spawn
+0x2ad72 func powerup_init_level hand level init of powerups
+0x2adee func fx_update_explosion_particles_a hand particles 0x103800-0x1039ff
+0x2b0d4 func fx_clear_all_effect_timers hand clears effect timers
+0x2b176 func fx_update_debris hand debris update
+0x2b26e func fx_update_explosion_particles_b hand particles
+0x2b3c6 func fx_update_smoke_trails hand smoke trails
+0x2b4e2 func fx_emit_particle_variant0 hand emitter
+0x2b518 func fx_emit_particle_variant1 hand emitter
+0x2b56e func fx_emit_particle_variant2 hand emitter
+0x2b5a8 func fx_emit_particle_variant3 hand emitter
+0x2b6ae func fx_update_big_explosion hand DAT_00104800
+0x2b816 func fx_start_big_explosion_at_cam hand big explosion at camera
+0x2b906 func fx_start_big_explosion_for_player hand big explosion at player
+0x2b9a2 func fx_stop_big_explosion hand stops it
+0x2b9aa func obj_draw_tanks_all hand tank array 0x904000 draw
+0x2b9c6 func obj_draw_tanks_from_player hand draw from player index
+0x2b9e8 func obj_draw_tanks_range hand range DAT_00900a10..a12
+0x2bbca func util_nop_stub hand empty
+0x2bc30 func obj_select_tank_model hand model by type +0x26
+0x2bd1e func obj_dispatch_tank_draw_type hand draw dispatch
+0x2be84 func util_rts_stub2 hand empty
+0x2be86 func cam_setup_view_mode3 hand camera globals 100b02..
+0x2bf22 func cam_setup_view_mode2 hand camera mode 2
+0x2bf5e func cam_setup_view_mode1 hand camera mode 1
+0x2bf90 func cam_setup_view_mode0 hand camera mode 0
+0x2bfe0 func cam_calc_view_offset hand view offset calc
+0x2c210 func hud_draw_status_icons hand status icons
+0x2c250 func hud_draw_icon_0x81 hand icon sprite 0x81
+0x2c288 func hud_draw_icon_0x80 hand icon sprite 0x80
+0x2c2c0 func hud_draw_icon_0x7f hand icon sprite 0x7f
+0x2c2f8 func hud_emit_icon_object hand display list entry
+0x2c354 func util_rts_stub3 hand empty
+0x2c356 func hw_sprite_set_flags_a hand sprite RAM flags 0x7403e4
+0x2c378 func util_rts_stub4 hand empty
+0x2c37a func hw_sprite_set_flags_b hand sprite RAM flags
+0x2c39c func obj_draw_tank_shadows_all hand shadows
+0x2c3b6 func obj_draw_tank_shadows_from_player hand shadows
+0x2c498 func fx_draw_cam_overlay_a hand overlay
+0x2c4a8 func fx_draw_cam_overlay_b hand overlay
+0x2c648 func obj_emit_tank_marker_wrap hand marker wrapper
+0x2c654 func obj_emit_tank_marker_default hand marker default
+0x2c65a func obj_emit_tank_marker hand marker display list entry
+0x2c812 func obj_draw_props_all hand 105800 array stride 0x20, sprite 0x75
+0x2c842 func obj_draw_props_range hand props range
+0x2c914 func hw_sprite_set_flags_c hand sprite RAM flags
+0x2c936 func hw_sprite_set_flags_d hand sprite RAM flags
+0x2c958 func obj_draw_tank_models_all hand tank models
+0x2c974 func obj_draw_tank_models_range hand tank models range
+0x2c9ec func obj_emit_hud_object_3e hand sprite 0x3e
+0x2ca32 func obj_draw_tank_extras_all hand extras
+0x2ca4e func obj_draw_tank_extras_range hand extras range
+0x2ccf2 func obj_trail_push_pos hand trail ring buffer mask 0x70
+0x2cd56 func obj_trail_shift_push hand trail shift
+0x2cdc6 func obj_trail_copy_pos hand trail copy
+0x2d082 func fx_init_debris_pieces hand 104700 array
+0x2d126 func fx_update_debris_pieces hand 104700 array
+0x2db30 func fx_calc_debris_offset hand offset
+0x2db60 func obj_draw_shot_sprite_0x76 hand sprite 0x76
+0x2dc86 func obj_draw_trail_sprites_0x78 hand sprite 0x78
+0x2ddf0 func obj_trail2_shift_push hand trail 2
+0x2de60 func obj_trail2_copy hand trail 2
+0x2dfc0 func obj_draw_shot_sprite_0x79 hand sprite 0x79
+0x2ebfa func obj_draw_pickups hand sprite 0x86
+0x2ecbe func obj_draw_powerups hand powerups
+0x2ed9e func obj_draw_repair_item hand sprite 0x87
+0x2ee4c func obj_draw_scenery_markers_104600 hand sprite 0x97
+0x2eeee func obj_draw_scenery_list_by_level hand table 0x2efae
+0x2f134 func obj_dispatch_level_scenery hand per level scenery
+0x2f2c4 func ai_update_path_follow_angle hand path angle
+0x2f3d0 func obj_draw_single_sprite_d2d8 hand single sprite
+0x2f4a8 func hud_draw_lives_or_ammo_digits hand digits
+0x2f5ac func obj_dispatch_level_hud hand per level hud
+0x2f700 func fx_draw_hit_sparks_104c00 hand sparks
+0x2f800 func fx_clear_hit_sparks hand clears sparks
+0x3001c func fx_draw_debris_chunks_104e00 hand debris chunks
+0x30234 func fx_update_shockwave_104c80 hand sprite 0xa4
+0x3038a func fx_clear_shockwave hand clears shockwave
+0x303a6 func ai_calc_dist_angle_for_tank hand dist/angle to player
+0x303f4 func ai_calc_dist_angle_all_tanks hand writes 1078c0/1078c8
+0x30450 func game_render_effects_group hand calls 4 sub-routines
+0x32b96 func ai_pick_nearest_target_in_fov hand nearest target in fov
+0x32ba0 func ai_pick_nearest_target_range hand nearest target by range
+0x32c5c func ai_lockon_check_a hand per tank angle test, DAT_001009a0/a6 timers
+0x32c6c func ai_lockon_check_b hand per tank angle test from DAT_00900216, uses +0x18/+0x30 pos
+0x32d88 func ai_lockon_timers_tick hand decrements 1009a2/1009a6
+0x32da2 func ai_lockon_set_flag hand DAT_001009a0=0x14, 102020=1
+0x32db4 func ai_proximity_warn_set hand DAT_001009a6=0x3c, 102050=1
+0x32dc6 func game_energy_low_check_a hand 901d02 vs table, snd 0x260040 via 0xa0043c
+0x32dce func game_energy_low_check_b hand same with alt table when 902010
+0x32e58 func ai_check_enemy_in_view hand dist/angle test, sets 901c02, counter 10d32c
+0x32f0c func math_rand_next hand LCG x*5+1 in 100880
+0x32f2a func math_rand_next_pair hand LCG on 100884, 100888
+0x32f64 func math_lfsr_step_d32e hand shift register on 10d32e
+0x34e60 func hw_dsp_init hand DSP RAM 0x200000 init sequence
+0x34e9e func hw_dsp_init_stage0 hand calls hw_dsp_ram_test
+0x34eb6 func hw_dsp_init_stage1 hand delay loop then boot
+0x34ed4 func hw_dsp_bank_regs_init hand writes 200200..206
+0x34ef6 func hw_dsp_load_program hand copies to 208000 and 20c000
+0x34f52 func hw_dsp_load_tables hand copies to 208040/20c040
+0x34fbe func hw_pointram_load_regs hand writes 0x400000/0x440001
+0x35058 func hw_pointram_select_and_load hand picks table by 901d80
+0x350d0 func hw_dsp_full_init hand dsp init plus pointram
+0x35138 func hw_dsp_ram_test hand writes 0x280000, sets OK/NG at 200074
+0x35208 func hw_dsp_clear_and_load_prog hand clears 0x200000 and loads
+0x35236 func hw_dsp_boot_and_run hand copies from 0x800000, ABORT/COMPLETE text
+0x35348 func hw_dsp_boot_test hand PTR BOOTING text
+0x35382 func hw_dsp_wait_idle hand polls 200112
+0x3539c func hw_dsp_wait_done hand polls 20010e/200100
+0x353ca func hw_dsp_read_word_b hand combines bytes
+0x353d8 func hw_dsp_read_word_a hand combines bytes
+0x353f0 func hw_dsp_read_byte hand byte read
+0x35404 func hw_dsp_download_and_verify hand copies to 200800, check 759c/2ed2
+0x355c8 func hw_pointram_write_seq_a hand list writer
+0x355de func hw_pointram_write_seq_b hand list writer
+0x355f4 func hw_pointram_write_seq_c hand list writer
+0x3560a func hw_pointram_write_list hand loops until -1
+0x35628 func hw_pointram_write_bits hand bit serial via 400000
+0x356e4 func hw_load_table_480000 hand 0x400 words from 0x3ba02
+0x3570a func hw_load_table_480000_only hand copy only
+0x35e34 func math_matrix_vec_mul hand 3x3 from 902500, vec 101640
+0x363d8 func cam_smooth_axis_a hand step 6 toward 100ab6, table 373ac
+0x3646a func cam_smooth_axis_b hand step 6 toward 100ab4
+0x37caa func hud_gauge_ease_to_center_0 hand 100ad0 toward 0x4f
+0x37ccc func hud_gauge_ease_to_center_1 hand 100ad2 toward 0x4f
+0x37cf8 func hud_gauge_ease_to_center_2 hand 100ad4 toward 0x4f
+0x37d1a func hud_gauge_ease_to_center_3 hand 100ad6 toward 0x4f
+0x37dbc func hud_gauge_inc_0 hand 100ad0 +8 clamp 0x9f
+0x37dd8 func hud_gauge_dec_0 hand 100ad0 -8 clamp 0
+0x37df2 func hud_gauge_inc_1 hand 100ad2 +8 clamp 0x9f
+0x37e0e func hud_gauge_dec_1 hand 100ad2 -8 clamp 0
+0x37e62 func hud_gauge_inc_2 hand 100ad4 +8 clamp 0x9f
+0x37e7e func hud_gauge_dec_2 hand 100ad4 -8 clamp 0
+0x37e98 func hud_gauge_inc_3 hand 100ad6 +8 clamp 0x9f
+0x37eb4 func hud_gauge_dec_3 hand 100ad6 -8 clamp 0
+0x3c1c4 func game_play_frame_update hand cam, ai dist, draw tanks per frame
+0x3ca34 func cam_init_chase hand 100e32..3a camera init
+0x3ca78 func cam_update_chase_fall hand 100e32 +1, 100e36 +0x28
+0x3cd54 func cam_init_orbit hand uses atan2/isqrt
+0x3ce26 func obj_init_extra_tank_slot hand 905014=7, range 900a10/12
+0x3ce72 func pickup_clear_all_timers hand 906004 stride 0x10 x16
+0x3ce90 func powerup_clear_all hand 906400 and 906204 x4
+0x3ceb6 func player_apply_hit_events_a hand bit flags in 10d36e 1,2
+0x3cfe8 func player_apply_status_events_a hand bit flags 0x20,0x40,0x80, 901d06
+0x3d486 func shot_spawn_hit_marker hand writes 103940 table, 900e20
+0x3d956 func player_consume_energy_by_model hand 901d04 minus table by model
+0x3d9b6 func obj_init_scenery_markers_by_level hand 104600 by 901d80
+0x3dc12 func game_level_init hand resets 901d02-06, 100100 pos, effects
+0x3ec28 func player_apply_hit_events_b hand bit flags in 10d38c 1,2
+0x3ecaa func player_apply_status_events_b hand bit flags 4..0x80 of 10d38c
+0x3f162 func shot_spawn_trail_slot hand 103840 table
+0x3f660 func player_consume_energy_idx hand 901d02 minus table
+0x3fc7c func game_level_start_setup hand 900002=0x2a, cam mode0, scenery
+0x00000170 func exc_entry_swap_regs hand calls 490 reg-swap jump
+0x00000190 func exc_capture_frame_to_irq7 hand stores 12 params to 0x6f0.. then irq_Level7
+0x000003bc func exc_save_cpu_state_regs hand saves SR/PC/D0-A6/USP/VBR to 0x608-0x660, calls 490
+0x000003ec func exc_reset_cpu_state_clear hand clears saved regs 0x608.., SR=0x2700, calls 490
+0x00000490 func exc_swap_saved_regs_jump hand swaps halves of longs 0x610-0x664 then indirect jump
+0x00001b54 func game_rts_stub_1b54 hand only rts
+0x00001b78 func game_rts_stub_1b78 hand only rts
+0x000024a4 func hw_fatal_halt_loop_a hand writes 1e2000/1d4000/1ce000 regs then spins forever
+0x0000255c func hw_fatal_halt_loop_b hand same write sequence then spins forever
+0x000027be func game_rts_stub_27be hand only rts
+0x00002a36 func hw_clear_ram_1e6000 hand writes 0 to 0x1e6000 (irq ack/watchdog mirror)
+0x00002fbc func game_set_shared_220a_220c_16 hand writes 0x10 to 0x90220a and 0x90220c
+0x000032e4 func game_rts_stub_32e4 hand only rts
+0x000051b0 func game_rts_stub_51b0 hand only rts
+0x000052e8 func game_rts_stub_52e8 hand only rts
+0x000064f2 func game_rts_stub_64f2 hand only rts
+0x00006eaa func game_rts_stub_6eaa hand only rts
+0x000072f6 func game_rts_stub_72f6 hand only rts
+0x0000dc6e func game_rts_stub_dc6e hand only rts
+0x0000dc70 func game_rts_stub_dc70 hand only rts
+0x0000dc72 func game_rts_stub_dc72 hand only rts
+0x0000dc74 func game_rts_stub_dc74 hand only rts
+0x0000e94c func game_rts_stub_e94c hand only rts
+0x0000e970 func game_rts_stub_e970 hand only rts
+0x0000fbc6 func game_rts_stub_fbc6 hand only rts
+0x00011b0c func spr_emit_cmd_rect_ff18 hand appends 11-word sprite cmd to list at 0x100824, ff18/40/d8/e0 coords
+0x00011ffa func game_rts_stub_11ffa hand only rts
+0x0001201e func game_rts_stub_1201e hand only rts
+0x000163c6 func game_rts_stub_163c6 hand only rts
+0x00016418 func math_mul4_d0w hand returns D0.w*4
+0x00016a1c func game_rts_stub_16a1c hand only rts
+0x000181b4 func game_rts_stub_181b4 hand only rts
+0x0001b2a0 func tank_load_f40_to_101c4c_a hand loads long tank+0x40 (A3+D4) into 0x101c4c
+0x0001cb8e func math_sincos_atan2_chain hand calls 1d520, math_sincos_pair, math_atan2_16
+0x0001d468 func col_lookup_cell_attr_player hand 0x901d02/04 -> cell index -> table 0x1d4a0 -> 0x101c52
+0x0001d520 func game_rts_stub_1d520 hand only rts
+0x0001d5e4 func game_set_timer_b800_60 hand 0x10b800=0, 0x10b802=0x3c
+0x0001e8e4 func tank_load_f40_f48_to_101c hand loads tank+0x40 to 0x101c4c, tank+0x48-0x8000 to 0x101c50
+0x0001f8cc func tank_load_f40_to_101c4c_b hand loads long tank+0x40 (A3+D4) into 0x101c4c
+0x00020b50 func tank_load_f40_to_101c4c_c hand loads long tank+0x40 (A3+D4) into 0x101c4c
+0x00020bd0 func ai_state_chase_aim_e hand ai_aim_angle_e, turn target, rand timers, ai_probe_terrain_ahead
+0x00022078 func ai_state_chase_aim_g hand ai_aim_angle_g, probe terrain, rand timers
+0x000225f6 func game_rts_stub_225f6 hand only rts
+0x000225f8 func ai_set_state_wait_40f hand sets tank state 0, timer 0x28
+0x000227c0 func ai_trigger_ambush_state_40 hand if timer 9fc==0 and target close, sets timer 0x78 state 0x40
+0x000228a8 func game_rts_stub_228a8 hand only rts
+0x00022e56 func game_rts_stub_22e56 hand only rts
+0x0002301c func ai_steer_heading_clamped hand clamps heading delta, adds to +10, ai_target_select, ai_random_wobble
+0x0002306c func game_rts_stub_2306c hand only rts
+0x0002306e func ai_move_integrate_waypoint hand ai_pick_next_waypoint, turn rate, speed, sincos, updates x/y, calls 23156
+0x00023156 func ai_decay_velocity_offsets hand decays +0x54/+0x56 toward 0 by 0x40, ai_random_wobble
+0x000231d8 func ai_set_heading_speed_gain hand sets heading, math_isqrt32 dist -> gain table lookup
+0x00023222 func ai_check_target_ahead_flag hand sets 0x10cf10 = ff if target near and in front arc
+0x00023384 func ai_pick_farthest_target_set hand 235b0 then stores chosen target idx, state 4
+0x00023416 func ai_select_target_by_screen hand picks target off-screen/closest, sets state 0 or 4, debug counters 901848-184e
+0x0002347e func ai_scan_closest_offscreen hand loop 0x10cf22 stride 16 picks min dist among off-screen live entries
+0x000234e2 func ai_scan_closest_inactive hand loop 0x10cf22 picks min dist among entries with flag 0
+0x00023522 func ai_scan_closest_any hand loop 0x10cf22 picks min dist entry
+0x00023560 func ai_scan_closest_to_rear hand loop picks min |angle-offset| entry vs player heading 0x100106
+0x000235b0 func ai_scan_farthest_target hand loop 0x10cf22 picks max long dist entry
+0x000235f0 func ai_check_wall_blocking_view hand scans rect list (A1+8), sets 0x10cf1e/20 flags by tank x/heading
+0x000240b8 func player_check_bullet_hit_single hand tank 900216 flag8, dist <640000, col_bullet_vs_player_corners, cam_shake
+0x0002414e func player_check_bullet_hit_all hand loops tanks 904014 stride 0x100, dist<90000, col_bullet_vs_player_corners, cam_shake, knockback
+0x000245c6 func cam_roll_kick_from_heading_a hand if 101a04==0 and tank ahead, computes 101a04 from rand
+0x000246ae func cam_hit_shake_trigger hand if tank flag8 and 101a14!=3 sets 102060/62 then calls 246f6
+0x000246f6 func cam_knockback_offset_calc hand sincos of 0x10cfac heading -> 101a00/101a02 offset, 0x100204=ffff
+0x00024834 func cam_roll_kick_from_heading_b hand variant of 245c6 without 0x400 bias
+0x000257e6 func spr_emit_flash_overlay hand uses 9dc countdown table 0x25844, emits 11-word sprite cmd to 0x100824
+0x00025864 func spr_emit_overlay_cmd_d1 hand appends fixed sprite cmd id 0xd1 to list at 0x100824
+0x00025bbe func shot_update_all_after_terrain hand shot_vs_terrain, shot_vs_building, then terrain height and player hit loops over 8 shots
+0x00025bc6 func shot_update_all_with_rects hand per-shot rect list test (2611c), shot_vs_building, terrain, player hit loops
+0x0002603c func col_point_in_rect_test_tail hand rect overlap test, sets 0x100992=ff on hit
+0x00026718 func missile_update_slot_body hand missile slot spawn from fire input, homing, col_missile_vs_rect_quadrant/square, terrain, input A00000 bit 0x20
+0x00029ae8 func game_rts_stub_29ae8 hand only rts
+0x0002f370 func game_unk_0002f370 hand decompile failed, 22 bytes unknown
+0x000351f0 func game_rts_stub_351f0 hand only rts
+0x00035f9a func game_call_pair_35fa4_35fc6 hand calls 35fa4 then 35fc6
+0x00035fe8 func game_call_pair_35ff2_36014 hand calls 35ff2 then 36014
+0x00036502 func game_call_pair_3650c_3652e hand calls 3650c then 3652e
+0x00036550 func game_call_pair_3655a_3657c hand calls 3655a then 3657c
+0x0003d104 func game_call_3d150_two_objs hand sets 0x10d388 from table by 101016 and calls 3d150, then with 0x102068 again
+0x00002c5c func io_btn10_clear_idle_2c5c hand if input 0x100a12 bit4 then clear timer 0x100c14
+0x00002c72 func game_reset_902200_block hand zeroes shared-RAM block 0x902202-0x90231c, sets 0x902202=0x180, 0x90231c=0x40, 0x90230a=0x400
+0x00003632 func game_second_timer_dec_3632 hand 60-frame counter 0x10c02c; every 60 decrements 0x901f18, sets 0x10c02a=ffff when negative
+0x00004980 func io_menu_repeat_tick_4980 hand every 0x1e frames runs io_menu_repeat_up_down and latches bit0 to 0x10c05e
+0x000049b0 func io_start_btns_clear_idle_49b0 hand if input 0x100a12 & 0x30 clear 0x100c14, returns the masked bits
+0x00004df0 func game_latch_a00014_delta_4df0 hand if D7 then 0x901b7e = (io 0xa00014 low byte) - 0x9002c4, inc 0x902280, 0x902290=ffff; clears 0x10c060
+0x00004e22 func game_timer_78_set_flag_4e22 hand counts 0x10c060 to 0x78 frames then sets 0x901b56=1 and clears 0x100c14
+0x00005826 func game_cycle_option_5826 hand button 0x40 cycles 0x901c32 mod 3, loads pair from table 0x5898, writes packed value to tank array 0x904012+idx
+0x00006a38 func game_mode2_sub8_attract_6a38 hand sets 0x900000=2,0x900002=8; attract screen tick calling attract_tick_second_timer_c, hud_scroll_select_objects, stick dispatch
+0x000076ba func game_mode2_sub10_attract_76ba hand sets 0x900000=2,0x900002=10; attract tick with attract_tick_second_timer_f, jump table on 0x100a24&3, exits on start button
+0x000078bc func game_cycle_option_78bc hand same as 5826 but table at 0x792e: cycles 0x901c32 mod 3, writes tank array 0x904012+idx
+0x00009296 func obj_list_begin_9296 hand writes 12-word list record (0x100,2,0,fe70x3,400x4,fe70,ffff) at A2 and sets list ptr 0x100824; starts with junk or.b prefix
+0x000092d6 func obj_list_append_92d6 hand appends 12-word record (0x100,0xbe,0x200,...,0xffff terminator) at list ptr 0x100824
+0x00009314 func obj_list_append_9314 hand appends 12-word record (0x100,0xbe,0x7000,...) at list ptr 0x100824
+0x00009352 func game_init_title_vars_9352 hand zeroes mode/title vars 0x101200,0x902004,0x100e90.. sets 0x100eb0-eb6 camera consts, calls 0x941e
+0x00009432 func hud_load_pal_or_8f14_9432 hand if 0x1016a0==0 hud_load_palette_cells else call 0x8f14
+0x00009448 func game_mode3_wait_start_9448 hand sets 0x900000=3,0x900002=0xc; waits 300 frames or button 0x30 then game_init_title_vars_9352
+0x0000a2f4 func player_apply_event_flags_a2f4 hand handles bits of 0x10c3f6 (ammo cost, shield, weapon select, 0x40 boost drain, 0x80), updates 0x901d06 energy
+0x0000a634 func ai_tank_los_scan_a634 hand loops tank array 0x904018/0x904030 computing atan2 and dist<0x40000 to player, calls 0xa758; leading junk or.b prefix
+0x0000a8ec func spr_copy_table_906000_a8ec hand copies 4-word entries from table PTR_a958[0x901d80] into 0x906000 stride 0x10 count 0x103b1e+1; junk prefix
+0x0000ad62 func obj_setup_table_104600_ad62 hand fills 0x104600 entries (stride 0x10) from table by 0x101006 level index, zero-fills rest; clears first when level 0x10
+0x0000b642 func game_mode1_sub1e_init_b642 hand sets 0x900220=2,0x900000=1,0x900002=0x1e,0x101210=0x31, calls game_rts_stub_52e8
+0x0000d230 func game_init_level_a_d230 hand big level-start reset (camera 0x100100=0x4000,0x8900, clears tanks/shots/fx, loads course tables, calls enemy_init_course_table_a, cam_setup_view_mode1, io_mcu_cmd_0_a)
+0x0000dc76 func game_dispatch_by_course_dc76 hand indirect jump through table at 0xdd92 indexed by 0x100904*4
+0x0000dc8e func game_end_timer_events_dc8e hand at 0x100922==0x50 sends sound cmd 0x400082; at 0x3c sets 0x900002=8 and sound 0x220040
+0x0000dcca func game_end_timer_events_dcca hand at 0x100922==0x78 spawn explosion jitter A, enemy_set_all_state_10; 0x50 and 0x3c sound events
+0x0000dd2a func game_end_timer_events_dd2a hand like dcca with order swapped plus extra sound 0x1e0040 at 0x3c
+0x0000eb6a func game_course_select_screen_eb6a hand sets 0x900002=9, picks course table by 0x100904, draws preview, countdown 0x100922, then game_init_attract_camera_b and io_mcu_cmd_0_b
+0x0000efce func game_init_level_b_efce hand like d230 but variant B (0x900002=0x10, enemy_init_course_table_b, io_mcu_cmd_0_b, 0x100900=0x23)
+0x0000fbc8 func game_end_timer_events_fbc8 hand at 0x100922==0x78 either player_init_title_tank (if 0x901d20>5) or explosion B; sound at 0x50, 0x3c
+0x0000fc54 func game_cam_drift_fc54 hand if 0x100960 set: at 0x78 sets 0x900f8c; drifts camera angles 0x901e80-84 by constants; 0x100970 -= 0xda
+0x00016db6 func col_tank_loop_a_16db6 hand loops tanks with active bit 0x904014&1: calls col_tank_box_corners, col_player_bump_check, col_rect_test_c with box 0x14/-0x14; sets 0x101c20-24; junk prefix
+0x00016e82 func col_tank_loop_b_16e82 hand same loop with box 0x12/-0x12 and per-course params from 0x16f3a/0x16f46; sets 0x101c62
+0x000193f6 func ai_load_long_field_40_193f6 hand loads long at A3+0x40+D4 into 0x101c4c; tail fragment
+0x0001c6ce func ai_steer_preset_c6ce hand sets steer words A3-0x50/-0x4e to 0x48, adjusts by heading error clamped 0x640 scale 0x8f5
+0x0001c742 func ai_steer_proportional_c742 hand steer words = +/- (heading error clamped +/-800)*0x11eb>>16
+0x0001c784 func ai_steer_preset_c784 hand steer words = -0x48, adjusts by heading error (mirror of c6ce)
+0x0001c7cc func ai_steer_preset_c7cc hand steer words 0x28, adjusts symmetric by heading error scale 0x51e
+0x0001c81c func ai_steer_to_player_heading_c81c hand steer words from error vs 0x101c44 clamped +/-0x15e scale 0x147a
+0x0001c86e func ai_steer_to_rear_heading_c86e hand steer words from error vs (A3+0x48 - 0x8000) clamped, scale 0x147a
+0x0001c8c2 func ai_steer_preset_c8c2 hand steer words 0x48 adjusted by error clamped 800 scale 0x1998
+0x0001c90e func ai_steer_proportional_c90e hand steer words +/- error clamped +/-0x640 scale 0x851
+0x0001c950 func ai_steer_preset_c950 hand steer words 0x38 adjusted by error clamped 800 scale 0x1998
+0x0001c99c func ai_steer_preset_c99c hand steer words -0x38 adjusted by error scale 0x8f5
+0x0001c9e4 func ai_steer_preset_c9e4 hand steer words -0x48 adjusted by error clamped 0x800 scale 0x900
+0x0001cce8 func ai_avoid_terrain_steer_cce8 hand probes terrain ahead 4 times left/right depending on sign, calls ai_steer_left/right_preset, halves steer words, sets 0x101c40
+0x0001d102 func ai_dist_sq_to_player_half_d102 hand 0x10cd3a = (dx>>1)^2+(dy>>1)^2 between object at A2+D4 and player 0x100100/102; junk prefix
+0x0001ec18 func ai_wander_turn_ec18 hand heading += sincos chain, zero velocity words, rand-picks next wander values from table when countdown <0; junk or.b prefix
+0x00022b46 func ai_edge_chk_a_22b46 hand loops 4 triples at 0x101b02 compare, sets 0x10ce04=0xff
+0x00022b80 func ai_edge_chk_b_22b80 hand loops 4 triples at 0x101b02 compare to A5+2, sets 0x10ce04=0xff
+0x00022ba8 func ai_edge_chk_c_22ba8 hand loops 4 triples at 0x101b00 compare to A5+4, sets 0x10ce04=0xff
+0x00022bce func ai_edge_chk_d_22bce hand loops 4 triples at 0x101b00 compare to A5+6, sets 0x10ce04=0xff
+0x00022ef6 func ai_drive_tank_move_22ef6 hand updates tank heading/speed/position: clamps turn, picks next waypoint, applies sincos velocity, decay and random wobble
+0x00025844 func obj_list_append_25844 hand appends 12-word record (0x100,0xd1,0,0xff00x3,0x100x4,0xff00,0xffff) at list ptr 0x100824
+0x00027f8a func col_side_chk_dir2_27f8a hand if range test passes sets 0x10cfc8=0xff,0x10cfc6=2
+0x00027fde func col_side_chk_dir1_27fde hand range test sets 0x10cfc8=0xff,0x10cfc6=1
+0x00027ff6 func col_side_chk_dir3_27ff6 hand range test sets 0x10cfc8=0xff,0x10cfc6=3
+0x0002800e func col_side_chk_dir5_2800e hand range test sets 0x10cfc8=0xff,0x10cfc6=5
+0x00028030 func col_side_chk_dir6_28030 hand range test sets 0x10cfc8=0xff,0x10cfc6=6
+0x00028044 func col_side_chk_dir4_28044 hand range test sets 0x10cfc8=0xff,0x10cfc6=4
+0x00028058 func col_side_chk_dir7_28058 hand range test sets 0x10cfc8=0xff,0x10cfc6=7
+0x00029736 func col_edge_flag_chk_a_29736 hand range test sets 0x10cfea=0xff
+0x00029784 func col_edge_flag_chk_b_29784 hand range test sets 0x10cfea=0xff
+0x0002979c func col_edge_flag_chk_c_2979c hand range test sets 0x10cfea=0xff
+0x000297b4 func col_edge_flag_chk_d_297b4 hand range test sets 0x10cfea=0xff
+0x000297d0 func col_edge_flag_chk_e_297d0 hand range test sets 0x10cfea=0xff
+0x000297e4 func col_edge_flag_chk_f_297e4 hand range test sets 0x10cfea=0xff
+0x000297f8 func col_edge_flag_chk_g_297f8 hand range test sets 0x10cfea=0xff
+0x0002adce func fx_update_particle_groups_2adce hand 4 emitter groups of 8 particles: respawn at count>=0x96 with rand table, emit sprite records (type1) to list 0x100824 relative to camera
+0x0002b762 func obj_view_coords_xyz_2b762 hand writes view-space x,y,z to A3 from object pos minus camera 0x100b06/08/0a, x2 / -2; fragment
+0x0002b79c func obj_view_coords_xyz_2b79c hand writes view x,y,z to A3: (pos4+D4-cam06)*2, cam08+D3, (pos6+D2-cam0a)*-2
+0x0002b7c4 func obj_view_coords_xyz_2b7c4 hand same as 2b79c with D2/D4 swapped
+0x0002b7ec func obj_view_coords_xyz_2b7ec hand same with pos4 - D2
+0x0002b8f4 func obj_spawn_debris_2b8f4 hand if tank flag 0x8000 set and 0x104604 slot active: clears slot, builds 8 sprite entries at 0x104810 from table, sets 0x101a90; junk prefix
+0x0002c036 func spr_emit_sincos_triple_2c036 hand if 0x901f08: appends type-1 record with pos 0x101600-04 and three math_sincos_pair results, term 4/ffff
+0x0002ca96 func obj_emit_target_marker_2ca96 hand if target within angle 0x2500 and dist<24000 emits sprite record id 0x76 with sincos pair data
+0x0002cdea func obj_emit_target_marker2_2cdea hand like 2ca96 with id 0x79/0x7a, calls fx_init_debris_pieces/fx_update_debris_pieces for player; long junk or.b prefix
+0x0002eba8 func obj_calc_sincos_offset_2eba8 hand 0x10d2d2/d4 = sin/cos pair * (A1+0x1a + A5 word) scaled
+0x00035048 func hw_pointram_set_from_course_35048 hand 0x1008f4 = word from table 0x350c0[(0x901d80&0x1c)>>1], hw_pointram_load_regs, writes 7 to 0x1e2000
+0x00036036 func pal_ramp_up_ad0_36036 hand 0x100ad0 += 4 clamped to 0x9f
+0x000360d2 func pal_ramp_down_ad0_360d2 hand 0x100ad0 -= 4 clamped at 0
+0x000360ec func pal_ramp_up_ad2_360ec hand 0x100ad2 += 4 clamped to 0x9f
+0x00036108 func pal_ramp_down_ad2_36108 hand 0x100ad2 -= 4 clamped at 0
+0x00036122 func pal_ramp_ad0_hold_ad2_down_36122 hand calls 0x360b6 then pal_ramp_down_ad2
+0x00036128 func pal_ramp_ad0_hold_ad2_up_36128 hand calls 0x360b6 then pal_ramp_up_ad2
+0x0003612e func pal_ramp_ad0_down_ad2_down_3612e hand calls ad0 down and ad2 down
+0x00036134 func pal_ramp_ad0_down_ad2_up_36134 hand calls ad0 down and ad2 up
+0x0003613a func pal_ramp_up_ad4_3613a hand 0x100ad4 += 4 clamped to 0x9f
+0x00036156 func pal_ramp_down_ad4_36156 hand 0x100ad4 -= 4 clamped at 0
+0x00036170 func pal_ramp_up_ad6_36170 hand 0x100ad6 += 4 clamped to 0x9f
+0x0003618c func pal_ramp_down_ad6_3618c hand 0x100ad6 -= 4 clamped at 0
+0x000361a6 func pal_ramp_ad4_up_ad6_down_361a6 hand calls ad4 up then ad6 down
+0x000361ac func pal_ramp_ad4_up_ad6_up_361ac hand calls ad4 up then ad6 up
+0x000361b2 func pal_ramp_ad4_down_ad6_down_361b2 hand calls ad4 down then ad6 down
+0x000361b8 func pal_ramp_ad4_down_ad6_up_361b8 hand calls ad4 down then ad6 up
+0x000361be func pal_ramp_hold_pair_361be hand calls 0x360b6 then 0x35fc6
+0x0003659e func pal_ramp_up_ad0_3659e hand 0x100ad0 += 4 clamped to 0x9f (variant set 2)
+0x0003663a func pal_ramp_down_ad0_3663a hand 0x100ad0 -= 4 clamped at 0
+0x00036654 func pal_ramp_up_ad2_c_36654 hand 0x100ad2 += 12 clamped to 0x9f
+0x00036672 func pal_ramp_down_ad2_c_36672 hand 0x100ad2 -= 12 clamped at 0
+0x0003668e func pal_ramp_ad0_hold_ad2_down_3668e hand calls 0x3661e then ad2 down 12
+0x00036694 func pal_ramp_ad0_hold_ad2_up_36694 hand calls 0x3661e then ad2 up 12
+0x0003669a func pal_ramp_ad0_down_ad2_down_3669a hand ad0 down and ad2 down 12
+0x000366a0 func pal_ramp_ad0_down_ad2_up_366a0 hand ad0 down and ad2 up 12
+0x000366a6 func pal_ramp_up_ad4_366a6 hand 0x100ad4 += 4 clamped to 0x9f
+0x000366c2 func pal_ramp_down_ad4_366c2 hand 0x100ad4 -= 4 clamped at 0
+0x000366dc func pal_ramp_up_ad6_c_366dc hand 0x100ad6 += 12 clamped to 0x9f
+0x000366fa func pal_ramp_down_ad6_c_366fa hand 0x100ad6 -= 12 clamped at 0
+0x00036716 func pal_ramp_ad4_up_ad6_down_36716 hand ad4 up then ad6 down 12
+0x0003671c func pal_ramp_ad4_up_ad6_up_3671c hand ad4 up then ad6 up 12
+0x00036722 func pal_ramp_ad4_down_ad6_down_36722 hand ad4 down then ad6 down 12
+0x00036728 func pal_ramp_ad4_down_ad6_up_36728 hand ad4 down then ad6 up 12
+0x0003672e func pal_ramp_hold_pair_3672e hand calls 0x3661e then 0x3652e
+0x1b9e func state_nop_1b9e hand empty state handler (rts)
+0x1cd4 func game_boot_init_loop_1cd4 hand nv init then endless main loop
+0x2bf4 func menu_nop_2bf4 hand empty menu handler
+0x2bf6 func menu_nop_2bf6 hand empty menu handler
+0x2bf8 func menu_page0_input_2bf8 hand menu page0 input handling
+0x2d38 func menu_page1_dispatch_2d38 hand menu page1 dispatch on selector
+0x2e3e func menu_adj_902204_2e3e hand adjusts setting at 0x902204
+0x2e60 func menu_adj_902206_2e60 hand adjusts setting at 0x902206
+0x2e82 func menu_adj_902208_2e82 hand adjusts setting at 0x902208
+0x2ea4 func menu_adj_90220a_2ea4 hand adjusts setting at 0x90220a
+0x2ec6 func menu_adj_90220c_2ec6 hand adjusts setting at 0x90220c
+0x2ee8 func menu_adj_90220e_mask_2ee8 hand adjusts 0x90220e masked with 0xf
+0x2f12 func menu_adj_902210_wrap6_2f12 hand adjusts 0x902210 wrap 0..5
+0x303c func tbl_entry_303c hand orphan pointer-table entry with register args (sites in pf_mpr.txt)
+0x3070 func menu_opt_902302_adj_3070 hand adjusts option 0x902302
+0x30a8 func menu_opt_902316_scaled_30a8 hand scaled option 0x902316
+0x30ee func menu_opt_902318_scaled_30ee hand scaled option 0x902318
+0x3136 func menu_opt_90231a_scaled_3136 hand scaled option 0x90231a
+0x317e func menu_opt_90231c_scaled_317e hand scaled option 0x90231c
+0x31c8 func menu_opt_90230c_wrap_31c8 hand wrapping option 0x90230c
+0x322c func menu_opt_90230e_toggle_322c hand toggle option 0x90230e
+0x326e func menu_exit_on_button_326e hand exits menu on button press
+0x33b2 func tbl_entry_33b2 hand orphan pointer-table entry with register args (sites in pf_mpr.txt)
+0x33c0 func tbl_entry_33c0 hand orphan pointer-table entry with register args (sites in pf_mpr.txt)
+0x33ea func menu_page3_input_33ea hand menu page3 input
+0x3408 func menu_page7_sprite_toggle_3408 hand menu page7 sprite toggle
+0x34fc func tbl_entry_34fc hand orphan pointer-table entry with register args (sites in pf_mpr.txt)
+0x35c6 func menu_page4_stick_calib_35c6 hand stick calibration menu page4
+0x370a func menu_page5_sound_test_370a hand sound test menu page5
+0x37bc func snd_vol_902216_adj_37bc hand sound volume 0x902216 adjust
+0x37e0 func snd_vol_902218_adj_37e0 hand sound volume 0x902218 adjust
+0x3804 func snd_test_stop_3804 hand sound test stop command
+0x382e func snd_test_stop_exit_382e hand sound test stop then exit
+0x3858 func snd_test_play_a_3858 hand sound test play command a
+0x386c func snd_test_play_b_386c hand sound test play command b
+0x3880 func menu_nop_3880 hand empty handler
+0x3882 func menu_page6_cursor_3882 hand menu page6 cursor move
+0x3914 func menu_adj_902246_dec_3914 hand 0x902246 minus 0x80
+0x391e func menu_adj_902246_inc_391e hand 0x902246 plus 0x80
+0x3928 func menu_adj_902244_dec_3928 hand 0x902244 minus 0x80
+0x3932 func menu_adj_902244_inc_3932 hand 0x902244 plus 0x80
+0x3996 func menu_nop_3996 hand empty handler
+0x3afc func menu_adj_901c38_dec_3afc hand 0x901c38 minus 0x100
+0x3b06 func menu_adj_901c38_inc_3b06 hand 0x901c38 plus 0x100
+0x3b10 func menu_toggle_901c3a_a_3b10 hand toggle 0x901c3a
+0x3b20 func menu_toggle_901c3a_b_3b20 hand toggle 0x901c3a
+0x3c84 func menu_adj_c030_34_a_3c84 hand adjust c030/c034 variant a
+0x3c9a func menu_adj_c030_34_b_3c9a hand adjust c030/c034 variant b
+0x3cb0 func menu_adj_c030_34_c_3cb0 hand adjust c030/c034 variant c
+0x3d18 func menu_adj_901e80_dec_3d18 hand decrement 0x901e80
+0x3d30 func menu_adj_901e80_inc_3d30 hand increment 0x901e80
+0x3d4c func menu_adj_901e84_dec_3d4c hand decrement 0x901e84
+0x3d6a func menu_adj_901e84_inc_3d6a hand increment 0x901e84
+0x3d88 func menu_adj_901e82_dec_3d88 hand decrement 0x901e82
+0x3da4 func menu_adj_901e82_inc_3da4 hand increment 0x901e82
+0x3dc0 func menu_cam_preset_call_3dc0 hand calls camera preset
+0x3eea func menu_input_autorepeat_3eea hand button autorepeat for menu input
+0x4000 func menu_dec_c20_4000 hand decrement counter 0xc20
+0x4008 func menu_dispatch_page_c14_4008 hand dispatch on menu page 0xc14
+0x404e func menu_nop_404e hand empty handler
+0x4050 func menu_page_e_input_4050 hand menu page e input
+0x40ee func menu_nop_40ee hand empty handler
+0x40f0 func menu_adj_901b20_dec_40f0 hand decrement 0x901b20 wrap 8
+0x4104 func menu_adj_901b20_inc_4104 hand increment 0x901b20 wrap 8
+0x41e4 func menu_page1_wait_exit_41e4 hand menu page1 wait then exit
+0x422a func menu_snd_test_page2_422a hand sound test page2
+0x4392 func menu_nop_4392 hand empty handler
+0x4394 func menu_adj_901b28_dec_4394 hand decrement 0x901b28 wrap 3
+0x43ae func menu_adj_901b28_inc_43ae hand increment 0x901b28 wrap 3
+0x43ca func menu_snd_edit_a_43ca hand sound edit a
+0x43f2 func menu_snd_edit_b_43f2 hand sound edit b
+0x441a func menu_snd_edit_c_441a hand sound edit c
+0x450c func menu_exit_stop_snd_450c hand stop sound then exit menu
+0x4578 func menu_page3_snd_select_4578 hand page3 sound selection
+0x4668 func menu_nop_4668 hand empty handler
+0x466a func menu_adj_901b22_dec_466a hand decrement 0x901b22 wrap 8
+0x4684 func menu_adj_901b22_inc_4684 hand increment 0x901b22 wrap 8
+0x46a0 func menu_sel_wrap_0_8_46a0 hand selector wrap 0..8
+0x46f4 func menu_sel_wrap_22_table_46f4 hand selector wrap over 22 entry table
+0x4766 func menu_toggle_c05a_4766 hand toggle 0xc05a
+0x478a func menu_exit_on_button_b_478a hand exit menu on button
+0x47fa func menu_page4_cabinet_id_47fa hand page4 cabinet id edit
+0x48f6 func menu_nop_48f6 hand empty handler
+0x48f8 func menu_adj_901b24_dec_48f8 hand decrement 0x901b24 wrap 9
+0x4912 func menu_adj_901b24_inc_4912 hand increment 0x901b24 wrap 9
+0x49f0 func menu_page5_clear_hiscore_49f0 hand page5 clear high scores
+0x4a96 func menu_inc_901b26_wrap9_4a96 hand increment 0x901b26 wrap 9
+0x4ab2 func menu_hiscore_clear_confirm_4ab2 hand high score clear confirm
+0x4b16 func menu_nop_4b16 hand empty handler
+0x4b18 func menu_page6_timed_exit_4b18 hand page6 timer then exit
+0x4b58 func menu_page7_toggle_901b2a_4b58 hand page7 toggle 0x901b2a
+0x4ba6 func menu_pageb_snd_stop_4ba6 hand pageb stop sounds
+0x4c1e func menu_pagec_stick_cal_4c1e hand pagec stick calibration
+0x4c92 func menu_cal_capture_axis0_4c92 hand capture stick axis 0
+0x4cc4 func menu_cal_capture_axis1_4cc4 hand capture stick axis 1
+0x4cf6 func menu_cal_capture_axis2_4cf6 hand capture stick axis 2
+0x4e46 func state_attract_idle_coin_4e46 hand attract idle with coin check
+0x539e func state_coin_credit_wait_539e hand waits for credit
+0x5670 func state_difficulty_sel_p1_5670 hand difficulty select player 1
+0x575a func state_nop_575a hand empty handler
+0x575c func diff_sel_inc_clamp3_575c hand increment clamp 3
+0x57a8 func diff_sel_dec_clamp3_57a8 hand decrement clamp 3
+0x58a4 func state_mode_select_58a4 hand game mode select
+0x59ea func state_nop_59ea hand empty handler
+0x59fe func mode_sel_inc_59fe hand mode select increment
+0x5a18 func mode_sel_dec_5a18 hand mode select decrement
+0x5a50 func state_title_models_wait_5a50 hand title models wait
+0x5d24 func state_credit_countdown_5d24 hand credit countdown
+0x6040 func state_start_game_init_a_6040 hand start game init a
+0x6338 func state_map_select_intro_6338 hand map select intro
+0x642e func state_select_objs_intro_642e hand select objects intro
+0x6500 func state_select_scroll_objs_6500 hand select scroll objects
+0x65d6 func state_start_new_game_p1_65d6 hand start new game player 1
+0x66e8 func state_start_new_game_p2_66e8 hand start new game player 2
+0x67de func state_difficulty_sel_p2_67de hand difficulty select player 2
+0x68de func state_nop_68de hand empty handler
+0x68e0 func diff2_inc_cap8_68e0 hand increment cap 8
+0x692c func diff2_dec_min5_692c hand decrement min 5
+0x6ba2 func state_nop_6ba2 hand empty handler
+0x6ba4 func stick_sel_next_wrap5_6ba4 hand next wrap 5
+0x6be0 func stick_sel_prev_wrap5_6be0 hand prev wrap 5
+0x6ec0 func state_select_tank_p2_6ec0 hand select tank player 2
+0x7002 func state_nop_7002 hand empty handler
+0x7004 func sel2_next_7004 hand selector next
+0x7040 func sel2_prev_7040 hand selector prev
+0x730c func state_wait_swap_a_730c hand wait then swap state a
+0x7438 func state_difficulty_sel_b_7438 hand difficulty select b
+0x7538 func state_nop_7538 hand empty handler
+0x753a func diff_b_inc_753a hand diff b increment
+0x7586 func diff_b_dec_7586 hand diff b decrement
+0x77f0 func state_nop_77f0 hand empty handler
+0x77f2 func sel16_inc_clamp2_77f2 hand increment clamp 2
+0x783e func sel16_dec_clamp2_783e hand decrement clamp 2
+0x7a12 func state_wait_swap_b_7a12 hand wait then swap state b
+0x7b28 func state_select_intro_b_7b28 hand select intro b
+0x7bc0 func state_select_objs_intro_b_7bc0 hand select objects intro b
+0x7d54 func state_select_objs_scroll_b_7d54 hand select objects scroll b
+0x8088 func state_stage_intro_dispatch_8088 hand stage intro dispatch
+0x8c8e func test_clear_shared_ram_903000_8c8e hand clears shared ram 0x903000
+0x8ccc func test_reset_counters_8ccc hand resets test counters
+0x8cec func test_work_ram_pattern_8cec hand work ram pattern test
+0x8d5e func test_start_slave_check_8d5e hand start slave check
+0x8d90 func test_shared_ram_pattern_8d90 hand shared ram pattern test
+0x9df2 func tank_load_script_rec_9df2 hand loads script record into tank array
+0x9e80 func tank_load_script_rec_9e80 hand loads script record into tank array
+0x9f0a func tank_load_script_rec_9f0a hand loads script record into tank array
+0x9fa4 func tank_load_script_rec_9fa4 hand loads script record into tank array
+0xa02a func tank_load_script_rec_a02a hand loads script record into tank array
+0xad00 func state_nop_ad00 hand empty handler
+0xcca2 func game_state_level_init_a_cca2 hand level init a
+0xcdfa func game_state_course_preview_a_cdfa hand course preview a
+0xcf54 func game_state_title_orbit_a_cf54 hand title orbit camera a
+0xd12c func game_state_cam_fly_a_d12c hand camera fly a
+0xd5aa func game_state_start_go_a_d5aa hand start go a
+0xd6f0 func game_state_play_a_d6f0 hand main play state a
+0xd9ce func game_state_player_dead_a_d9ce hand player dead a
+0xdd9e func game_deadcam_pan_a_dd9e hand dead camera pan a
+0xde2c func game_dead_nop_de2c hand empty handler
+0xde5e func game_state_stage_clear_a_de5e hand stage clear a
+0xdfa4 func game_state_all_destroyed_a_dfa4 hand all destroyed a
+0xe0c0 func game_state_timeout_a_e0c0 hand timeout a
+0xe14e func game_state_gameover_a_e14e hand game over a
+0xe23a func game_state_gameover_b_e23a hand game over b
+0xe994 func game_state_level_init_b_e994 hand level init b
+0xecda func game_state_title_orbit_b_ecda hand title orbit camera b
+0xeeca func game_state_cam_fly_b_eeca hand camera fly b
+0xf368 func game_state_start_go_b_f368 hand start go b
+0xf4b8 func game_state_play_b_f4b8 hand main play state b
+0xf910 func game_state_player_dead_b_f910 hand player dead b
+0xfb5c func game_dead_sub_adv1_fb5c hand dead substate advance 1
+0xfb6e func game_dead_sub_adv2_ring_fb6e hand dead substate advance 2 ring
+0xfb8c func game_dead_sub_adv2_cnt_fb8c hand dead substate advance 2 ring counter
+0xfbb0 func game_dead_sub_adv3_fbb0 hand dead substate advance 3
+0xfbc0 func game_dead_sub_nop_fbc0 hand empty handler
+0xfbc2 func game_dead_sub_nop_fbc2 hand empty handler
+0xfbc4 func game_dead_sub_nop_fbc4 hand empty handler
+0xfd00 func game_state_stage_clear_b_fd00 hand stage clear b
+0xffc6 func game_state_all_destroyed_b_ffc6 hand all destroyed b
+0x1007c func game_state_gameover_c_1007c hand game over c
+0x1012e func game_state_gameover_d_1012e hand game over d
+0x101c8 func game_state_gameover_e_101c8 hand game over e
+0x102b6 func game_state_gameover_orbit_f_102b6 hand game over orbit f
+0x103f2 func game_state_gameover_orbit_g_103f2 hand game over orbit g
+0x105e4 func game_state_replay_a_105e4 hand replay a
+0x10702 func game_state_replay_b_10702 hand replay b
+0x10cf0 func game_state_ending_setup_10cf0 hand ending setup
+0x10ed0 func game_state_ending_run_10ed0 hand ending run
+0x110d4 func game_state_ending_init2_110d4 hand ending init 2
+0x11116 func game_state_restore_resume_11116 hand restore and resume
+0x12042 func game_state_demo_init_12042 hand demo init
+0x1226c func game_state_demo_wait_start_1226c hand demo wait to start
+0x122f4 func game_state_demo_title_orbit_122f4 hand sincos title orbit then advance game state at 0x100900 and set sound cmds
+0x1251e func game_state_intro_scene_b hand counts down 0x922, calls cam_smooth_build_scene_b and tank shadow draw
+0x1261c func game_init_round_state hand resets round state, calls game_load_course_params, pickup/powerup init
+0x12aac func game_state_precountdown_cam hand calls game_toggle_view_button and io_mcu_cmd_countdown_c
+0x12c22 func game_state_play_loop hand main gameplay: player_update_tank, player_fire_shot
+0x130c4 func game_state_round_end_loop hand dispatches via PTR tables 13758/13778/13768 by DAT_00100962*4
+0x134b0 func state_round_end_advance_snd hand state+=4 and writes 0x1e0040 to a00420 sound
+0x134c2 func state_round_end_pick_a_134c2 hand round-end sub-state table entry
+0x1352e func state_round_end_pick_b_1352e hand round-end sub-state table entry
+0x13592 func state_round_end_pick_c_13592 hand round-end sub-state table entry
+0x1359e func state_noop_1359e hand single rts table filler
+0x135a0 func state_round_end_cam_drift_135a0 hand round-end camera drift
+0x13620 func state_round_end_cam_move_13620 hand round-end camera move
+0x136d6 func state_round_end_cam_drift_136d6 hand same as 135a0 drift variant
+0x13756 func state_noop_13756 hand single rts table filler
+0x13834 func game_state_result_scene_a hand cam_load_chase_and_build 901d70=0, countdown 0xb4, course music
+0x13aa0 func game_state_result_scene_b hand result scene variant 901d70=1
+0x13c5c func game_state_result_scene_c hand result scene variant 901d70=2
+0x13e3e func game_state_result_scene_d hand ends via game_init_gameover_screen
+0x13ede func game_state_gameover_screen_a hand cam_next_path_point_c, dsp_set_params_by_course, nv_count_results_stats
+0x14056 func game_state_gameover_screen_b hand gameover screen second stage
+0x15ee2 func col_wall_chk_15ee2 hand edge test sets 10c95c and col_add_wall_hit_effect
+0x15f0c func col_wall_chk_15f0c hand edge test sets 10c95c and col_add_wall_hit_effect
+0x15f38 func col_wall_chk_15f38 hand edge test sets 10c95c and col_add_wall_hit_effect
+0x15f68 func col_wall_chk_15f68 hand edge test sets 10c95c and col_add_wall_hit_effect
+0x15f8c func col_wall_chk_15f8c hand edge test sets 10c95c and col_add_wall_hit_effect
+0x15fb0 func col_wall_chk_15fb0 hand edge test sets 10c95c and col_add_wall_hit_effect
+0x16b00 func ai_dispatch_by_type_all hand dispatch enemy update by type
+0x16bb4 func ai_enemy_update_type_a_all hand sets 78e0=0 loops ai_update_enemy_type_a
+0x16c48 func ai_enemy_update_type_b_all hand sets 78e0=1 loops enemy update
+0x16f52 func ai_enemy_update_type_c_all hand loops enemies calling func_0x00020a66
+0x17000 func ai_enemy_update_type_d_all hand loops enemies calling func_0x0001f7a0
+0x170ae func ai_enemy_update_type_e_all hand loops enemies calling func_0x00021c10
+0x1717e func ai_turn_clamp_toward_heading hand clamps heading difference, A3/D4 enemy fields
+0x18364 func ai_beh_pursue_18364 hand aim at target, probe terrain, rand next behaviour
+0x1864a func ai_beh_advance_fast_1864a hand thrust positive, probe terrain, rand next behaviour
+0x18748 func ai_beh_retreat_fast_18748 hand thrust negative, probe terrain, rand next behaviour
+0x18846 func ai_beh_halt_wait_18846 hand thrust 0 turn 0 wait timer
+0x188ac func ai_beh_halt_turn_188ac hand thrust 0 turn in place
+0x18a70 func ai_beh_track_turn_18a70 hand halted track target turn
+0x18b40 func ai_beh_retreat_slow_18b40 hand slow negative thrust
+0x18be0 func ai_beh_advance_slow_18be0 hand slow positive thrust
+0x18c8e func ai_beh_strafe_left_18c8e hand heading = field -0x26 + 0xc00
+0x18d14 func ai_beh_strafe_right_18d14 hand heading = field -0x26 - 0xc00
+0x18d9a func ai_beh_retreat_med_18d9a hand medium negative thrust
+0x18e52 func ai_beh_advance_med_18e52 hand medium positive thrust
+0x1a3d0 func ai_beh_pursue_1a3d0 hand aim at target, probe terrain, rand next behaviour
+0x1a6a8 func ai_beh_advance_fast_1a6a8 hand thrust positive, probe terrain
+0x1a7a6 func ai_beh_retreat_fast_1a7a6 hand thrust negative, probe terrain
+0x1a8a4 func ai_beh_halt_wait_1a8a4 hand thrust 0 turn 0 wait timer
+0x1a90a func ai_beh_halt_turn_1a90a hand thrust 0 turn in place
+0x1a966 func ai_beh_halt_track_1a966 hand halted tracking target
+0x1a9e2 func ai_beh_retreat_slow_1a9e2 hand slow negative thrust
+0x1aa82 func ai_beh_advance_slow_1aa82 hand slow positive thrust
+0x1ab22 func ai_beh_face_side_a_1ab22 hand heading = field -0x26 + 0x1800
+0x1aba2 func ai_beh_face_side_b_1aba2 hand heading = field -0x26 - 0x1800
+0x1ac22 func ai_beh_retreat_or_turn_1ac22 hand negative thrust with turn
+0x1ace4 func ai_beh_advance_or_turn_1ace4 hand positive thrust with turn
+0x1b320 func ai_beh_pursue_1b320 hand aim at target, probe terrain, rand next behaviour
+0x1b56a func ai_beh_spin_idle_1b56a hand idle spin behaviour
+0x1b63e func ai_beh_advance_fast_1b63e hand thrust positive, probe terrain
+0x1b73c func ai_beh_retreat_fast_1b73c hand thrust negative, probe terrain
+0x1b83a func ai_beh_halt_wait_1b83a hand thrust 0 turn 0 wait timer
+0x1b8a0 func ai_beh_halt_turn_1b8a0 hand thrust 0 turn in place
+0x1ba64 func ai_beh_halt_track_1ba64 hand halted tracking target
+0x1bae0 func ai_beh_retreat_slow_1bae0 hand slow negative thrust
+0x1bb80 func ai_beh_advance_slow_1bb80 hand slow positive thrust
+0x1bc20 func ai_beh_face_side_a_1bc20 hand heading = field -0x26 + side offset
+0x1bca0 func ai_beh_face_side_b_1bca0 hand heading = field -0x26 - side offset
+0x1bd20 func ai_beh_retreat_or_turn_1bd20 hand negative thrust with turn
+0x1bde0 func ai_beh_advance_or_turn_1bde0 hand positive thrust with turn
+0x1ecce func ai_beh_advance_fast_1ecce hand thrust positive, probe terrain
+0x1edcc func ai_beh_retreat_fast_1edcc hand thrust negative, probe terrain
+0x1eeca func ai_beh_halt_wait_1eeca hand thrust 0 turn 0 wait timer
+0x1ef30 func ai_beh_halt_turn_1ef30 hand thrust 0 turn in place
+0x1ef8c func ai_beh_halt_track_1ef8c hand halted tracking target
+0x1f008 func ai_beh_retreat_slow_1f008 hand slow negative thrust
+0x1f0a8 func ai_beh_advance_slow_1f0a8 hand slow positive thrust
+0x1f148 func ai_beh_face_side_a_1f148 hand heading = field -0x26 + side offset
+0x1f1c8 func ai_beh_face_side_b_1f1c8 hand heading = field -0x26 - side offset
+0x1f248 func ai_beh_retreat_slow_1f248 hand thrust -0x1c turn 0x24
+0x1f2e8 func ai_beh_advance_slow_1f2e8 hand thrust +0x1c turn 0x24
+0x1f94c func ai_beh_pursue_1f94c hand ai_aim_angle_a, abs_sin_times_speed, rand next behaviour
+0x1fc38 func ai_beh_advance_probe_1fc38 hand ai_aim_angle_c thrust +0x30 probe terrain
+0x1fd58 func ai_beh_retreat_probe_1fd58 hand ai_aim_angle_c thrust -0x30 probe terrain
+0x1fe78 func ai_beh_halt_wait_1fe78 hand thrust 0 turn 0 wait timer
+0x1fede func ai_beh_halt_turn_1fede hand thrust 0 turn 0x24
+0x20000 func ai_beh_creep_choose_20000 hand thrust 0x10, probe terrain, rand next behaviour
+0x200a0 func ai_beh_halt_track_200a0 hand heading from D0, thrust 0 turn 0x24, probe terrain
+0x202ae func ai_beh_face_side_a_202ae hand heading = field -0x26 + 0x1400
+0x2032e func ai_beh_face_side_b_2032e hand heading = field -0x26 - 0x1400
+0x203ae func ai_beh_retreat_aim_203ae hand ai_aim_angle_a thrust -0x1c turn 0x24
+0x20484 func ai_beh_advance_aim_20484 hand ai_aim_angle_a thrust +0x1c turn 0x24
+0x20ea8 func ai_beh_advance_fast_20ea8 hand ai_aim_angle_e thrust +0x38 probe terrain
+0x20fa6 func ai_beh_retreat_fast_20fa6 hand ai_aim_angle_e thrust -0x38 probe terrain
+0x210a4 func ai_beh_halt_wait_210a4 hand thrust 0 turn 0 wait timer
+0x2110a func ai_beh_halt_turn_2110a hand thrust 0 turn 8
+0x212ce func ai_beh_halt_track_212ce hand ai_aim_angle_e thrust 0
+0x21346 func ai_beh_retreat_slow_21346 hand ai_aim_angle_e thrust -0x20
+0x213e2 func ai_beh_advance_slow_213e2 hand ai_aim_angle_e thrust +0x20
+0x2147e func ai_beh_face_side_a_2147e hand heading = field -0x26 + 0x1800
+0x214fe func ai_beh_face_side_b_214fe hand heading = field -0x26 - 0x1800
+0x2157e func ai_beh_retreat_med_2157e hand ai_aim_angle_e thrust -0x18
+0x21632 func ai_beh_advance_med_21632 hand ai_aim_angle_e thrust +0x18
+0x21d9e func state_noop_21d9e hand single rts table filler
+0x21da0 func ai_beh_pursue_21da0 hand ai_aim_angle_g, rand next behaviour, probe terrain
+0x22176 func ai_beh_retreat_fast_22176 hand ai_aim_angle_g thrust -0x28 probe terrain
+0x22274 func ai_beh_halt_wait_22274 hand thrust 0 turn 0 wait timer
+0x222da func ai_beh_halt_turn_222da hand thrust 0 turn 8
+0x22336 func ai_beh_halt_track_22336 hand ai_aim_angle_g thrust 0
+0x223ae func ai_beh_retreat_med_223ae hand ai_aim_angle_g thrust -0x18
+0x22462 func ai_beh_advance_med_22462 hand ai_aim_angle_g thrust +0x18
+0x22516 func ai_beh_face_side_a_22516 hand heading = field -0x26 + 0x1800
+0x22596 func ai_beh_face_side_b_22596 hand heading = field -0x26 - 0x1800
+0x226ca func ai_beh_advance_med_226ca hand ai_aim_angle_g thrust +0x20
+0x22ee0 func ai_beh_dispatch_by_id_22ee0 hand indirect call indexed by field -0x5c into 901840
+0x23f0e func ai_beh_dispatch_by_flag_23f0e hand indirect call indexed by field -0x60 bit 1
+0x2a720 func player_effect_tick_a_2a720 hand countdown 901d60, bit 0x100 in 100870, sound a00434 0x120000
+0x2a758 func player_effect_tick_b_2a758 hand countdown 901d68, bit 0x400 in 100870, sound a00434 0x130000
+0x2a7ae func player_effect_tick_c_2a7ae hand countdown 901d64, bit 0x200 in 100870, sound a00434 0x120000
+0x2a848 func player_pickup_effect_a_2a848 hand sets 901d60=600 else jumps via table 2a828
+0x2a862 func player_pickup_effect_b_2a862 hand sets 901d68=600 else jumps via table 2a828
+0x2a884 func player_pickup_effect_c_2a884 hand sets 901d64=600 else jumps via table 2a828
+0x2b094 func game_clear_slot_flags_2b094 hand zeroes 1038xx-1039xx slot words
+0x2bd36 func state_noop_2bd36 hand single rts table filler
+0x2bd58 func obj_emit_effect_84_2bd58 hand writes effect record id 0x84 with 3 sincos pairs
+0x2bdbc func obj_emit_effect_83_2bdbc hand writes effect record id 0x83 with 3 sincos pairs
+0x2be20 func obj_emit_effect_82_2be20 hand writes effect record id 0x82 with 3 sincos pairs
+0x2c0ba func obj_emit_trail_effect_2c0ba hand effect record with sincos pairs, uses 901f08 and table 2c15a
+0x2c1aa func math_build_rot_matrix_2c1aa hand 3 sincos pairs stored to 902412-90241a matrix
+0x2cbe4 func obj_emit_target_markers_2cbe4 hand obj_trail_push_pos, atan2 per marker, emits id 0x78 records
+0x2f148 func hud_pointer_update_2f148 hand ai_update_path_follow_angle, eases 10d2e0, draws sprite 0x15fb
+0x2f256 func hud_draw_sprite_f5_2f256 hand sincos position, sprite 0xf5, hud_draw_lives_or_ammo_digits
+0x2f2c2 func state_noop_2f2c2 hand single rts table filler
+0x2f5c0 func hud_pointer_reset_2f5c0 hand sets 10d2da-10d2ec initial values
+0x2f602 func hud_clear_counter_2f602 hand clears 10d2d6
+0x2f60a func state_noop_2f60a hand single rts table filler
+0x31500 func obj_draw_projected_list_31500 hand loop applying matrix, offsets by camera, calls func_0x0002c04e
+0x35d84 func math_rotate_vec3_matrix_35d84 hand 3x3 matrix (902400-902410) times vector 101630-101634
+0x376fe func hud_bar_pair_call_376fe hand calls func_0x0003770e and func_0x00037730
+0x37708 func hud_bar_single_call_37708 hand calls func_0x00037752
+0x37774 func hud_bar_pair_call_37774 hand calls func_0x00037784 and func_0x000377a6
+0x3777e func hud_bar_single_call_3777e hand calls func_0x000377c8
+0x378ea func hud_bar_a_inc_378ea hand 100ad0 +=4 clamp 0x9f
+0x37906 func hud_bar_a_dec_37906 hand 100ad0 -=4 clamp 0
+0x37920 func hud_bar_b_inc_37920 hand 100ad2 +=4 clamp 0x9f
+0x3793c func hud_bar_b_dec_3793c hand 100ad2 -=4 clamp 0
+0x37956 func hud_bar_e_inc_37956 hand 100ad8 +=8 clamp 0x9f
+0x37972 func hud_bar_e_dec_37972 hand 100ad8 -=8 clamp 0
+0x3798c func hud_bar_a_inc_b_dec_3798c hand calls bar a inc and bar b dec
+0x37994 func hud_bar_a_inc_b_inc_37994 hand calls bar a inc and bar b inc
+0x3799c func hud_bar_a_dec_b_dec_3799c hand calls bar a dec and bar b dec
+0x379a4 func hud_bar_a_dec_b_inc_379a4 hand calls bar a dec and bar b inc
+0x379ae func hud_bar_e_dec_wrap_379ae hand tail call bar e dec
+0x379b2 func hud_bar_e_inc_wrap_379b2 hand tail call bar e inc
+0x379b6 func hud_bar_e_dec_wrap_379b6 hand tail call bar e dec
+0x379ba func hud_bar_e_inc_wrap_379ba hand tail call bar e inc
+0x379be func hud_bar_c_inc_379be hand 100ad4 +=4 clamp 0x9f
+0x379da func hud_bar_c_dec_379da hand 100ad4 -=4 clamp 0
+0x379f4 func hud_bar_d_inc_379f4 hand 100ad6 +=4 clamp 0x9f
+0x37a10 func hud_bar_d_dec_37a10 hand 100ad6 -=4 clamp 0
+0x37a2a func hud_bar_f_inc_37a2a hand 100ada +=8 clamp 0x9f
+0x37a46 func hud_bar_f_dec_37a46 hand 100ada -=8 clamp 0
+0x37a60 func hud_bar_c_inc_d_dec_37a60 hand calls bar c inc and bar d dec
+0x37a68 func hud_bar_c_inc_d_inc_37a68 hand calls bar c inc and bar d inc
+0x37a70 func hud_bar_c_dec_d_dec_37a70 hand calls bar c dec and bar d dec
+0x37a78 func hud_bar_c_dec_d_inc_37a78 hand calls bar c dec and bar d inc
+0x37a82 func hud_bar_f_dec_wrap_37a82 hand tail call bar f dec
+0x37a86 func hud_bar_f_inc_wrap_37a86 hand tail call bar f inc
+0x37a8a func hud_bar_f_dec_wrap_37a8a hand tail call bar f dec
+0x37a8e func hud_bar_f_inc_wrap_37a8e hand tail call bar f inc
+0x37ca0 func hud_gauge_ease01_37ca0 hand eases gauges 0 and 1 to center
+0x37cee func hud_gauge_ease23_37cee hand eases gauges 2 and 3 to center
+0x37e28 func hud_gauge_inc0_dec1_37e28 hand gauge 0 inc, gauge 1 dec
+0x37e2e func hud_gauge_inc0_inc1_37e2e hand gauge 0 inc, gauge 1 inc
+0x37e34 func hud_gauge_dec0_dec1_37e34 hand gauge 0 dec, gauge 1 dec
+0x37e3a func hud_gauge_dec0_inc1_37e3a hand gauge 0 dec, gauge 1 inc
+0x37e40 func hud_gauge_inc0_ease1_37e40 hand gauge 0 inc, gauge 1 ease to center
+0x37e4a func hud_gauge_dec0_ease1_37e4a hand gauge 0 dec, gauge 1 ease to center
+0x37e52 func hud_gauge_dec1_ease0_37e52 hand gauge 1 dec, gauge 0 ease to center
+0x37e5a func hud_gauge_inc1_ease0_37e5a hand gauge 1 inc, gauge 0 ease to center
+0x37ece func hud_gauge_inc2_dec3_37ece hand gauge 2 inc, gauge 3 dec
+0x37ed4 func hud_gauge_inc2_inc3_37ed4 hand gauge 2 inc, gauge 3 inc
+0x37eda func hud_gauge_dec2_dec3_37eda hand gauge 2 dec, gauge 3 dec
+0x37ee0 func hud_gauge_dec2_inc3_37ee0 hand gauge 2 dec, gauge 3 inc
+0x37ee6 func hud_gauge_inc2_ease3_37ee6 hand gauge 2 inc, gauge 3 ease to center
+0x37ef0 func hud_gauge_dec2_ease3_37ef0 hand gauge 2 dec, gauge 3 ease to center
+0x37ef8 func hud_gauge_dec3_ease2_37ef8 hand gauge 3 dec, gauge 2 ease to center
+0x37f00 func hud_gauge_inc3_ease2_37f00 hand gauge 3 inc, gauge 2 ease to center
+0x00003284 func io_stick_deadzone_3284 hand copies 100ab2..b6 to c016..1a, zero if abs<0x10
+0x000032e6 func cam_emit_sincos_cmd_add_32e6 hand emits cmd 1 sincos x3 then adds 902304.. to 902310..
+0x00003368 func cam_emit_sincos_cmd_stick_3368 hand same cmd as 32e6 but adds deadzoned stick c016..1a
+0x00004442 func snd_cmd_a00820_4442 hand on input bits 0x30 writes a00820 cmd 0x40, timer c052=900
+0x00004482 func snd_cmd_a00420_4482 hand on input 0x30 writes a00420 cmd 0x40, timer c054=900
+0x000044cc func snd_cmd_a00220_44cc hand on input 0x30 writes a00220 cmd 0x40, timer c056=900
+0x00005298 func obj_emit_cmd_0100_5298 hand emits cmd 0x100 / 0x600 record from c066..c076 to list
+0x00005312 func obj_emit_cmd_sincos_5312 hand emits cmd 1 with sincos x3 from c078..c07c
+0x00007f38 func game_inc_c1c2_ac_7f38 hand adds 0xac to word at 10c1c2
+0x00008f14 func obj_particles_update_8f14 hand loops 9 entries at 10c214 stride 0x20, moves pos, calls 8f96
+0x0000941e func game_clear_901c2e_941e hand zeroes 901c2e/30/32
+0x000094c0 func obj_emit_poly_list_94c0 hand writes 4 const polygon cmd records 0x100/0x1c0 to list
+0x00009d8c func game_script_read_color_9d8c hand reads 2 words from script ptr 101002, sets 100180..86 nibbles
+0x0000a1b6 func game_script_read_pos_a1b6 hand reads 3 words from script ptr into 100100..06
+0x0000a4de func shot_smoke_spawn_update_a4de hand 8 slot 0x20 at 105800, spawn from tank, move with sin/cos, expire
+0x0000a758 func game_set_timer_9a6_a758 hand sets 1009a6=0x3c and 102050=1
+0x0000a76a func obj_spawn_hit_marker_a76a hand copies tank pos 904000/02/08 to 103800 slot, 900f00 slot
+0x0000a7d4 func obj_spawn_explosion_a7d4 hand finds free slot at 103840 stride 0x10, copies tank pos, life 0x4b
+0x0000a81a func obj_spawn_missile_hit_a81a hand free slot at 103940, copies tank 904018/1a/20, life 0x4b, 900e20
+0x0000a886 func obj_init_spr_slots_a886 hand fills 8 slots at 104c00 from 103a00.., sets 900e10..18
+0x0000acb6 func game_sub_901d02_tbl_acb6 hand 901d02 -= table 25004 [900210*0x10+8]
+0x0000acda func game_sub_901d02_tbl_acda hand 901d02 -= table 25514 [900210<<4+8]
+0x0000ad30 func game_sub_901d04_tbl_ad30 hand 901d04 -= table 25514 indexed by tank 904026
+0x0000b358 func obj_set_three_7fff_b358 hand writes 0x7fff to 3 longs at ptr 100820
+0x0000b36c func obj_emit_five_sincos_b36c hand loop 5 cmd1 records with sincos x3 from tbl b3e0
+0x000137f0 func cam_copy_pos_rot_137f0 hand copies 100b00..0a to 100e30..3a swapped
+0x00017d2a func ai_pick_lockon_target_17d2a hand loops tanks, range+LOS check, flags nearest at 1078e0
+0x00017e58 func ai_angle_gate_17e58 hand sets flag +0x60 if abs angle diff > 0x5ff
+0x0001a274 func ai_tank_update_variant_1a274 hand AI tick: behaviour table 1a31c, calls ai_* chain, wobble 0xc00
+0x0001a350 func tank_load_f40_to_101c4c_1a350 hand loads tank +0x40 long to 101c4c
+0x0001a35a func ai_find_nearest_enemy_1a35a hand loops tanks, dist^2 and atan2 to 10ccca/cccc/ccd0
+0x0001b1b6 func ai_tank_update_variant_1b1b6 hand AI tick: behaviour table 1b26c, find_nearest_a, wobble 0x500
+0x0001e7f6 func ai_tank_update_variant_1e7f6 hand AI tick: behaviour table 1e8b0, waypoint_select_b, 0x600
+0x0001f7a0 func ai_tank_update_variant_1f7a0 hand AI tick: behaviour table 1f898, find_nearest_b, retreat timer
+0x00020a66 func ai_tank_update_variant_20a66 hand AI tick: behaviour table 20b1c, find_nearest_c, 0x600
+0x00021c10 func ai_tank_update_variant_21c10 hand AI tick: ambush state 40, behaviour table 21cda, 0x600
+0x00021d1e func tank_load_f40_to_101c4c_21d1e hand loads tank +0x40 long to 101c4c
+0x00021d28 func ai_find_nearest_enemy_21d28 hand loops tanks, dist^2 and atan2 to 10cddc/dde/de2
+0x0002dd8c func obj_trail_push_pos_2dd8c hand ring buffer 0x70 wrap, stores x/y/z/angles of tank into trail
+0x0002e11c func obj_debris_spawn_4_2e11c hand spawns 4 debris at 104780 near tank with random velocity
+0x0002e1c0 func obj_debris_update_2e1c0 hand updates 4 debris slots, emits cmd1 sincos, gravity, expiry
+0x0003046a func obj_emit_trail_fx_3046a hand sets fx type 0x1e, copies pos, calls 2c04e and trail effect 0x47
+0x000304e2 func obj_emit_exhaust_fx_304e2 hand fx type 0x1f, rotates vec by matrix, countdown 101670
+0x000306be func obj_emit_wheel_fx_x4_306be hand 4 fx records from tables 3083e..308de rotated by matrix
+0x00035ee4 func obj_wheel_offset_calc_35ee4 hand dispatches ramp fns, table lookup sets 101650..5e offsets
+0x00035fa4 func math_ease_ad0_to_4f_35fa4 hand steps 100ad0 toward 0x4f by 4
+0x00035fc6 func math_ease_ad2_to_4f_35fc6 hand steps 100ad2 toward 0x4f by 4
+0x00035ff2 func math_ease_ad4_to_4f_35ff2 hand steps 100ad4 toward 0x4f by 4
+0x00036014 func math_ease_ad6_to_4f_36014 hand steps 100ad6 toward 0x4f by 4
+0x0003650c func math_ease_ad0_to_4f_3650c hand steps 100ad0 toward 0x4f by 4
+0x0003652e func math_ease_ad2_to_4f_3652e hand steps 100ad2 toward 0x4f by 4
+0x0003655a func math_ease_ad4_to_4f_3655a hand steps 100ad4 toward 0x4f by 4
+0x0003657c func math_ease_ad6_to_4f_3657c hand steps 100ad6 toward 0x4f by 4
+0x0003770e func math_ease_ad0_to_4f_3770e hand steps 100ad0 toward 0x4f by 4
+0x00037730 func math_ease_ad2_to_4f_37730 hand steps 100ad2 toward 0x4f by 4
+0x00037752 func math_ease_ad8_to_4f_37752 hand steps 100ad8 toward 0x4f by 4
+0x00037784 func math_ease_ad4_to_4f_37784 hand steps 100ad4 toward 0x4f by 4
+0x000377a6 func math_ease_ad6_to_4f_377a6 hand steps 100ad6 toward 0x4f by 4
+0x000377c8 func math_ease_ada_to_4f_377c8 hand steps 100ada toward 0x4f by 4
+0x360a func game_init_flags_360a hand sets 901f18=3, 10c028=1, clears 10c02a/2c; tail or.b garbage
+0x39d2 func obj_emit_sincos_particles_39d2 hand loop of 13-word records using math_sincos_pair x3, ends 0xffff, sets 100824
+0x5b52 func attract_emit_players_5b52 hand attract_emit_player2/1_model with table-by-frame lookup
+0x8010 func game_state_timer_8010 hand sets 900000/2, calls game_rts_stub_52e8, counts 902004 to 0x3b then resets
+0x9b1e func game_trigger_sequence_9b1e hand game_set_trigger_flags_by_time + flag_by_time_range + snd_cmd_stop_all_c
+0x133c4 func game_tick_match_133c4 hand obj_spawn_debris_ring_c, game_check_match_over, best-score 901900 compare
+0x1e8fc func ai_state_wander_avoid_1e8fc hand math_sincos_atan2_chain, ai_probe_terrain_ahead, math_rand_next, per-tank state vars
+0x2011e func ai_state_retreat_aim_2011e hand ai_aim_angle_c, ai_probe_terrain_ahead, math_rand_next, retimer 0x1e
+0x226b4 func ai_state_noop_226b4 hand body is only return, pointer-table state handler
+0x22774 func ai_state_hold_still_22774 hand zeroes turn/speed fields, speed 4, timer 0x78 when target matches
+0x22874 func ai_state_clear_vel_22874 hand writes D0 to two longs at A2-4/-8, tiny handler
+0x23f26 func ai_state_steer_clamp_23f26 hand heading error clamped to -0x150..0x150 added to turn, countdown timer; dispatched by 23f26 table
+0x28be6 func shot_update_one_28be6 hand shot_init_speed/damage, ai_shot_homing_aim, col_shot_vs_box_zone, terrain, tank table
+0x32e40 func tank_in_view_count_32e40 hand scans 0x904014 tank array stride 0x100 for range/angle window, sets 901c02
